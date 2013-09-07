@@ -1,7 +1,39 @@
 # Markdown
+# Jekyll
+snippet jekyll
+	---
+	layout: ${1:post}
+	published: ${2:true}
+	title: "${3:title}"
+	date: 2013-05-06 10:58:10
+	tags: ${4:JavaScript}
+	categories: ${5:jekyll}
+	---
+# HTML Syntax
+snippet img default
+	![${1:alttext}](${2:/images/image.jpg})
+snippet img with title
+	![${1:alttext}](${2:/images/image.jpg} "${3:title}")
+snippet a default
+	[${1:text}](${2:http://address})
+snippet a with title
+	[${1:text}](${2:http://address} "${3:title}")
+snippet link automatic Links
+	<${1:http://address}>
+snippet link reference
+	[${1:text}][${2:id}]
+snippet link address
+	[${1}]: ${2:http://address}
+snippet code
+	{% highlight ${1:language} ${2:linenos }%}
+	${3:...}
+	{% endhighlight %}
+snippet table
+	${1:th} | ${2:th}
+	--- | ---
+	${3:td} | ${4:td}
 
 # Includes octopress (http://octopress.org/) snippets
-
 snippet [
 	[${1:text}](http://${2:address} "${3:title}")
 snippet [*
@@ -72,7 +104,7 @@ snippet gist-full
 snippet gist-short
 	{% gist ${1:gist_id} %}
 
-snippet img
+snippet img octopress 
 	{% img ${1:class} ${2:URL} ${3:width} ${4:height} ${5:title_text} ${6:alt_text} %}
 
 snippet youtube

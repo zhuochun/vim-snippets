@@ -75,6 +75,10 @@ snippet unless
 	unless ${1:condition}
 		${2}
 	end
+snippet while
+	while ${1:condition}
+		${2}
+	end
 snippet wh
 	while ${1:condition}
 		${2}
@@ -1075,3 +1079,22 @@ snippet isresw
 	it { should respond_to(:${1}).with(${2}).arguments }
 snippet super_call
 	${1:super_class}.instance_method(:${2:method}).bind(self).call
+#TomDoc
+snippet doc method
+    # ${1:Public/Internal/Deprecated}: ${2:what does it do?}
+    # 
+    # ${3:args - Description}
+    #
+    # Examples
+    #
+    # ${4:bar()}
+    #
+    # ${5:return}
+snippet doc class/module
+    # ${1:Public/Internal/Deprecated}: ${2:what does it do?}
+    #
+    # Examples
+    #
+    # ${3:bar()}
+snippet doc constant
+    # ${1:Public/Internal/Deprecated}: [${2:Type}] ${3:its purpose}
