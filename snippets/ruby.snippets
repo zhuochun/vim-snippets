@@ -196,6 +196,11 @@ snippet defs
 		${2}
 	end
 # def initialize
+snippet init
+	def initialize(${1:args})
+		${2}
+	end
+# def initialize
 snippet definit
 	def initialize(${1:args})
 		${2}
@@ -1081,20 +1086,26 @@ snippet super_call
 	${1:super_class}.instance_method(:${2:method}).bind(self).call
 #TomDoc
 snippet doc method
-    # ${1:Public/Internal/Deprecated}: ${2:what does it do?}
-    # 
-    # ${3:args - Description}
-    #
-    # Examples
-    #
-    # ${4:bar()}
-    #
-    # ${5:return}
+	# ${1:Public/Internal/Deprecated}: ${2:what does it do?}
+	#
+	# ${3:args - Description}
+	#
+	# Examples
+	#
+	# ${4:bar()}
+	#
+	# ${5:Returns nothing.}
 snippet doc class/module
-    # ${1:Public/Internal/Deprecated}: ${2:what does it do?}
-    #
-    # Examples
-    #
-    # ${3:bar()}
+	# ${1:Public/Internal/Deprecated}: ${2:what does it do?}
+	#
+	# Examples
+	#
+	# ${3:bar()}
 snippet doc constant
-    # ${1:Public/Internal/Deprecated}: [${2:Type}] ${3:its purpose}
+	# ${1:Public/Internal/Deprecated}: [${2:Type}] ${3:its purpose}
+snippet doca simple
+	${1:arg} - ${2:description}
+snippet doca with default
+	${1:arg} - ${2:description}(default: ${3})
+snippet docr returns
+	Returns ${1}
