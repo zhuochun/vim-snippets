@@ -13,7 +13,7 @@ snippet =
 	<%= ${1} %>${2}
 snippet end
 	<% end %>${1}
-snippet ead
+snippet each
 	<% ${1}.each do |${2}| %>
 		${3}
 	<% end %>
@@ -21,34 +21,46 @@ snippet for
 	<% for ${2:item} in ${1} %>
 		${3}
 	<% end %>
-snippet rp
-	<%= render :partial => '${1:item}' %>
-snippet rpl
-	<%= render :partial => '${1:item}', :locals => { :${2:name} => '${3:value}'$4 } %>
-snippet rps
-	<%= render :partial => '${1:item}', :status => ${2:500} %>
-snippet rpc
-	<%= render :partial => '${1:item}', :collection => ${2:items} %>
-snippet lia
-	<%= link_to '${1:link text...}', :action => '${2:index}' %>
-snippet liai
-	<%= link_to '${1:link text...}', :action => '${2:edit}', :id => ${3:@item} %>
-snippet lic
-	<%= link_to '${1:link text...}', :controller => '${2:items}' %>
-snippet lica
-	<%= link_to '${1:link text...}', :controller => '${2:items}', :action => '${3:index}' %>
-snippet licai
-	<%= link_to '${1:link text...}', :controller => '${2:items}', :action => '${3:edit}', :id => ${4:@item} %>
+snippet ren
+	<%= render "${1:item}" %>
+snippet renf
+	<%= render :file => "${1:file}"${2} %>
+snippet rent
+	<%= render :template => "${1:file}"${2} %>
+snippet renp
+	<%= render :partial => "${1:item}" %>
+snippet renpl
+	<%= render :partial => "${1:item}", :locals => { :${2:name} => "${3:value}"$4 } %>
+snippet renps
+	<%= render :partial => "${1:item}", :status => ${2:500} %>
+snippet renpc
+	<%= render :partial => "${1:item}", :collection => ${2:items} %>
+snippet link
+	<%= link_to "${1:link text...}" %>
+snippet linka
+	<%= link_to "${1:link text...}", :action => "${2:index}" %>
+snippet linkkai
+	<%= link_to "${1:link text...}", :action => "${2:edit}", :id => ${3:@item} %>
+snippet linkc
+	<%= link_to "${1:link text...}", :controller => "${2:items}" %>
+snippet linkca
+	<%= link_to "${1:link text...}", :controller => "${2:items}", :action => "${3:index}" %>
+snippet linkcai
+	<%= link_to "${1:link text...}", :controller => "${2:items}", :action => "${3:edit}", :id => ${4:@item} %>
 snippet yield
 	<%= yield ${1::content_symbol} %>${2}
-snippet conf
+snippet content
 	<% content_for :${1:head} do %>
 		${2}
 	<% end %>
-snippet cs
-	<%= collection_select <+object+>, <+method+>, <+collection+>, <+value_method+>, <+text_method+><+, <+[options]+>, <+[html_options]+>+> %>
-snippet ct
+snippet contentt
 	<%= content_tag '${1:DIV}', ${2:content}${3:,options} %>
+snippet simpleff
+	<%= simple_form_for @${1:model} do |f| %>
+		${2}
+	<% end %>
+snippet field
+	<% f.input :${1:filed} %>
 snippet ff
 	<%= form_for @${1:model} do |f| %>
 		${2}
@@ -85,36 +97,24 @@ snippet fields
 	<% end %>
 snippet i18
 	I18n.t('${1:type.key}')${2}
-snippet it
+snippet img
 	<%= image_tag "${1}"${2} %>
-snippet jit
-	<%= javascript_include_tag ${1::all} %>
-snippet jsit
-	<%= javascript_include_tag "${1}" %>
-snippet lim
-	<%= link_to ${1:model}.${2:name}, ${3:$1}_path(${4:$1}) %>
-snippet linp
-	<%= link_to "${1:Link text...}", ${2:parent}_${3:child}_path(${4:@$2}, ${5:@$3}) %>
-snippet linpp
-	<%= link_to "${1:Link text...}", ${2:parent}_${3:child}_path(${4:@$2}) %>
-snippet lip
-	<%= link_to "${1:Link text...}", ${2:model}_path(${3:@$2}) %>
-snippet lipp
-	<%= link_to "${1:Link text...}", ${2:model}s_path %>
-snippet lt
-	<%= link_to "${1:name}", ${2:dest} %>
 snippet ntc
 	<%= number_to_currency(${1}) %>
 snippet ofcfs
 	<%= options_from_collection_for_select ${1:collection}, ${2:value_method}, ${3:text_method}, ${4:selected_value} %>
-snippet rf
-	<%= render :file => "${1:file}"${2} %>
-snippet rt
-	<%= render :template => "${1:file}"${2} %>
-snippet slt
-	<%= stylesheet_link_tag ${1::all}, :cache => ${2:true} %>
-snippet sslt
+snippet jsall
+	<%= javascript_include_tag ${1::all} %>
+snippet js
+	<%= javascript_include_tag "${1}" %>
+snippet javascript
+	<%= javascript_include_tag "${1}" %>
+snippet css
 	<%= stylesheet_link_tag "${1}" %>
+snippet style
+	<%= stylesheet_link_tag "${1}" %>
+snippet stylecache
+	<%= stylesheet_link_tag ${1::all}, :cache => ${2:true} %>
 snippet if
 	<% if ${1} %>
 		${2}
@@ -125,3 +125,6 @@ snippet ife
 	<% else %>
 		${3}
 	<% end %>
+snippet else
+	<% else %>
+		${3}
