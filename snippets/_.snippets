@@ -1,5 +1,9 @@
 # Global snippets
 
+snippet credit
+	Author: ${1:`g:snips_author`}
+	Created: `strftime("%d/%b/%Y %I:%M %p")`
+	Last Edit: `strftime("%d/%b/%Y %I:%M %p")`
 # (c) holds no legal value ;)
 snippet c)
 	Copyright `&enc[:2] == "utf" ? "©" : "(c)"` `strftime("%Y")` ${1:`g:snips_author`}. All Rights Reserved.${2}
