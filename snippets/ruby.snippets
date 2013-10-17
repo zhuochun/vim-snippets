@@ -121,13 +121,29 @@ snippet cla class << self .. end
 	class << ${1:self}
 		${2}
 	end
-# class .. < DelegateClass .. initialize .. end
-snippet cla-
+snippet cla class .. < DelegateClass .. initialize .. end
 	class ${1:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`} < DelegateClass(${2:ParentClass})
 		def initialize(${3:args})
 			super(${4:del_obj})
 
 			${5}
+		end
+	end
+snippet cla class model without db
+	class ${1:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`}
+		include ActiveModel::Validations
+		include ActiveModel::Conversion
+
+		attr_accessor :${1:attributes}
+
+		def initialize(attributes = {})
+			attributes.each do |name, value|
+				send("#{name}=", value)
+			end
+		end
+
+		def persisted?
+			false
 		end
 	end
 snippet struct
@@ -153,18 +169,18 @@ snippet mod module .. ClassMethods .. end
 		end
 
 		def self.included(receiver)
-			receiver.extend         ClassMethods
+			receiver.extend ClassMethods
 			receiver.send :include, InstanceMethods
 		end
 	end
 # attr_reader
-snippet r
+snippet atr
 	attr_reader :${1:attr_names}
 # attr_writer
-snippet w
+snippet atw
 	attr_writer :${1:attr_names}
 # attr_accessor
-snippet rw
+snippet ata
 	attr_accessor :${1:attr_names}
 snippet atp
 	attr_protected :${1:attr_names}
@@ -175,6 +191,11 @@ snippet ana
 # ivc == instance variable cache
 snippet ivc
 	@${1:variable_name} ||= ${2:chached_value}
+# include
+snippet inc
+	include ${1:ActiveModel::}${2:Validations}
+snippet ext
+	extend ${1:ActiveSupport::}${2:Memoizable}
 # include Enumerable
 snippet Enum
 	include Enumerable
@@ -613,8 +634,6 @@ snippet asrj
 	assert_rjs :${1:replace}, "${2:dom id}"
 snippet ass assert_select(..)
 	assert_select '${1:path}', ${2:text}: '${3:inner_html' ${4:do}
-snippet bf
-	before_filter :${1:method}
 snippet bt
 	belongs_to :${1:association}
 snippet btp
@@ -806,11 +825,13 @@ snippet ru
 	render :update do |${1:page}|
 		$1.${2}
 	end
+snippet scope default scope
+	default_scope -> { ${1:scope} }
 snippet scope ->
-	scope :${1:name}, -> { where(${2:field}: ${3:value}) }
+	scope :${1:name}, -> { ${2:scope} }
 snippet scope lambda
 	scope :${1:name}, lambda do |${2:value}|
-		where("${3:field = ?}", ${4:bind var})
+		${3:scope}
 	end
 snippet sha1
 	Digest::SHA1.hexdigest(${1:string})
@@ -1174,3 +1195,39 @@ snippet fgb build unsaved model
 	FactoryGirl.build(:${1:name})
 snippet fgc create saved model
 	FactoryGirl.create(:${1:name})
+# before, around, after
+snippet before validation
+	before_validation ${1}
+snippet after validation
+	after_validation ${1}
+snippet before save
+	before_save ${1}
+snippet after save
+	after_save ${1}
+snippet before create
+	before_create ${1}
+snippet around create
+	around_create ${1}
+snippet after create
+	after_create ${1}
+snippet before update
+	before_update ${1}
+snippet around update
+	around_update ${1}
+snippet after update
+	after_update ${1}
+snippet before destroy
+	before_destroy ${1}
+snippet after destroy
+	after_destroy ${1}
+snippet around destroy
+	around_destroy ${1}
+# filter
+snippet before skip filter
+	skip_before_filter :${1:method}
+snippet before filter
+	before_filter :${1:method}
+snippet only
+	only: [${1:methods}]
+snippet except
+	except: [${1:methods}]
