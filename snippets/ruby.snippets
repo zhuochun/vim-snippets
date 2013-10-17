@@ -180,7 +180,7 @@ snippet atr
 snippet atw
 	attr_writer :${1:attr_names}
 # attr_accessor
-snippet ata
+snippet atrw
 	attr_accessor :${1:attr_names}
 snippet atp
 	attr_protected :${1:attr_names}
@@ -716,17 +716,17 @@ snippet defupdate
 		end
 	end${3}
 snippet dele delegate .. to
-	delegate :${1:methods}, :to => :${2:object}
+	delegate :${1:methods}, to: :${2:object}
 snippet dele delegate .. to .. prefix .. allow_nil
-	delegate :${1:methods}, :to => :${2:object}, :prefix => :${3:prefix}, :allow_nil => ${4:allow_nil}
+	delegate :${1:methods}, to: :${2:object}, prefix: :${3:prefix}, allow_nil: ${4:allow_nil}
 snippet flash
 	flash[:${1:notice}] = "${2}"
 snippet hasabtm
-	has_and_belongs_to_many :${1:object}, :join_table => "${2:table_name}", :foreign_key => "${3}_id"${4}
+	has_and_belongs_to_many :${1:object}, join_table: "${2:table_name}", foreign_key: "${3}_id"${4}
 snippet hasm
 	has_many :${1:object}
 snippet hasmd
-	has_many :${1:other}s, :class_name => "${2:$1}", :foreign_key => "${3:$1}_id", :dependent => :destroy${4}
+	has_many :${1:other}s, class_name: "${2:$1}", foreign_key: "${3:$1}_id", dependent: :destroy${4}
 snippet hasmt
 	has_many :${1:object}, through: :${2:object}
 snippet haso
@@ -1243,3 +1243,7 @@ snippet only
 	only: [${1:methods}]
 snippet except
 	except: [${1:methods}]
+snippet to_param
+	def to_param
+		"#{id}-#{${1:name}.parameterize}"
+	end
