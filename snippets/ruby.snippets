@@ -401,7 +401,7 @@ snippet fet
 	fetch(${1:name}) { |${2:key}| ${3} }
 snippet fin
 	find { |${1:e}| ${2} }
-snippet find
+snippet findo
 	find do |${1:e}|
 		${2}
 	end
@@ -409,6 +409,10 @@ snippet fina
 	find_all { |${1:e}| ${2} }
 snippet finad
 	find_all do |${1:e}|
+		${2}
+	end
+snippet fino
+	find_or_initialize_by_name(${1:attributes}) do |${1:e}|
 		${2}
 	end
 snippet gre
@@ -851,26 +855,34 @@ snippet sweeper
 			expire_page
 		end
 	end
+snippet validator
+	class ${1:What}Validator < ActiveRecord::${2:Each}Validator
+		def validate_each(record, attribute, value)
+			${3}
+		end
+	end
 snippet vala validates_associated
 	validates_associated :${1:attribute}
-snippet vala validates .., :acceptance => true
-	validates :${1:terms}, :acceptance => true
+snippet vala acceptance => true
+	validates :${1:terms}, acceptance: true
+snippet validate
+	validates :${1:attribute}, ${2:validators}
 snippet valc
-	validates :${1:attribute}, :confirmation => true
+	validates :${1:attribute}, confirmation: true
 snippet vale
-	validates :${1:attribute}, :exclusion => { :in => ${2:%w( mov avi )} }
+	validates :${1:attribute}, exclusion: { in: ${2:%w( mov avi )} }
 snippet valf
-	validates :${1:attribute}, :format => { :with => /${2:regex}/ }
+	validates :${1:attribute}, format: { with: /${2:regex}/ }
 snippet vali
-	validates :${1:attribute}, :inclusion => { :in => %w(${2: mov avi }) }
+	validates :${1:attribute}, inclusion: { in: %w(${2: mov avi }) }
 snippet vall
-	validates :${1:attribute}, :length => { :in => ${2:3}..${3:20} }
+	validates :${1:attribute}, length: { in: ${2:3}..${3:20} }
 snippet valn
-	validates :${1:attribute}, :numericality => true
+	validates :${1:attribute}, numericality: true
 snippet valp
-	validates :${1:attribute}, :presence => true
+	validates :${1:attribute}, presence: true
 snippet valu
-	validates :${1:attribute}, :uniqueness => true
+	validates :${1:attribute}, uniqueness: true
 snippet format
 	format.${1:js|xml|html} { ${2} }
 snippet where field:value
