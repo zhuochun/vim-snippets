@@ -208,3 +208,55 @@ snippet prop
 			configurable : ${6:boolean}
 		}
 	);
+# backbones
+snippet view model
+	Backbone.View.extend({
+		events: {
+		},
+		initialize: function() {
+			${1}
+		},
+		render: function() {
+			return this;
+		}
+	});
+snippet view collection
+	Backbone.View.extend({
+		events: {
+		},
+		initialize: function() {
+			${1}
+			this.collection.on("add", this.addOne, this);
+			this.collection.on("reset", this.addAll, this);
+		},
+		addOne: function(subject) {
+		},
+		addAll: function() {
+			this.collection.forEach(this.addOne, this);
+		},
+		render: function() {
+			this.addAll();
+		}
+	});
+snippet model
+	Backbone.Model.extend({${1}});
+snippet collection
+	Backbone.Collection.extend({
+		model: ${1:Model}
+	});
+snippet router
+	Backbone.Router.extend({
+		routes: {
+			"": "index",
+			"${1:path}": "${2:handler}"
+		},
+		index: function() {
+		},
+		${2}: function() {
+		},
+		initialize: function(${3:options}) {
+			${4}
+		}
+	});
+snippet history
+	Backbone.history.start({pushState: true});
