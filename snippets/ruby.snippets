@@ -995,23 +995,23 @@ snippet tctss
 ##########################
 #     Rspec snippets     #
 ##########################
-snippet desc
+snippet desc class
 	describe ${1:class_name} do
 		${2}
 	end
-snippet descm
+snippet desc method
 	describe "${1:#method}" do
 		${2:pending "Not implemented"}
 	end
-snippet cont
+snippet context
 	context "${1:message}" do
 		${2}
 	end
-snippet bef
+snippet bef rspec each/all
 	before :${1:each} do
 		${2}
 	end
-snippet aft
+snippet aft rspec each/all
 	after :${1:each} do
 		${2}
 	end
@@ -1019,26 +1019,42 @@ snippet let
 	let(:${1:object}) ${2}
 snippet let!
 	let!(:${1:object}) ${2}
-snippet subj
+snippet subj object
+	subject(:${1:instance}) { ${2} }
+snippet subj default
 	subject { ${1} }
-snippet s.
+snippet subj .
 	subject.${1:method}
 snippet spec
 	specify { subject.${1} }
-snippet exp
+snippet expect to
 	expect { ${1:object} }.to ${2}
-snippet raise
+snippet expect change
+	expect { ${1:object} }.to change { ${2} }.${3:by(1)}
+snippet from .. to ..
+	from(${1:0}).to(${2:2})
+snippet expect raise_error
 	expect { ${1:object} }.to raise_error ${2:StandardError}, /${3:message_regex}/
+snippet have
+	${1:instance}.should have(${2:1}).${3:items}
 snippet shared
-	shared_examples ${1:"shared examples name"}
+	shared_examples_for ${1:"shared examples name"} do
+		${2}
+	end
 snippet ibl
-	it_behaves_like ${1:"shared examples name"}
+	it_behaves_like ${1:"shared examples name"} do
+		${2}
+	end
 snippet it
 	it "${1:spec_name}" do
 		${2}
 	end
 snippet its
 	its(:${1:method}) { should ${2} }
+snippet should_receive
+	should_receive(:${1:method}).with(${2:attrs}).and_return(${3:returns})
+snippet stub
+	stub(:${1:method}).returns(${3:returns})
 snippet is
 	it { should ${1} }
 snippet isn
