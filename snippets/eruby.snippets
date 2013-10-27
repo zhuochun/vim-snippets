@@ -49,13 +49,13 @@ snippet linkcai
 	<%= link_to "${1:link text...}", :controller => "${2:items}", :action => "${3:edit}", :id => ${4:@item} %>
 snippet yield
 	<%= yield ${1::content_symbol} %>${2}
-snippet content
+snippet content content_for
 	<% content_for :${1:head} do %>
 		${2}
 	<% end %>
-snippet contentt
+snippet content content_tag
 	<%= content_tag '${1:DIV}', ${2:content}${3:,options} %>
-snippet simpleff
+snippet ff simple form
 	<%= simple_form_for @${1:model} do |f| %>
 		${2}
 	<% end %>
@@ -99,8 +99,6 @@ snippet i18
 	I18n.t('${1:type.key}')${2}
 snippet img
 	<%= image_tag "${1}"${2} %>
-snippet ntc
-	<%= number_to_currency(${1}) %>
 snippet ofcfs
 	<%= options_from_collection_for_select ${1:collection}, ${2:value_method}, ${3:text_method}, ${4:selected_value} %>
 snippet jsall
@@ -130,3 +128,29 @@ snippet else
 		${3}
 snippet plur
 	pluralize(${1:size}, '${2:word}')
+# number helpers
+snippet number number_to_currency
+	number_to_currency $1
+snippet number number_to_human
+	number_to_human $1
+snippet number number_to_human_size
+	number_to_human_size $1
+snippet number number_to_percentage
+	number_to_percentage $1
+snippet number number_to_phone
+	number_to_phone $1
+snippet number number_with_delimiter
+	number_with_delimiter $1
+snippet number number_with_precision
+	number_with_precision $1
+# cancan gem
+snippet can manage
+	<% if can?, :manage, ${1:Model} %>
+snippet can read
+	<% if can?, :read, ${1:Model} %>
+snippet can create
+	<% if can?, :create, ${1:Model} %>
+snippet can update
+	<% if can?, :update, ${1:Model} %>
+snippet can destroy
+	<% if can?, :destroy, ${1:Model} %>
