@@ -1265,3 +1265,11 @@ snippet to_param
 	def to_param
 		"#{id}-#{${1:name}.parameterize}"
 	end
+snippet method method_missing
+	def method_missing(method_name, *args, &block)
+		@${1:instance}.send(method_name, *args, &block)
+	end
+snippet respond respond_to_missing?
+	def respond_to_missing?(method_name, *args, &block)
+		@${1:instance}.respond_to?(method_name, *args, &block)
+	end

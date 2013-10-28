@@ -125,24 +125,23 @@ snippet ife
 	<% end %>
 snippet else
 	<% else %>
-		${3}
 snippet plur
 	pluralize(${1:size}, '${2:word}')
 # number helpers
 snippet number number_to_currency
-	number_to_currency $1
+	number_to_currency ${1}
 snippet number number_to_human
-	number_to_human $1
+	number_to_human ${1}
 snippet number number_to_human_size
-	number_to_human_size $1
+	number_to_human_size ${1}
 snippet number number_to_percentage
-	number_to_percentage $1
+	number_to_percentage ${1}
 snippet number number_to_phone
-	number_to_phone $1
+	number_to_phone ${1}
 snippet number number_with_delimiter
-	number_with_delimiter $1
+	number_with_delimiter ${1}
 snippet number number_with_precision
-	number_with_precision $1
+	number_with_precision ${1}
 # cancan gem
 snippet can manage
 	<% if can?, :manage, ${1:Model} %>
