@@ -11,5 +11,4 @@ For a list of authors, please see the `AUTHORS` files.
 License
 -------
 
-Just as the original snipMate plugin, all the snippets are licensed under the
-terms of the MIT license.
+Just as the original snipMate plugin, all the snippets are licensed under the terms of the MIT license.

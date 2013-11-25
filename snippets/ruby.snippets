@@ -365,9 +365,11 @@ snippet redd
 	reduce(${1:init}) do |${2:mem}, ${3:var}|
 		${4}
 	end
-snippet map
+snippet map method
+	map(&:${1:id})
+snippet map block
 	map { |${1:e}| ${2} }
-snippet mapd
+snippet map do block
 	map do |${1:e}|
 		${2}
 	end
@@ -768,8 +770,6 @@ snippet mcht
 	change_table :${1:table_name} do |t|
 		${2}
 	end
-snippet map
-	map(&:${1:id})
 snippet mrw
 	mattr_accessor :${1:attr_names}
 snippet oa order
