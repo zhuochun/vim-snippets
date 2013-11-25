@@ -497,61 +497,61 @@ snippet ts
 
 	require "tc_${1:test_case_file}"
 	require "tc_${2:test_case_file}"${3}
-snippet as
+snippet as assert
 	assert ${1:test}, "${2:Failure message.}"${3}
-snippet ase
+snippet ase assert_equal
 	assert_equal ${1:expected}, ${2:actual}${3}
-snippet asne
+snippet asne assert_not_equal
 	assert_not_equal ${1:unexpected}, ${2:actual}${3}
-snippet asid
+snippet asid assert_in_delta
 	assert_in_delta ${1:expected_float}, ${2:actual_float}, ${3:2 ** -20}${4}
-snippet asio
+snippet asio assert_instance_of
 	assert_instance_of ${1:ExpectedClass}, ${2:actual_instance}${3}
-snippet asko
+snippet asko assert_kind_of
 	assert_kind_of ${1:ExpectedKind}, ${2:actual_instance}${3}
-snippet asn
+snippet asn assert_nil
 	assert_nil ${1:instance}${2}
-snippet asnn
+snippet asnn assert_not_nil
 	assert_not_nil ${1:instance}${2}
-snippet asm
+snippet asm assert_match
 	assert_match /${1:expected_pattern}/, ${2:actual_string}${3}
-snippet asnm
+snippet asnm assert_no_match
 	assert_no_match /${1:unexpected_pattern}/, ${2:actual_string}${3}
-snippet aso
+snippet aso assert_operator
 	assert_operator ${1:left}, :${2:operator}, ${3:right}${4}
-snippet asr
+snippet asr assert_raise
 	assert_raise ${1:Exception} { ${2} }
-snippet asrd
+snippet asrd assert_raise
 	assert_raise ${1:Exception} do
 		${2}
 	end
-snippet asnr
+snippet asnr assert_nothing_raised
 	assert_nothing_raised ${1:Exception} { ${2} }
-snippet asnrd
+snippet asnrd assert_nothing_raised
 	assert_nothing_raised ${1:Exception} do
 		${2}
 	end
-snippet asrt
+snippet asrt assert_respond_to
 	assert_respond_to ${1:object}, :${2:method}${3}
-snippet ass assert_same(..)
+snippet ass assert_same
 	assert_same ${1:expected}, ${2:actual}${3}
-snippet ass assert_send(..)
+snippet ass assert_send
 	assert_send [${1:object}, :${2:message}, ${3:args}]${4}
-snippet asns
+snippet asns assert_not_same
 	assert_not_same ${1:unexpected}, ${2:actual}${3}
-snippet ast
+snippet ast assert_throws
 	assert_throws :${1:expected} { ${2} }
-snippet astd
+snippet astd assert_throws
 	assert_throws :${1:expected} do
 		${2}
 	end
-snippet asnt
+snippet asnt assert_nothing_thrown
 	assert_nothing_thrown { ${1} }
-snippet asntd
+snippet asntd assert_nothing_thrown
 	assert_nothing_thrown do
 		${1}
 	end
-snippet fl
+snippet fl flunk
 	flunk "${1:Failure message.}"${2}
 # Benchmark.bmbm do .. end
 snippet bm-
@@ -611,7 +611,6 @@ snippet begin
 	ensure
 		# always executed
 	end
-
 #debugging
 snippet debug
 	require 'ruby-debug'; debugger; true;
@@ -620,27 +619,27 @@ snippet pry
 #############################################
 # Rails snippets - for pure Ruby, see above #
 #############################################
-snippet art action
+snippet art assert_redirected_to action
 	assert_redirected_to ${1:action}: "${2:index}"}
-snippet art path
+snippet art assert_redirected_to path
 	assert_redirected_to ${1:parent}_path ${2}
-snippet asd
+snippet asd assert_difference
 	assert_difference "${1:Model}.${2:count}", ${3:1} do
 		${4}
 	end
-snippet asnd
+snippet asnd assert_no_difference
 	assert_no_difference "${1:Model}.${2:count}" do
 		${3}
 	end
-snippet asre
+snippet asre assert_response
 	assert_response :${1:success}, @response.body${2}
-snippet asrj
+snippet asrj assert_rjs
 	assert_rjs :${1:replace}, "${2:dom id}"
-snippet ass assert_select(..)
+snippet ass assert_select
 	assert_select '${1:path}', ${2:text}: '${3:inner_html' ${4:do}
-snippet bt
+snippet bt belongs_to
 	belongs_to :${1:association}
-snippet btp
+snippet btp belongs_to (polymorphic)
 	belongs_to :${1:association}, polymorphic: true${2}
 snippet crw
 	cattr_accessor :${1:attr_names}
@@ -763,73 +762,73 @@ snippet mapwo
 	${1:map}.with_options :${2:controller} => '${3:thing}' do |$3|
 		${4}
 	end
-snippet mbs
+snippet mbs before_save
 	before_save :${1:method}
 snippet mcht
 	change_table :${1:table_name} do |t|
 		${2}
 	end
-snippet mp
+snippet map
 	map(&:${1:id})
 snippet mrw
 	mattr_accessor :${1:attr_names}
-snippet oa
+snippet oa order
 	order("${1:field}")
-snippet od
+snippet od order
 	order("${1:field} DESC")
-snippet pa
+snippet pa params
 	params[:${1:id}]${2}
-snippet ra
+snippet ra render
 	render action: "${1:action}"
-snippet ral
+snippet ral render action
 	render action: "${1:action}", layout: "${2:layoutname}"
-snippet rest
+snippet rest respond_to
 	respond_to do |format|
 		format.${1:html} { ${2} }
 	end
-snippet rf
-	render :file => "${1:filepath}"
-snippet rfu
-	render :file => "${1:filepath}", :use_full_path => ${2:false}
-snippet ri
-	render :inline => "${1:<%= 'hello' %>}"
-snippet ril
-	render :inline => "${1:<%= 'hello' %>}", :locals => { ${2::name} => "${3:value}"${4} }
-snippet rit
-	render :inline => "${1:<%= 'hello' %>}", :type => ${2::rxml}
-snippet rxml
+snippet rf render file
+	render file: "${1:filepath}"
+snippet rfu render file
+	render file: "${1:filepath}", use_full_path: ${2:false}
+snippet ri render inline
+	render inline: "${1:<%= 'hello' %>}"
+snippet ril render inline
+	render inline: "${1:<%= 'hello' %>}", locals: { ${2::name}: "${3:value}"${4} }
+snippet rit render inline
+	render inline: "${1:<%= 'hello' %>}", type: ${2::rxml}
+snippet rxml xml
 	render xml: ${1:text to render}
-snippet rjson
-	render :json => ${1:text to render}
-snippet rl
-	render :layout => "${1:layoutname}"
-snippet rn
-	render :nothing => ${1:true}
-snippet rns
-	render :nothing => ${1:true}, :status => ${2:401}
-snippet rp
-	render :partial => "${1:item}"
-snippet rpc
-	render :partial => "${1:item}", :collection => ${2:@$1s}
-snippet rpl
-	render :partial => "${1:item}", :locals => { :${2:$1} => ${3:@$1}
-snippet rpo
-	render :partial => "${1:item}", :object => ${2:@$1}
-snippet rps
-	render :partial => "${1:item}", :status => ${2:500}
-snippet rt
-	render :text => "${1:text to render}"
-snippet rtl
-	render :text => "${1:text to render}", :layout => "${2:layoutname}"
-snippet rtlt
-	render :text => "${1:text to render}", :layout => ${2:true}
-snippet rts
-	render :text => "${1:text to render}", :status => ${2:401}
-snippet ru
+snippet rjson json
+	render json: ${1:text to render}
+snippet rl render layout
+	render layout: "${1:layoutname}"
+snippet rn render nothing
+	render nothing: ${1:true}
+snippet rns render nothing
+	render nothing: ${1:true}, status: ${2:401}
+snippet rp render partial
+	render partial: "${1:item}"
+snippet rpc render partial
+	render partial: "${1:item}", collection: ${2:@$1s}
+snippet rpl render partial
+	render partial: "${1:item}", locals: { ${2:$1}: ${3:@$1} }
+snippet rpo render partial
+	render partial: "${1:item}", object: ${2:@$1}
+snippet rps render partial
+	render partial: "${1:item}", status: ${2:500}
+snippet rt render text
+	render text: "${1:text to render}"
+snippet rtl render text
+	render text: "${1:text to render}", layout: "${2:layoutname}"
+snippet rtlt render text
+	render text: "${1:text to render}", layout: ${2:true}
+snippet rts render text
+	render text: "${1:text to render}", status: ${2:401}
+snippet ru render update
 	render :update do |${1:page}|
 		$1.${2}
 	end
-snippet scope default scope
+snippet defscope default scope
 	default_scope -> { ${1:scope} }
 snippet scope ->
 	scope :${1:name}, -> { ${2:scope} }
