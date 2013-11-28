@@ -91,37 +91,37 @@ snippet until
 	until ${1:condition}
 		${2}
 	end
-snippet cla class .. end
+snippet class .. end
 	class ${1:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`}
 		${2}
 	end
-snippet cla class .. initialize .. end
+snippet class .. initialize .. end
 	class ${1:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`}
 		def initialize(${2:args})
 			${3}
 		end
 	end
-snippet cla class .. < ParentClass .. initialize .. end
+snippet class .. < ParentClass .. initialize .. end
 	class ${1:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`} < ${2:ParentClass}
 		def initialize(${3:args})
 			${4}
 		end
 	end
-snippet cla ClassName = Struct .. do .. end
+snippet ClassName = Struct .. do .. end
 	${1:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`} = Struct.new(:${2:attr_names}) do
 		def ${3:method_name}
 			${4}
 		end
 	end
-snippet cla class BlankSlate .. initialize .. end
+snippet class BlankSlate .. initialize .. end
 	class ${1:BlankSlate}
 		instance_methods.each { |meth| undef_method(meth) unless meth =~ /\A__/ }
 	end
-snippet cla class << self .. end
+snippet class << self .. end
 	class << ${1:self}
 		${2}
 	end
-snippet cla class .. < DelegateClass .. initialize .. end
+snippet class .. < DelegateClass .. initialize .. end
 	class ${1:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`} < DelegateClass(${2:ParentClass})
 		def initialize(${3:args})
 			super(${4:del_obj})
@@ -129,7 +129,7 @@ snippet cla class .. < DelegateClass .. initialize .. end
 			${5}
 		end
 	end
-snippet cla class model without db
+snippet class model without db
 	class ${1:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`}
 		include ActiveModel::Validations
 		include ActiveModel::Conversion
@@ -148,17 +148,17 @@ snippet cla class model without db
 	end
 snippet struct
 	Struct.new(:${1:attr_name})
-snippet mod module .. end
+snippet module .. end
 	module ${1:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`}
 		${2}
 	end
-snippet mod module .. module_function .. end
+snippet module .. module_function .. end
 	module ${1:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`}
 		module_function
 
 		${2}
 	end
-snippet mod module .. ClassMethods .. end
+snippet module .. ClassMethods .. end
 	module ${1:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`}
 		module ClassMethods
 			${2}
@@ -174,17 +174,17 @@ snippet mod module .. ClassMethods .. end
 		end
 	end
 # attr_reader
-snippet atr
+snippet attr
 	attr_reader :${1:attr_names}
 # attr_writer
-snippet atw
+snippet attw
 	attr_writer :${1:attr_names}
 # attr_accessor
-snippet atrw
+snippet attrw
 	attr_accessor :${1:attr_names}
-snippet atp
+snippet attp
 	attr_protected :${1:attr_names}
-snippet ata
+snippet atta
 	attr_accessible :${1:attr_names}
 snippet ana
 	accepts_nested_attributes_for :${1:association}
