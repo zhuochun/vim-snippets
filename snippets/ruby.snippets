@@ -734,8 +734,10 @@ snippet haso
 	has_one :${1:object}
 snippet hasod
 	has_one :${1:object}, dependent: :${2:destroy}
-snippet i18
+snippet i18 translate
 	I18n.t('${1:type.key}')${2}
+snippet i18 localize
+	I18n.l('${1:type.key}')${2}
 snippet ist
 	<%= image_submit_tag("${1:agree.png}", :id => "${2:id}"${3} %>
 snippet log
@@ -1158,10 +1160,10 @@ snippet docr returns
 	Returns ${1}
 # Regex
 # avoid using $1-9 as it can be hard to track
-snippet rgn named group
-	(?<${1:name}${2:regex})
+snippet regex named group
+	(?<${1:name}>${2:regex})
 # x modifier
-snippet rgx
+snippet regex across line
 	%r{
 		${1}
 	}x${2}
@@ -1264,7 +1266,7 @@ snippet to_param
 	def to_param
 		"#{id}-#{${1:name}.parameterize}"
 	end
-snippet method method_missing
+snippet method missing
 	def method_missing(method_name, *args, &block)
 		@${1:instance}.send(method_name, *args, &block)
 	end
@@ -1272,3 +1274,16 @@ snippet respond respond_to_missing?
 	def respond_to_missing?(method_name, *args, &block)
 		@${1:instance}.respond_to?(method_name, *args, &block)
 	end
+# cancan gem
+snippet can manage
+	can?, :manage, ${1:Model}
+snippet can read
+	can?, :read, ${1:Model}
+snippet can create
+	can?, :create, ${1:Model}
+snippet can update
+	can?, :update, ${1:Model}
+snippet can destroy
+	can?, :destroy, ${1:Model}
+snippet can customize
+	can?, :${1:view}, ${2:Model}

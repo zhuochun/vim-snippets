@@ -1,15 +1,20 @@
+include html.snippets
+include ruby.snippets
+
+# Rails
 # .erb and .rhmtl files
 
-# Includes html.snippets
-
-# Rails *****************************
 snippet rc
+options word
 	<% ${1} %>
 snippet %
+options word
 	<% ${1} %>
 snippet rce
+options word
 	<%= ${1} %>${2}
 snippet =
+options word
 	<%= ${1} %>${2}
 snippet end
 	<% end %>${1}
@@ -21,87 +26,93 @@ snippet for
 	<% for ${2:item} in ${1} %>
 		${3}
 	<% end %>
-snippet ren
+snippet render
+options word
 	<%= render "${1:item}" %>
-snippet renf
-	<%= render :file => "${1:file}"${2} %>
-snippet rent
-	<%= render :template => "${1:file}"${2} %>
-snippet renp
-	<%= render :partial => "${1:item}" %>
-snippet renpl
-	<%= render :partial => "${1:item}", :locals => { :${2:name} => "${3:value}"$4 } %>
-snippet renps
-	<%= render :partial => "${1:item}", :status => ${2:500} %>
-snippet renpc
-	<%= render :partial => "${1:item}", :collection => ${2:items} %>
+snippet render partial
+options word
+	<%= render partial: "${1:item}" %>
+snippet render partial locals
+options word
+	<%= render partial: "${1:item}", locals: { ${2:name}: "${3:value}"$4 } %>
+snippet render partial status
+options word
+	<%= render partial: "${1:item}", status: ${2:500} %>
+snippet render partial collection
+options word
+	<%= render partial: "${1:item}", collection: ${2:items} %>
+snippet render file
+options word
+	<%= render file: "${1:file}"${2} %>
+snippet render template
+options word
+	<%= render template: "${1:file}"${2} %>
 snippet link
-	<%= link_to "${1:link text...}" %>
-snippet linka
-	<%= link_to "${1:link text...}", :action => "${2:index}" %>
-snippet linkkai
-	<%= link_to "${1:link text...}", :action => "${2:edit}", :id => ${3:@item} %>
-snippet linkc
-	<%= link_to "${1:link text...}", :controller => "${2:items}" %>
-snippet linkca
-	<%= link_to "${1:link text...}", :controller => "${2:items}", :action => "${3:index}" %>
-snippet linkcai
-	<%= link_to "${1:link text...}", :controller => "${2:items}", :action => "${3:edit}", :id => ${4:@item} %>
+options word
+	<%= link_to "${1:link text...}", ${2} %>
 snippet yield
 	<%= yield ${1::content_symbol} %>${2}
-snippet content content_for
+snippet content for
 	<% content_for :${1:head} do %>
 		${2}
 	<% end %>
-snippet content content_tag
-	<%= content_tag '${1:DIV}', ${2:content}${3:,options} %>
+snippet content tag
+	<%= content_tag :${1:div}, ${2:content}${3:, options} %>
+snippet content tag do
+	<%= content_tag :${1:div} do %>
+		${2}
+	<% end %>
 snippet ff simple form
 	<%= simple_form_for @${1:model} do |f| %>
 		${2}
 	<% end %>
-snippet field
-	<% f.input :${1:filed} %>
-snippet ff
+snippet input
+	<%= f.input :${1:filed} %>
+snippet ff form
 	<%= form_for @${1:model} do |f| %>
 		${2}
 	<% end %>
-snippet ffi
-	<%= ${1:f}.input :${2:attribute} %>
-snippet ffcb
-	<%= ${1:f}.check_box :${2:attribute} %>
-snippet ffe
+snippet ff form with error
 	<% error_messages_for :${1:model} %>
 
 	<%= form_for @${2:model} do |f| %>
 		${3}
 	<% end %>
-snippet ffff
+snippet ff input
+	<%= ${1:f}.input :${2:attribute} %>
+snippet ff check_box
+	<%= ${1:f}.check_box :${2:attribute} %>
+snippet ff file_field
 	<%= ${1:f}.file_field :${2:attribute} %>
-snippet ffhf
+snippet ff hidden_field
 	<%= ${1:f}.hidden_field :${2:attribute} %>
-snippet ffl
+snippet ff label
 	<%= ${1:f}.label :${2:attribute}, '${3:$2}' %>
-snippet ffpf
+snippet ff password
 	<%= ${1:f}.password_field :${2:attribute} %>
-snippet ffrb
+snippet ff radio_button
 	<%= ${1:f}.radio_button :${2:attribute}, :${3:tag_value} %>
-snippet ffs
+snippet ff submit
 	<%= ${1:f}.submit "${2:submit}" %>
-snippet ffta
+snippet ff text_area
 	<%= ${1:f}.text_area :${2:attribute} %>
-snippet fftf
+snippet ff text_field
 	<%= ${1:f}.text_field :${2:attribute} %>
 snippet fields
 	<%= fields_for :${1:model}, @$1 do |${2:f}| %>
 		${3}
 	<% end %>
-snippet i18
+snippet i18 translate
 	I18n.t('${1:type.key}')${2}
+snippet i18 localize
+	I18n.l('${1:type.key}')${2}
 snippet img
+options word
+	<%= link_to "${1:link text...}", ${2} %>
 	<%= image_tag "${1}"${2} %>
 snippet ofcfs
 	<%= options_from_collection_for_select ${1:collection}, ${2:value_method}, ${3:text_method}, ${4:selected_value} %>
-snippet jsall
+snippet js :all
 	<%= javascript_include_tag ${1::all} %>
 snippet js
 	<%= javascript_include_tag "${1}" %>
@@ -117,7 +128,7 @@ snippet if
 	<% if ${1} %>
 		${2}
 	<% end %>
-snippet ife
+snippet if else
 	<% if ${1} %>
 		${2}
 	<% else %>
@@ -125,31 +136,34 @@ snippet ife
 	<% end %>
 snippet else
 	<% else %>
+# fun helpers
 snippet plur
 	pluralize(${1:size}, '${2:word}')
 # number helpers
-snippet number number_to_currency
+snippet number to_currency
 	number_to_currency ${1}
-snippet number number_to_human
+snippet number to_human
 	number_to_human ${1}
-snippet number number_to_human_size
+snippet number to_human_size
 	number_to_human_size ${1}
-snippet number number_to_percentage
+snippet number to_percentage
 	number_to_percentage ${1}
-snippet number number_to_phone
+snippet number to_phone
 	number_to_phone ${1}
-snippet number number_with_delimiter
+snippet number with_delimiter
 	number_with_delimiter ${1}
-snippet number number_with_precision
+snippet number with_precision
 	number_with_precision ${1}
 # cancan gem
 snippet can manage
-	<% if can?, :manage, ${1:Model} %>
+	can?, :manage, ${1:Model}
 snippet can read
-	<% if can?, :read, ${1:Model} %>
+	can?, :read, ${1:Model}
 snippet can create
-	<% if can?, :create, ${1:Model} %>
+	can?, :create, ${1:Model}
 snippet can update
-	<% if can?, :update, ${1:Model} %>
+	can?, :update, ${1:Model}
 snippet can destroy
-	<% if can?, :destroy, ${1:Model} %>
+	can?, :destroy, ${1:Model}
+snippet can customize
+	can?, :${1:view}, ${2:Model}
