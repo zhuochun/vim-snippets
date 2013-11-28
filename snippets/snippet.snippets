@@ -2,8 +2,11 @@
 snippet snip
 	snippet ${1:trigger}
 		${2}
-snippet msnip
+snippet snip description
 	snippet ${1:trigger} ${2:description}
 		${3}
-snippet v
-	{VISUAL}
+snippet $
+options word
+	$\{${1}\}
+snippet v visual
+	{${1:n}:VISUAL}
