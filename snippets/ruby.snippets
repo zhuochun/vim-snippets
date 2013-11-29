@@ -25,7 +25,9 @@ snippet priv
 
 	${1}
 snippet y
-	:yields: ${1:arguments}
+	yield
+snippet bg
+	block_given?
 snippet rb
 	#!/usr/bin/env ruby -wKU
 snippet beg
@@ -33,11 +35,12 @@ snippet beg
 		${3}
 	rescue ${1:Exception} => ${2:e}
 	end
-
 snippet req require
 	require "${1}"${2}
 snippet reqr
 	require_relative "${1}"${2}
+snippet :
+	${1:key}: ${2:"value"}
 snippet #
 	# =>
 snippet end
@@ -214,7 +217,7 @@ snippet Comp
 snippet Forw-
 	extend Forwardable
 # def self
-snippet defs
+snippet def self.method
 	def self.${1:class_method_name}
 		${2}
 	end
@@ -224,12 +227,12 @@ snippet init
 		${2}
 	end
 # def initialize
-snippet definit
+snippet def init
 	def initialize(${1:args})
 		${2}
 	end
 # def method_missing
-snippet defmm
+snippet def method_missing
 	def method_missing(meth, *args, &blk)
 		${1}
 	end
@@ -237,7 +240,7 @@ snippet defd
 	def_delegator :${1:@del_obj}, :${2:del_meth}, :${3:new_name}
 snippet defds
 	def_delegators :${1:@del_obj}, :${2:del_methods}
-snippet am
+snippet alias method
 	alias_method :${1:new_name}, :${2:old_name}
 snippet app
 	if __FILE__ == $PROGRAM_NAME
@@ -459,9 +462,7 @@ snippet do default
 	do |${1:v}|
 		${2}
 	end
-snippet :
-	${1:key}: ${2:"value"}
-snippet ope
+snippet open
 	open(${1:"path/or/url/or/pipe"}, "${2:w}") { |${3:io}| ${4} }
 # path_from_here()
 snippet fpath
@@ -555,14 +556,25 @@ snippet asntd assert_nothing_thrown
 	end
 snippet fl flunk
 	flunk "${1:Failure message.}"${2}
-# Benchmark.bmbm do .. end
-snippet bm-
-	TESTS = ${1:10_000}
-	Benchmark.bmbm do |results|
+# Benchmark
+snippet benchmark measure
+	puts Benchmark.measure do
+		${1}
+	end
+snippet benchmark bm
+	Benchmark.bm do |bm|
+		${1}
+	end
+snippet benchmark bmbm
+	Benchmark.bmbm do |bm|
+		${1}
+	end
+snippet bm block
+	bm.report("${1:name}:") do
 		${2}
 	end
-snippet rep
-	results.report("${1:name}:") { TESTS.times { ${2} }}
+snippet bm single line
+	bm.report("${1:name}:") { ${2} }
 # Marshal.dump(.., file)
 snippet Md
 	File.open(${1:"path/to/file.dump"}, "wb") { |${2:file}| Marshal.dump(${3:obj}, $2) }${4}
@@ -716,9 +728,9 @@ snippet defupdate
 			end
 		end
 	end${3}
-snippet dele delegate .. to
+snippet delegate .. to
 	delegate :${1:methods}, to: :${2:object}
-snippet dele delegate .. to .. prefix .. allow_nil
+snippet delegate .. to .. prefix .. allow_nil
 	delegate :${1:methods}, to: :${2:object}, prefix: :${3:prefix}, allow_nil: ${4:allow_nil}
 snippet flash
 	flash[:${1:notice}] = "${2}"
@@ -741,9 +753,7 @@ snippet i18 localize
 snippet ist
 	<%= image_submit_tag("${1:agree.png}", :id => "${2:id}"${3} %>
 snippet log
-	Rails.logger.${1:debug} ${2}
-snippet log2
-	RAILS_DEFAULT_LOGGER.${1:debug} ${2}
+	${1:Rails.logger}.${2:debug} ${3}
 snippet logd
 	logger.debug { "${1:message}" }${2}
 snippet loge
@@ -893,13 +903,13 @@ snippet where field:value
 snippet where condition
 	where(${1:"conditions"}${2:, bind_var})
 snippet xdelete
-	xhr :delete, :${1:destroy}, :id => ${2:1}${3}
+	xhr :delete, :${1:destroy}, id: ${2:1}${3}
 snippet xget
-	xhr :get, :${1:show}, :id => ${2:1}${3}
+	xhr :get, :${1:show}, id: ${2:1}${3}
 snippet xpost
-	xhr :post, :${1:create}, :${2:object} => { ${3} }
+	xhr :post, :${1:create}, ${2:object}: { ${3} }
 snippet xput
-	xhr :put, :${1:update}, :id => ${2:1}, :${3:object} => { ${4} }${5}
+	xhr :put, :${1:update}, id: ${2:1}, ${3:object}: { ${4} }${5}
 # ActiveSupport Test Case
 snippet test
 	test "${1:shold do something}" do
