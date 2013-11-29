@@ -1,33 +1,31 @@
-include html.snippets
-
 # Markdown
 # Jekyll Post
 snippet jekyll post
 	---
-	layout: ${1:post}
-	published: ${2:true}
-	title: '${3:title}'
-	date: ${4:2013-09-09 09:09:09}
-	tags: ${5:JavaScript}
-	categories: ${6:JavaScript}
+	layout: post
+	published: true
+	title: '${1:title}'
+	date: `strftime("%Y-%m-%d %H:%M:%S")`
+	tags: ${2:JavaScript}
+	categories: ${3:JavaScript}
 	---
-	${7}
+	${4}
 # Jekyll Project
 snippet jekyll project
 	---
 	layout: project
-	title: '${2:title}'
-	project: ${3:short-reference}
-	date: ${4:2013-09-09 09:09:09}
-	good: ${5:3}
-	description: '${6:oneline-description}'
-	tools: [${7:tools}]
-	source: '${8:url}'
-	site: '${9:url}'
-	icon: '${10:url}'
-	tags: ${11:tags}
+	title: '${1:title}'
+	project: ${2:short-name}
+	date: `strftime("%Y-%m-%d %H:%M:%S")`
+	good: ${3:3}
+	description: '${4:oneline-description}'
+	tools: [${5:tools-used}]
+	source: '${6:url}'
+	site: '${7:url}'
+	icon: '${8:url}'
+	tags: ${9:tags}
 	category: Project
-	permalink: /project/${12:project-name}.html
+	permalink: /project/$2.html
 	---
 	${13}
 # HTML Syntax
@@ -43,74 +41,51 @@ snippet link automatic Links
 	<${1:http://address}>
 snippet link reference
 	[${1:text}][${2:id}]
-snippet link address
-	[${1}]: ${2:http://address}
-snippet code
-	{% highlight ${1:language} ${2:linenos }%}
-	${3:...}
-	{% endhighlight %}
+snippet link reference address
+	[${1}]: ${2:http://address} "${3:title}"
 snippet table
 	${1:th} | ${2:th}
 	--- | ---
 	${3:td} | ${4:td}
-# Includes octopress (http://octopress.org/) snippets
-snippet [
-	[${1:text}](http://${2:address} "${3:title}")
-snippet [*
-	[${1:link}](${2:`@*`} "${3:title}")${4}
-snippet [:
-	[${1:id}]: http://${2:url} "${3:title}"
-snippet [:*
-	[${1:id}]: ${2:`@*`} "${3:title}"
-snippet ![
-	![${1:alttext}](${2:/images/image.jpg} "${3:title}")
-snippet ![*
-	![${1:alt}](${2:`@*`} "${3:title}")${4}
-snippet ![:
-	![${1:id}]: ${2:url} "${3:title}"
-snippet ![:*
-	![${1:id}]: ${2:`@*`} "${3:title}"
-snippet ===
-	`repeat('=', strlen(getline(line(".") - 1)) - strlen(getline('.')))`
-
-	${1}
-snippet ---
-	`repeat('-', strlen(getline(line(".") - 1)) - strlen(getline('.')))`
-
-	${1}
+# Code embedded
+snippet code jekyll
+	{% highlight ${1:language} ${2:linenos }%}
+	${3:...}
+	{% endhighlight %}
+snippet code github
+	``` ${1:language}
+	${1:code_snippet}
+	```
+snippet code github more
+	``` ${1:language} ${2:title} ${3:URL} ${4:link_text}
+	${5:code_snippet}
+	```
+# Includes octopress snippets
 snippet blockquote
 	{% blockquote %}
 	${1:quote}
 	{% endblockquote %}
-snippet blockquote-author
+snippet blockquote author
 	{% blockquote ${1:author}, ${2:title} %}
 	${3:quote}
 	{% endblockquote %}
-snippet blockquote-link
+snippet blockquote link
 	{% blockquote ${1:author} ${2:URL} ${3:link_text} %}
 	${4:quote}
 	{% endblockquote %}
-snippet bt-codeblock-short
-	```
-	${1:code_snippet}
-	```
-snippet bt-codeblock-full
-	``` ${1:language} ${2:title} ${3:URL} ${4:link_text}
-	${5:code_snippet}
-	```
-snippet codeblock-short
+snippet codeblock short
 	{% codeblock %}
 	${1:code_snippet}
 	{% endcodeblock %}
-snippet codeblock-full
+snippet codeblock full
 	{% codeblock ${1:title} lang:${2:language} ${3:URL} ${4:link_text} %}
 	${5:code_snippet}
 	{% endcodeblock %}
-snippet gist-full
+snippet gist full
 	{% gist ${1:gist_id} ${2:filename} %}
-snippet gist-short
+snippet gist short
 	{% gist ${1:gist_id} %}
-snippet img octopress 
+snippet img octopress
 	{% img ${1:class} ${2:URL} ${3:width} ${4:height} ${5:title_text} ${6:alt_text} %}
 snippet youtube
 	{% youtube ${1:video_id} %}
