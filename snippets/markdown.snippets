@@ -30,13 +30,13 @@ snippet jekyll project
 	${13}
 # HTML Syntax
 snippet img default
-	![${1:alttext}](${2:/images/image.jpg})
+	![${1:TARGET}](${2:/images/image.jpg})
 snippet img with title
-	![${1:alttext}](${2:/images/image.jpg} "${3:title}")
+	![${1:TARGET}](${2:/images/image.jpg} "${3:title}")
 snippet a default
-	[${1:text}](${2:http://address})
+	[${1:TARGET}](${2:http://address})
 snippet a with title
-	[${1:text}](${2:http://address} "${3:title}")
+	[${1:TARGET}](${2:http://address} "${3:title}")
 snippet link automatic Links
 	<${1:http://address}>
 snippet link reference
@@ -50,28 +50,28 @@ snippet table
 # Code embedded
 snippet code jekyll
 	{% highlight ${1:language} ${2:linenos }%}
-	${3:...}
+	${3:TARGET}
 	{% endhighlight %}
 snippet code github
-	\`\`\` ${1:language}
-	${1:code_snippet}
+	\`\`\` ${2:language}
+	${1:TARGET}
 	\`\`\`
 snippet code github more
 	\`\`\` ${1:language} ${2:title} ${3:URL} ${4:link_text}
-	${5:code_snippet}
+	${5:TARGET}
 	\`\`\`
 # Includes octopress snippets
 snippet blockquote
 	{% blockquote %}
-	${1:quote}
+	${1:TARGET}
 	{% endblockquote %}
 snippet blockquote author
 	{% blockquote ${1:author}, ${2:title} %}
-	${3:quote}
+	${3:TARGET}
 	{% endblockquote %}
 snippet blockquote link
 	{% blockquote ${1:author} ${2:URL} ${3:link_text} %}
-	${4:quote}
+	${4:TARGET}
 	{% endblockquote %}
 snippet codeblock short
 	{% codeblock %}
