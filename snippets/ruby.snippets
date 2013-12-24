@@ -602,15 +602,29 @@ snippet clafn
 # singleton_class()
 snippet sinc
 	class << self; self end
-snippet nam
+snippet namespace
 	namespace :${1:`vim_snippets#Filename()`} do
 		${2}
 	end
-snippet tas
+snippet task default
 	desc "${1:Task description}"
 	task ${2:task_name}: ${3:[:dependent, :tasks]} do
 		${4}
 	end
+snippet task params
+	desc "${1:Task description}"
+	task ${2:task_name}, [:${3:arg}${4:,}] do |t, args|
+		args.with_defaults($3: $5)
+		${6}
+	end
+snippet task params with prerequisites
+	desc "${1:Task description}"
+	task ${2:task_name}, [:${3:arg}] => [:${4:prereq}] do |t, args|
+		args.with_defaults($3: $5)
+		${6}
+	end
+snippet rake
+	Rake::Task[:${1:task_name}].${2:invoke}
 # block
 snippet b
 	{ |${1:var}| ${2} }
