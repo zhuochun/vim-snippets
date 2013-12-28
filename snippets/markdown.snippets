@@ -3,13 +3,15 @@
 snippet jekyll post
 	---
 	layout: post
+	${2:menu: true}
+	${3:note: true}
 	published: true
 	title: '${1:title}'
 	date: `strftime("%Y-%m-%d %H:%M:%S")`
-	tags: ${2:JavaScript}
-	categories: ${3:JavaScript}
+	tags: ${4:JavaScript}
+	categories: $4 ${5}
 	---
-	${4}
+	${6}
 # Jekyll Project
 snippet jekyll project
 	---
@@ -17,17 +19,19 @@ snippet jekyll project
 	title: '${1:title}'
 	project: ${2:short-name}
 	date: `strftime("%Y-%m-%d %H:%M:%S")`
-	good: ${3:3}
-	description: '${4:oneline-description}'
-	tools: [${5:tools-used}]
-	source: '${6:url}'
-	site: '${7:url}'
-	icon: '${8:url}'
-	tags: ${9:tags}
+	good: ${3:1-5}
+	${4:highlight: true}
+	${5:sideproject: true}
+	description: '${6:oneline description}.'
+	tools: [${7:tools-used}]
+	source: '${8:url}'
+	site: '${9:url}'
+	icon: '${10:url}'
+	tags: ${11:tags}
 	category: Project
 	permalink: /project/$2.html
 	---
-	${13}
+	${12}
 # HTML Syntax
 snippet img default
 	![${1:TARGET}](${2:/images/image.jpg})
