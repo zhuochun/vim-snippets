@@ -8,8 +8,8 @@ snippet jekyll post
 	published: true
 	title: '${1:title}'
 	date: `strftime("%Y-%m-%d %H:%M:%S")`
-	tags: ${4:JavaScript}
-	categories: $4 ${5}
+	tags: ${4:JavaScript} ${5}
+	categories: $4
 	---
 	${6}
 # Jekyll Project
@@ -22,8 +22,8 @@ snippet jekyll project
 	good: ${3:1-5}
 	${4:highlight: true}
 	${5:sideproject: true}
-	description: '${6:oneline description}.'
-	tools: [${7:tools-used}]
+	description: '${6:one line description}.'
+	tools: [${7:"tools used"}]
 	source: '${8:url}'
 	site: '${9:url}'
 	icon: '${10:url}'
