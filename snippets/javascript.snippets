@@ -260,3 +260,47 @@ snippet router
 	});
 snippet history
 	Backbone.history.start({pushState: true});
+snippet gulp init
+alias gi
+	var gulp = require('gulp')${1};
+
+	gulp.task('default', function(){
+		// place code for your default task here
+	});
+snippet gulp task
+alias gt
+	gulp.task('${1:task-name}', function() {
+		${2}
+	});
+snippet gulp src
+alias gs
+	gulp.src('${1:./**}')
+		.pipe(${2})${3:;}
+snippet gulp pipe
+alias gs
+	pipe(${1})${2:;}
+snippet gulp dest
+alias gd
+	gulp.dest('${1:./build}')${2:;}
+snippet gulp copy
+alias gcp
+	gulp.src('${1:src/**}')
+		.pipe(gulp.dest('${2:./build/**}'));
+snippet gulp watch
+alias gw
+	gulp.watch(['${1}'${2}], function() {
+		gulp.run('${3}');
+		${4}
+	});
+snippet gulp coffee
+	gulp.task('coffee', function() {
+		gulp.src('./coffee/*.coffee')
+			.pipe(coffee(${1}))
+			.pipe(gulp.dest('./js'));
+	});
+snippet gulp less
+	gulp.task('less', function() {
+		gulp.src('./less/*.less')
+			.pipe(less({compress: ${1:true}}))
+			.pipe(gulp.dest('./css'));
+	});

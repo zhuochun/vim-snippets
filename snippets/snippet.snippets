@@ -1,13 +1,21 @@
 # snippets for making snippets :)
 snippet snip
 	snippet ${1:trigger}
-		${2}
+	alias ${2}
+		${3}
 snippet snip description
 	snippet ${1:trigger} ${2:description}
-		${3}
-snippet inc
+	alias ${3}
+		${4}
+snippet alias
+alias al
+	alias ${1}
+snippet include
+alias inc
 	include ${1:type}.snippets
-snippet opt word
-	options word
-snippet v visual
-	{${1:n}:VISUAL}
+snippet options
+alias opt
+	options ${1:word}${2}
+snippet target
+alias tg
+	{${1:n}:TARGET}
