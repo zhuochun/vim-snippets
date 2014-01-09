@@ -138,10 +138,22 @@ alias des
 snippet it
 	it '${1:should do something}', ->
 		${2}
+snippet it async
+alias ita
+	it '${1:should do something}', (done) ->
+		${2:done()}
+snippet before
+	before ${1:(done)} ->
+		${2}
+snippet after
+	after ${1:(done)} ->
+		${2}
 snippet beforeEach
-alias befe
-	beforeEach ->
-		${1}
+	beforeEach ${1:(done)} ->
+		${2}
+snippet afterEach
+	afterEach ${1:(done)} ->
+		${2}
 # Chai - Assert
 snippet chai require assert
 alias cha

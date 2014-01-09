@@ -315,6 +315,27 @@ snippet it
 	it('${1:should do something}', function() {
 		${2}
 	});
+snippet it async
+alias ita
+	it('${1:should do something async}', function(done) {
+		${2:done()}
+	});
+snippet before
+	before(function(${1:done}) {
+		${2}
+	});
+snippet after
+	after(function(${1:done}) {
+		${2}
+	});
+snippet beforeEach
+	beforeEach(function(${1:done}) {
+		${2}
+	});
+snippet afterEach
+	afterEach(function(${1:done}) {
+		${2}
+	});
 # Chai - Assert
 snippet chai require assert
 alias cha
