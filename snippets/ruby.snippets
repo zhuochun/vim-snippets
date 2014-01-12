@@ -57,10 +57,6 @@ snippet def
 	def ${1:method_name}
 		${2}
 	end
-snippet deft
-	def test_${1:case_name}
-		${2}
-	end
 snippet if
 	if ${1:condition}
 		${2}
@@ -94,37 +90,37 @@ snippet until
 	until ${1:condition}
 		${2}
 	end
-snippet class .. end
+snippet class basic
 	class ${1:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`}
 		${2}
 	end
-snippet class .. initialize .. end
+snippet class initialize
 	class ${1:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`}
 		def initialize(${2:args})
 			${3}
 		end
 	end
-snippet class .. < ParentClass .. initialize .. end
+snippet class SubClass
 	class ${1:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`} < ${2:ParentClass}
 		def initialize(${3:args})
 			${4}
 		end
 	end
-snippet ClassName = Struct .. do .. end
+snippet class Struct
 	${1:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`} = Struct.new(:${2:attr_names}) do
 		def ${3:method_name}
 			${4}
 		end
 	end
-snippet class BlankSlate .. initialize .. end
+snippet class BlankSlate
 	class ${1:BlankSlate}
 		instance_methods.each { |meth| undef_method(meth) unless meth =~ /\A__/ }
 	end
-snippet class << self .. end
+snippet class Self
 	class << ${1:self}
 		${2}
 	end
-snippet class .. < DelegateClass .. initialize .. end
+snippet class DelegateClass
 	class ${1:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`} < DelegateClass(${2:ParentClass})
 		def initialize(${3:args})
 			super(${4:del_obj})
@@ -132,7 +128,7 @@ snippet class .. < DelegateClass .. initialize .. end
 			${5}
 		end
 	end
-snippet class model without db
+snippet class Rails Model
 	class ${1:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`}
 		include ActiveModel::Validations
 		include ActiveModel::Conversion
@@ -151,17 +147,17 @@ snippet class model without db
 	end
 snippet struct
 	Struct.new(:${1:attr_name})
-snippet module .. end
+snippet module basic
 	module ${1:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`}
 		${2}
 	end
-snippet module .. module_function .. end
+snippet module module_function
 	module ${1:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`}
 		module_function
 
 		${2}
 	end
-snippet module .. ClassMethods .. end
+snippet module ClassMethods
 	module ${1:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`}
 		module ClassMethods
 			${2}
@@ -485,78 +481,214 @@ snippet opt
 	         "${4:Option description.}") do |${5:opt}|
 		${6}
 	end
-snippet tc
-	require "test/unit"
 
-	require "${1:library_file_name}"
+#############################################
+# MiniTest
+#############################################
+snippet minitest
+	gem "minitest"
+	require "minitest/autorun"
+	${1}
 
-	class Test${2:$1} < Test::Unit::TestCase
-		def test_${3:case_name}
-			${4}
+	class ${2:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`} < Minitest::Test
+		${3}
+	end
+snippet minitest spec
+	gem "minitest"
+	require "minitest/autorun"
+	${1}
+
+	describe ${2:object} do
+		${3}
+	end
+# Test Methods
+snippet test rails
+	test "${1:something}" do
+		${2}
+	end
+snippet test def
+	def test_${1:case_name}
+		${2}
+	end
+
+#############################################
+# Minitest Mock
+#############################################
+snippet mock
+	${1:object} = MiniTest::Mock.new
+snippet mock expect
+	expect(${1:name}, ${2:val}, ${3:args = []})
+
+#############################################
+# TestCase in Rails
+#############################################
+snippet testcase
+	require 'test_helper'
+
+	class ${1:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`} < ActionController::TestCase
+		test "${2}" do
+			${3}
 		end
 	end
-snippet ts
-	require "test/unit"
 
-	require "tc_${1:test_case_file}"
-	require "tc_${2:test_case_file}"${3}
-snippet as assert
+#############################################
+# Assertions
+#############################################
+snippet assert
+alias as
 	assert ${1:test}, "${2:Failure message.}"${3}
-snippet ase assert_equal
+snippet assert_equal
+alias ase
 	assert_equal ${1:expected}, ${2:actual}${3}
-snippet asne assert_not_equal
+snippet assert_not_equal
+alias asne
 	assert_not_equal ${1:unexpected}, ${2:actual}${3}
-snippet asid assert_in_delta
+snippet assert_in_delta
+alias asid
 	assert_in_delta ${1:expected_float}, ${2:actual_float}, ${3:2 ** -20}${4}
-snippet asio assert_instance_of
+snippet assert_instance_of
+alias asio
 	assert_instance_of ${1:ExpectedClass}, ${2:actual_instance}${3}
-snippet asko assert_kind_of
+snippet assert_kind_of
+alias asko
 	assert_kind_of ${1:ExpectedKind}, ${2:actual_instance}${3}
-snippet asn assert_nil
+snippet assert_nil
+alias asn
 	assert_nil ${1:instance}${2}
-snippet asnn assert_not_nil
+snippet assert_not_nil
+alias asnn
 	assert_not_nil ${1:instance}${2}
-snippet asm assert_match
+snippet assert_match
+alias asm
 	assert_match /${1:expected_pattern}/, ${2:actual_string}${3}
-snippet asnm assert_no_match
+snippet assert_no_match
+alias asnm
 	assert_no_match /${1:unexpected_pattern}/, ${2:actual_string}${3}
-snippet aso assert_operator
+snippet assert_operator
+alias aso
 	assert_operator ${1:left}, :${2:operator}, ${3:right}${4}
-snippet asr assert_raise
+snippet assert_raise
+alias asr
 	assert_raise ${1:Exception} { ${2} }
-snippet asrd assert_raise
+snippet assert_raise do..end
+alias asrd
 	assert_raise ${1:Exception} do
 		${2}
 	end
-snippet asnr assert_nothing_raised
+snippet assert_nothing_raised
+alias asnr
 	assert_nothing_raised ${1:Exception} { ${2} }
-snippet asnrd assert_nothing_raised
+snippet assert_nothing_raised do..end
+alias asnrd
 	assert_nothing_raised ${1:Exception} do
 		${2}
 	end
-snippet asrt assert_respond_to
+snippet assert_respond_to
+alias asrt
 	assert_respond_to ${1:object}, :${2:method}${3}
-snippet ass assert_same
+snippet assert_same
+alias ass
 	assert_same ${1:expected}, ${2:actual}${3}
-snippet ass assert_send
-	assert_send [${1:object}, :${2:message}, ${3:args}]${4}
-snippet asns assert_not_same
+snippet assert_not_same
+alias asns
 	assert_not_same ${1:unexpected}, ${2:actual}${3}
-snippet ast assert_throws
+snippet assert_send
+alias ass
+	assert_send [${1:object}, :${2:message}, ${3:args}]${4}
+snippet assert_throws
+alias ast
 	assert_throws :${1:expected} { ${2} }
-snippet astd assert_throws
+snippet assert_throws do..end
+alias astd
 	assert_throws :${1:expected} do
 		${2}
 	end
-snippet asnt assert_nothing_thrown
+snippet assert_nothing_thrown
+alias asnt
 	assert_nothing_thrown { ${1} }
-snippet asntd assert_nothing_thrown
+snippet assert_nothing_thrown do..end
+alias asntd
 	assert_nothing_thrown do
 		${1}
 	end
-snippet fl flunk
-	flunk "${1:Failure message.}"${2}
+snippet flunk
+	flunk "${1:failure message}"
+snippet skip
+	skip "${1:skip message}"
+# rails assertions
+snippet assert_routing
+alias ar
+	assert_routing "${1:/path/}", { controller: "${2}", action: "${3}" }
+
+#############################################
+# Minitest Spec
+#############################################
+snippet must_be
+	must_be ${1}
+snippet must_be_close_to
+	must_be_close_to ${1}
+snippet must_be_empty
+	must_be_empty ${1}
+snippet must_be_instance_of
+	must_be_instance_of ${1}
+snippet must_be_kind_of
+	must_be_kind_of ${1}
+snippet must_be_nil
+	must_be_nil ${1}
+snippet must_be_same_as
+	must_be_same_as ${1}
+snippet must_be_silent
+	must_be_silent ${1}
+snippet must_be_within_delta
+	must_be_within_delta ${1}
+snippet must_be_within_epsilon
+	must_be_within_epsilon ${1}
+snippet must_equal
+	must_equal ${1}
+snippet must_include
+	must_include ${1}
+snippet must_match
+	must_match ${1}
+snippet must_output
+	must_output ${1}
+snippet must_raise
+	must_raise ${1}
+snippet must_respond_to
+	must_respond_to ${1}
+snippet must_send
+	must_send ${1}
+snippet must_throw
+	must_throw ${1}
+snippet wont_be
+	wont_be ${1}
+snippet wont_be_close_to
+	wont_be_close_to ${1}
+snippet wont_be_empty
+	wont_be_empty ${1}
+snippet wont_be_instance_of
+	wont_be_instance_of ${1}
+snippet wont_be_kind_of
+	wont_be_kind_of ${1}
+snippet wont_be_nil
+	wont_be_nil ${1}
+snippet wont_be_same_as
+	wont_be_same_as ${1}
+snippet wont_be_within_delta
+	wont_be_within_delta ${1}
+snippet wont_be_within_epsilon
+	wont_be_within_epsilon ${1}
+snippet wont_equal
+	wont_equal ${1}
+snippet wont_include
+	wont_include ${1}
+snippet wont_match
+	wont_match ${1}
+snippet wont_respond_to
+	wont_respond_to ${1}
+
+#############################################
 # Benchmark
+#############################################
 snippet benchmark measure
 	puts Benchmark.measure do
 		${1}
@@ -569,12 +701,13 @@ snippet benchmark bmbm
 	Benchmark.bmbm do |bm|
 		${1}
 	end
-snippet bm block
+snippet benchmark block
 	bm.report("${1:name}:") do
 		${2}
 	end
-snippet bm single line
+snippet benchmark single line
 	bm.report("${1:name}:") { ${2} }
+
 # Marshal.dump(.., file)
 snippet Md
 	File.open(${1:"path/to/file.dump"}, "wb") { |${2:file}| Marshal.dump(${3:obj}, $2) }${4}
@@ -645,30 +778,40 @@ alias dbg
 	require 'ruby-debug'; debugger; true;
 snippet pry
 	require 'pry'; binding.pry
+
 #############################################
 # Rails snippets - for pure Ruby, see above #
 #############################################
-snippet art assert_redirected_to action
+snippet assert_redirected_to action
+alias art
 	assert_redirected_to ${1:action}: "${2:index}"}
-snippet art assert_redirected_to path
+snippet assert_redirected_to path
+alias art
 	assert_redirected_to ${1:parent}_path ${2}
-snippet asd assert_difference
+snippet assert_difference
+alias asd
 	assert_difference "${1:Model}.${2:count}", ${3:1} do
 		${4}
 	end
-snippet asnd assert_no_difference
+snippet assert_no_difference
+alias asnd
 	assert_no_difference "${1:Model}.${2:count}" do
 		${3}
 	end
-snippet asre assert_response
+snippet assert_response
+alias asre
 	assert_response :${1:success}, @response.body${2}
-snippet asrj assert_rjs
+snippet assert_rjs
+alias asrj
 	assert_rjs :${1:replace}, "${2:dom id}"
-snippet ass assert_select
+snippet assert_select
+alias ass
 	assert_select '${1:path}', ${2:text}: '${3:inner_html' ${4:do}
-snippet bt belongs_to
+snippet belongs_to
+alias bt
 	belongs_to :${1:association}
-snippet btp belongs_to (polymorphic)
+snippet belongs_to (polymorphic)
+alias btp
 	belongs_to :${1:association}, polymorphic: true${2}
 snippet crw
 	cattr_accessor :${1:attr_names}
@@ -743,9 +886,9 @@ snippet defupdate
 			end
 		end
 	end${3}
-snippet delegate .. to
+snippet delegate to
 	delegate :${1:methods}, to: :${2:object}
-snippet delegate .. to .. prefix .. allow_nil
+snippet delegate to .. prefix .. allow_nil
 	delegate :${1:methods}, to: :${2:object}, prefix: :${3:prefix}, allow_nil: ${4:allow_nil}
 snippet flash
 	flash[:${1:notice}] = "${2}"
@@ -765,8 +908,6 @@ snippet i18 translate
 	I18n.t('${1:type.key}')${2}
 snippet i18 localize
 	I18n.l('${1:type.key}')${2}
-snippet ist
-	<%= image_submit_tag("${1:agree.png}", :id => "${2:id}"${3} %>
 snippet log
 	${1:Rails.logger}.${2:debug} ${3}
 snippet logd
@@ -925,15 +1066,7 @@ snippet xpost
 	xhr :post, :${1:create}, ${2:object}: { ${3} }
 snippet xput
 	xhr :put, :${1:update}, id: ${2:1}, ${3:object}: { ${4} }${5}
-# ActiveSupport Test Case
-snippet test
-	test "${1:shold do something}" do
-		${2}
-	end
-snippet setup
-	def setup
-		${1}
-	end
+
 ###########################
 #   migrations snippets   #
 ###########################
@@ -1020,6 +1153,7 @@ snippet tcts
 snippet tctss
 	t.timestamps
 	${1}
+
 ##########################
 #     Rspec snippets     #
 ##########################
@@ -1158,7 +1292,10 @@ snippet isresw
 	it { should respond_to(:${1}).with(${2}).arguments }
 snippet super_call
 	${1:super_class}.instance_method(:${2:method}).bind(self).call
+
+#############################################
 # TomDoc
+#############################################
 snippet doc method
 	# ${1:Public/Internal/Deprecated}: ${2:what does it do?}
 	#
@@ -1183,6 +1320,7 @@ snippet doca argument with default
 	${1:arg} - ${2:description}(default: ${3})
 snippet docr returns
 	Returns ${1}
+
 # Regex
 # avoid using $1-9 as it can be hard to track
 snippet regex named group
@@ -1232,7 +1370,10 @@ snippet within
 	within('${1:selector}') do
 		${2:tests}
 	end
+
+#############################################
 # FactoryGirl
+#############################################
 snippet fgd
 	FactoryGirl.define do
 		factory :${1:name} do
@@ -1299,7 +1440,10 @@ snippet respond respond_to_missing?
 	def respond_to_missing?(method_name, *args, &block)
 		@${1:instance}.respond_to?(method_name, *args, &block)
 	end
+
+#############################################
 # cancan gem
+#############################################
 snippet can manage
 	can? :manage, ${1:Model}
 snippet can read
