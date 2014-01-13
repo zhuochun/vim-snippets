@@ -191,9 +191,9 @@ snippet ana
 snippet ivc
 	@${1:variable_name} ||= ${2:chached_value}
 # include
-snippet inc
+snippet include
 	include ${1:ActiveModel::}${2:Validations}
-snippet ext
+snippet extend
 	extend ${1:ActiveSupport::}${2:Memoizable}
 # include Enumerable
 snippet Enum
@@ -587,13 +587,13 @@ snippet assert_respond_to
 alias asrt
 	assert_respond_to ${1:object}, :${2:method}${3}
 snippet assert_same
-alias ass
+alias assame
 	assert_same ${1:expected}, ${2:actual}${3}
 snippet assert_not_same
 alias asns
 	assert_not_same ${1:unexpected}, ${2:actual}${3}
 snippet assert_send
-alias ass
+alias assend
 	assert_send [${1:object}, :${2:message}, ${3:args}]${4}
 snippet assert_throws
 alias ast
@@ -805,7 +805,7 @@ snippet assert_rjs
 alias asrj
 	assert_rjs :${1:replace}, "${2:dom id}"
 snippet assert_select
-alias ass
+alias asselect
 	assert_select '${1:path}', ${2:text}: '${3:inner_html' ${4:do}
 snippet belongs_to
 alias bt
@@ -1066,6 +1066,55 @@ snippet xpost
 	xhr :post, :${1:create}, ${2:object}: { ${3} }
 snippet xput
 	xhr :put, :${1:update}, id: ${2:1}, ${3:object}: { ${4} }${5}
+# before, around, after
+snippet before validation
+	before_validation ${1}
+snippet after validation
+	after_validation ${1}
+snippet before save
+	before_save ${1}
+snippet after save
+	after_save ${1}
+snippet before create
+	before_create ${1}
+snippet around create
+	around_create ${1}
+snippet after create
+	after_create ${1}
+snippet before update
+	before_update ${1}
+snippet around update
+	around_update ${1}
+snippet after update
+	after_update ${1}
+snippet before destroy
+	before_destroy ${1}
+snippet after destroy
+	after_destroy ${1}
+snippet around destroy
+	around_destroy ${1}
+# filter
+snippet before skip filter
+	skip_before_filter :${1:method}
+snippet before filter
+	before_filter :${1:method}
+snippet only
+	only: [${1:methods}]
+snippet except
+	except: [${1:methods}]
+snippet to_param
+	def to_param
+		"#{id}-#{${1:name}.parameterize}"
+	end
+snippet method missing
+	def method_missing(method_name, *args, &block)
+		@${1:instance}.send(method_name, *args, &block)
+	end
+snippet respond respond_to_missing?
+	def respond_to_missing?(method_name, *args, &block)
+		@${1:instance}.respond_to?(method_name, *args, &block)
+	end
+
 
 ###########################
 #   migrations snippets   #
@@ -1189,16 +1238,6 @@ snippet subj .
 	subject.${1:method}
 snippet spec
 	specify { subject.${1} }
-snippet expect to
-	expect { ${1:object} }.to ${2}
-snippet expect change
-	expect { ${1:object} }.to change { ${2} }.${3:by(1)}
-snippet from .. to ..
-	from(${1:0}).to(${2:2})
-snippet expect raise_error
-	expect { ${1:object} }.to raise_error ${2:StandardError}, /${3:message_regex}/
-snippet have
-	${1:instance}.should have(${2:1}).${3:items}
 snippet shared
 	shared_examples_for ${1:"shared examples name"} do
 		${2}
@@ -1217,6 +1256,86 @@ snippet should_receive
 	should_receive(:${1:method}).with(${2:attrs}).and_return(${3:returns})
 snippet stub
 	stub(:${1:method}).returns(${3:returns})
+
+##########################
+# RSpec Expects
+##########################
+snippet expect general
+alias ex
+	expect(${1:target}).to ${2}
+# equal
+snippet expect eq
+alias ee
+	expect(${1:target}).to eq(${2})
+snippet expect not eq
+alias ene
+	expect(${1:target}).not_to eq(${2})
+snippet expect eql
+	expect(${1:target}).to eql(${2})
+snippet expect not eql
+	expect(${1:target}).not_to eql(${2})
+snippet expect equal
+	expect(${1:target}).to equal(${2})
+snippet expect not equal
+	expect(${1:target}).not_to equal(${2})
+# be
+snippet expect be
+	expect(${1:target}).to be ${2}
+snippet expect not be
+	expect(${1:target}).not_to be ${2}
+snippet expect be_truthy
+alias ebt
+	expect(${1:target}).to be_truthy
+snippet expect be_falsey
+alias ebf
+	expect(${1:target}).to be_falsey
+snippet expect be_nil
+alias ebn
+	expect(${1:target}).to be_nil
+snippet expect be_within
+alias ebw
+	expect(${1:target}).to be_within(${2:0.1}).of(${3:1.9})
+snippet expect be_a/an
+	expect(${1:target}).to be_a(${2:type})
+snippet expect be_instance
+	expect(${1:target}).to be_an_instance_of(${2:type})
+# exists
+snippet expect exist
+	expect(${1:target}).to exist
+# range change
+snippet expect change from to
+alias ecft
+	expect { ${1:action} }.to change { ${2:target} }.from(${3:0}).to(${4:1})
+snippet expect change by
+alias ecb
+	expect { ${1:action} }.to change { ${2:target} }.by(${3:1})
+# exception/error
+snippet expect raise error
+alias ere
+	expect { ${1:action} }.to raise_error${2}
+# match
+snippet expect match
+alias em
+	expect(${1:target}).to match(${2})
+# response to
+snippet expect response to
+alias ert
+	expect(${1:target}).to respond_to(:${2:method})
+# satisfy
+snippet expect satisfy
+alias es
+	expect(${1:target}).to satisfy { |${2:arg}| ${3} }
+# mock and stub
+snippet stub
+alias st
+	stub(:${1:method})
+snippet should_receive
+alias sr
+	should_receive(:${1:method})
+
+##########################
+# RSpect Should
+##########################
 snippet is
 	it { should ${1} }
 snippet isn
@@ -1335,7 +1454,10 @@ snippet to_json only
 	${1:instance}.to_json(include: ${2}, only: ${3})${4}
 snippet to_json except
 	${1:instance}.to_json(include: ${2}, except: ${3})${4}
+
+#############################################
 # capybara cheatsheet
+#############################################
 snippet hasc
 	has_content?(${1:text})
 snippet click link
@@ -1374,72 +1496,30 @@ snippet within
 #############################################
 # FactoryGirl
 #############################################
-snippet fgd
+snippet factory define
+alias fgd
 	FactoryGirl.define do
 		factory :${1:name} do
 			${2:attr} ${3:value}
 		end
 	end
-snippet factory
-	factory :${1:name}${2:, class: Model} do
+snippet factory default
+alias fgf
+	factory :${1:name} do
+		${2:attr} ${3:value}
+	end
+snippet factory class
+	factory :${1:name}, class: ${2:Model} do
 		${3:attr} ${4:value}
 	end
 snippet sequence
-	sequence(:${1:field}) { |i| ${2:value} }${3}
-snippet fga attributes for
-	FactoryGirl.attributes_for(:${1:name})
-snippet fgb build unsaved model
-	FactoryGirl.build(:${1:name})
-snippet fgc create saved model
-	FactoryGirl.create(:${1:name})
-# before, around, after
-snippet before validation
-	before_validation ${1}
-snippet after validation
-	after_validation ${1}
-snippet before save
-	before_save ${1}
-snippet after save
-	after_save ${1}
-snippet before create
-	before_create ${1}
-snippet around create
-	around_create ${1}
-snippet after create
-	after_create ${1}
-snippet before update
-	before_update ${1}
-snippet around update
-	around_update ${1}
-snippet after update
-	after_update ${1}
-snippet before destroy
-	before_destroy ${1}
-snippet after destroy
-	after_destroy ${1}
-snippet around destroy
-	around_destroy ${1}
-# filter
-snippet before skip filter
-	skip_before_filter :${1:method}
-snippet before filter
-	before_filter :${1:method}
-snippet only
-	only: [${1:methods}]
-snippet except
-	except: [${1:methods}]
-snippet to_param
-	def to_param
-		"#{id}-#{${1:name}.parameterize}"
-	end
-snippet method missing
-	def method_missing(method_name, *args, &block)
-		@${1:instance}.send(method_name, *args, &block)
-	end
-snippet respond respond_to_missing?
-	def respond_to_missing?(method_name, *args, &block)
-		@${1:instance}.respond_to?(method_name, *args, &block)
-	end
+alias seq
+	sequence(:${1:field}) { |i| ${2:value} }
+snippet attributes for
+	attributes_for(:${1:name})
+snippet association
+alias ass
+	association :${1:attr}, factory: :${2:model}
 
 #############################################
 # cancan gem
