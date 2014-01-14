@@ -1514,17 +1514,38 @@ alias fgf
 		${2:attr} ${3:value}
 	end
 snippet factory class
+alias fgc
 	factory :${1:name}, class: ${2:Model} do
 		${3:attr} ${4:value}
+	end
+snippet factory trait
+	factory :${1}, traits: [:${2:trait}]
+snippet factory has_many
+	factory :${1:model}_with_${2:many}s do
+		ignore do
+			$2s_count 5
+		end
+
+		after(:create) do |$1, evaluator|
+			create_list(:$2, evaluator.$2s_count, $1: $1)
+		end
 	end
 snippet sequence
 alias seq
 	sequence(:${1:field}) { |i| ${2:value} }
 snippet attributes for
+alias atf
 	attributes_for(:${1:name})
 snippet association
 alias ass
 	association :${1:attr}, factory: :${2:model}
+snippet build
+alias strategy
+	strategy: :build
+snippet trait
+	trait :${1:name} do
+		${2}
+	end
 
 #############################################
 # cancan gem
