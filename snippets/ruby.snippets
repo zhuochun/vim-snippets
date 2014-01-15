@@ -1257,10 +1257,6 @@ snippet it
 	end
 snippet its
 	its(:${1:method}) { should ${2} }
-snippet should_receive
-	should_receive(:${1:method}).with(${2:attrs}).and_return(${3:returns})
-snippet stub
-	stub(:${1:method}).returns(${3:returns})
 
 ##########################
 # RSpec Expects
@@ -1290,10 +1286,10 @@ snippet expect not be
 	expect(${1:target}).not_to be ${2}
 snippet expect be_truthy
 alias ebt
-	expect(${1:target}).to be_truthy
+	expect(${1:target}).to be_true
 snippet expect be_falsey
 alias ebf
-	expect(${1:target}).to be_falsey
+	expect(${1:target}).to be_false
 snippet expect be_nil
 alias ebn
 	expect(${1:target}).to be_nil
@@ -1334,9 +1330,15 @@ alias es
 snippet stub
 alias st
 	stub(:${1:method})
+snippet stub returns
+alias str
+	stub(:${1:method}).return(${3:result})
 snippet should_receive
 alias sr
 	should_receive(:${1:method})
+snippet should_receive with and return
+alias srw
+	should_receive(:${1:method}).with(${2:attrs}).and_return(${3:result})
 
 ##########################
 # RSpect Should
@@ -1485,8 +1487,6 @@ snippet select select dropdown
 	select '${1:option}', from: '${2:field}'
 snippet find default
 	find("${1:id}").${2:action}
-snippet find all
-	all("${1:id}").${2:action}
 snippet find field
 	find_field('${1:text}').${2:action}
 snippet find link
