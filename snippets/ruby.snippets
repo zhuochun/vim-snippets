@@ -1332,7 +1332,7 @@ alias st
 	stub(:${1:method})
 snippet stub returns
 alias str
-	stub(:${1:method}).return(${3:result})
+	stub(:${1:method}).and_return(${3:result})
 snippet should_receive
 alias sr
 	should_receive(:${1:method})
@@ -1546,6 +1546,10 @@ snippet trait
 	trait :${1:name} do
 		${2}
 	end
+snippet create_list
+	create_list(:${1:of_model}, ${2:count}, ${3:to_model}: $3)
+snippet build_list
+	build_list(:${1:of_model}, ${2:count}, ${3:to_model}: $3)
 
 #############################################
 # cancan gem
