@@ -130,17 +130,20 @@ snippet req
 # Export
 snippet exp
 	${1:root} = exports ? this
+# Asset Pipeline
+snippet rreq
+	#= require ${1:file}
 # BDD Testings
 snippet describe
 alias des
-	describe '${1:context to test}', ->
+	describe "${1:context to test}", ->
 		${2}
 snippet it
-	it '${1:should do something}', ->
+	it "${1:should do something}", ->
 		${2}
 snippet it async
 alias ita
-	it '${1:should do something}', (done) ->
+	it "${1:should do something}", (done) ->
 		${2:done()}
 snippet before
 	before ${1:(done)} ->
@@ -157,64 +160,102 @@ snippet afterEach
 # Chai - Assert
 snippet chai require assert
 alias cha
-	assert = require('chai').assert${1:,}
+	assert = require("chai").assert${1:,}
 snippet assert
 alias as
-	assert(${1:expression}, '${2:message}');
+	assert(${1:expression}, '${2:message}')
 snippet assert equal
 alias ae
-	assert.equal(${1:actual}, ${2:expected}, '${3:message}');
+	assert.equal(${1:actual}, ${2:expected}, '${3:message}')
 snippet assert not equal
 alias ane
-	assert.notEqual(${1:actual}, ${2:expected}, '${3:message}');
+	assert.notEqual(${1:actual}, ${2:expected}, '${3:message}')
 snippet assert strict equal
 alias ase
-	assert.strictEqual(${1:actual}, ${2:expected}, '${3:message}');
+	assert.strictEqual(${1:actual}, ${2:expected}, '${3:message}')
 snippet assert not strict equal
 alias anse
-	assert.notStrictEqual(${1:actual}, ${2:expected}, '${3:message}');
+	assert.notStrictEqual(${1:actual}, ${2:expected}, '${3:message}')
 snippet assert deep equal
 alias ade
-	assert.deepEqual(${1:actual}, ${2:expected}, '${3:message}');
+	assert.deepEqual(${1:actual}, ${2:expected}, '${3:message}')
 snippet assert not deep equal
 alias ande
-	assert.notDeepEqual(${1:actual}, ${2:expected}, '${3:message}');
+	assert.notDeepEqual(${1:actual}, ${2:expected}, '${3:message}')
 snippet assert isTrue
 alias at
-	assert.isTrue(${1:value}, '${2:message}');
+	assert.isTrue(${1:value}, '${2:message}')
 snippet assert isFalse
 alias af
-	assert.isFalse(${1:value}, '${2:message}');
+	assert.isFalse(${1:value}, '${2:message}')
 snippet assert isNull
-	assert.isNull(${1:value}, '${2:message}');
+	assert.isNull(${1:value}, '${2:message}')
 snippet assert isUndefined
-	assert.isUndefined(${1:value}, '${2:message}');
+	assert.isUndefined(${1:value}, '${2:message}')
 snippet assert isDefined
-	assert.isDefined(${1:value}, '${2:message}');
+	assert.isDefined(${1:value}, '${2:message}')
 snippet assert isFunction
-	assert.isFunction(${1:value}, '${2:message}');
+	assert.isFunction(${1:value}, '${2:message}')
 snippet assert isObject
-	assert.isObject(${1:value}, '${2:message}');
+	assert.isObject(${1:value}, '${2:message}')
 snippet assert isArray
-	assert.isArray(${1:value}, '${2:message}');
+	assert.isArray(${1:value}, '${2:message}')
 snippet assert isString
-	assert.isString(${1:value}, '${2:message}');
+	assert.isString(${1:value}, '${2:message}')
 snippet assert isNumber
-	assert.isNumber(${1:value}, '${2:message}');
+	assert.isNumber(${1:value}, '${2:message}')
 snippet assert typeOf
-	assert.typeOf(${1:value}, ${2:name}, '${3:message}');
+	assert.typeOf(${1:value}, ${2:name}, '${3:message}')
 snippet assert match
-	assert.match(${1:value}, ${2:regex}, '${3:message}');
+	assert.match(${1:value}, ${2:regex}, '${3:message}')
 snippet assert lengthOf
-	assert.lengthOf(${1:object}, ${2:length}, '${3:message}');
+	assert.lengthOf(${1:object}, ${2:length}, '${3:message}')
 # Chai - Expect
 snippet chai require expect
 alias che
-	expect = require('chai').expect${1:,}
+	expect = require("chai").expect${1:,}
+snippet expect general
+alias ex
+	expect(${1:expression}).to.${2:equal}(${3})
 snippet expect equal
-alias exe
-	expect(${1:expression}).to.equal(${2});
-# Chai - Should
-snippet chai require should
-alias chs
-	should = require('chai').should()${1:,}
+alias ee
+	expect(${1:expression}).to.equal(${2})
+snippet expect not equal
+alias ene
+	expect(${1:expression}).to.not.equal(${2})
+snippet expect be a
+	expect(${1:expression}).to.be.a("${2:string}")
+snippet expect be instanceof
+	expect(${1:expression}).to.be.instanceof("${2:string}")
+snippet expect be true
+alias ebt
+	expect(${1:expression}).to.be.true
+snippet expect be false
+alias ebf
+	expect(${1:expression}).to.be.false
+snippet expect be null
+	expect(${1:expression}).to.be.null
+snippet expect be undefined
+	expect(${1:expression}).to.be.undefined
+snippet expect be empty
+	expect(${1:expression}).to.be.empty
+snippet expect be above
+	expect(${1:expression}).to.be.above(${2})
+snippet expect be below
+	expect(${1:expression}).to.be.below(${2})
+snippet expect be within
+	expect(${1:expression}).to.be.within(${2})
+snippet expect exist
+	expect(${1:expression}).to.exist
+snippet expect include
+	expect(${1:expression}).to.include(${2})
+snippet expect contain
+	expect(${1:expression}).to.contain(${2})
+snippet expect match
+alias em
+	expect(${1:expression}).to.match(/${2}/)
+snippet expect throw
+	expect(${1:expression}).to.throw(${2})
+snippet expect satisfy
+	expect(${1:expression}).to.satisfy (${2:args}) ->
+		${3}

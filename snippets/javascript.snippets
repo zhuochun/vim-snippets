@@ -308,16 +308,16 @@ snippet gulp less
 # BDD
 snippet describe
 alias des
-	describe('${1:context to test}', function() {
+	describe("${1:context to test}", function() {
 		${2}
 	});
 snippet it
-	it('${1:should do something}', function() {
+	it("${1:should do something}", function() {
 		${2}
 	});
 snippet it async
 alias ita
-	it('${1:should do something async}', function(done) {
+	it("${1:should do something async}", function(done) {
 		${2:done()}
 	});
 snippet before
@@ -339,7 +339,7 @@ snippet afterEach
 # Chai - Assert
 snippet chai require assert
 alias cha
-	assert = require('chai').assert${1:,}
+	assert = require("chai").assert${1:,}
 snippet assert
 alias as
 	assert(${1:expression}, '${2:message}');
@@ -392,11 +392,50 @@ snippet assert lengthOf
 # Chai - Expect
 snippet chai require expect
 alias che
-	expect = require('chai').expect${1:,}
-snippet expect
+	expect = require("chai").expect${1:,}
+snippet expect general
 alias ex
 	expect(${1:expression}).to.${2:equal}(${3});
-# Chai - Should
-snippet chai require should
-alias chs
-	should = require('chai').should()${1:,}
+snippet expect equal
+alias ee
+	expect(${1:expression}).to.equal(${2});
+snippet expect not equal
+alias ene
+	expect(${1:expression}).to.not.equal(${2});
+snippet expect be a
+	expect(${1:expression}).to.be.a("${2:string}");
+snippet expect be instanceof
+	expect(${1:expression}).to.be.instanceof("${2:string}");
+snippet expect be true
+alias ebt
+	expect(${1:expression}).to.be.true;
+snippet expect be false
+alias ebf
+	expect(${1:expression}).to.be.false;
+snippet expect be null
+	expect(${1:expression}).to.be.null;
+snippet expect be undefined
+	expect(${1:expression}).to.be.undefined;
+snippet expect be empty
+	expect(${1:expression}).to.be.empty;
+snippet expect be above
+	expect(${1:expression}).to.be.above(${2});
+snippet expect be below
+	expect(${1:expression}).to.be.below(${2});
+snippet expect be within
+	expect(${1:expression}).to.be.within(${2});
+snippet expect exist
+	expect(${1:expression}).to.exist;
+snippet expect include
+	expect(${1:expression}).to.include(${2});
+snippet expect contain
+	expect(${1:expression}).to.contain(${2});
+snippet expect match
+alias em
+	expect(${1:expression}).to.match(/${2}/);
+snippet expect throw
+	expect(${1:expression}).to.throw(${2});
+snippet expect satisfy
+	expect(${1:expression}).to.satisfy(function(${2:args}) {
+		${3}
+	});

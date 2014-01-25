@@ -237,6 +237,10 @@ snippet defds
 	def_delegators :${1:@del_obj}, :${2:del_methods}
 snippet alias method
 	alias_method :${1:new_name}, :${2:old_name}
+snippet __ file
+	__FILE__
+snippet __ line
+	__LINE__
 snippet app
 	if __FILE__ == $PROGRAM_NAME
 		${1}
@@ -1465,36 +1469,39 @@ snippet to_json except
 #############################################
 # capybara cheatsheet
 #############################################
-snippet hasc
-	has_content?(${1:text})
+snippet have content
+	have_content?(${1:text})
 snippet click link
+alias cll
 	click_link ${1:id/text}
 snippet click button
+alias clb
 	click_button ${1:id/text}
-snippet click on link/button
+snippet click on
+alias clo
 	click_on ${1:id/text}
-snippet fill fill in
-	fill_in '${1:field}', with: ${2:value}
+snippet fill in
+	fill_in "${1:field}", with: ${2:value}
 snippet choose radio button
-	choose '${1:a radio button}'
+	choose "${1:a radio button}"
 snippet check checkbox
-	check '${1:a checkbox}'
+	check "${1:a checkbox}"
 snippet uncheck checkbox
-	uncheck '${1:a checkbox}'
-snippet attach attach file
-	attach_file '${1:field}', '${2:path_to_file}'
-snippet select select dropdown
-	select '${1:option}', from: '${2:field}'
+	uncheck "${1:a checkbox}"
+snippet attach file
+	attach_file "${1:field}", "${2:path_to_file}"
+snippet select dropdown
+	select "${1:option}", from: "${2:field}"
 snippet find default
 	find("${1:id}").${2:action}
 snippet find field
-	find_field('${1:text}').${2:action}
+	find_field("${1:text}").${2:action}
 snippet find link
-	find_link('${1:text}').${2:action}
+	find_link("${1:text}").${2:action}
 snippet find button
-	find_button('${1:text}').${2:action}
+	find_button("${1:text}").${2:action}
 snippet within
-	within('${1:selector}') do
+	within "${1:selector}" do
 		${2:tests}
 	end
 
