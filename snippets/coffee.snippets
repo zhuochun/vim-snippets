@@ -146,16 +146,16 @@ alias ita
 	it "${1:should do something}", (done) ->
 		${2:done()}
 snippet before
-	before ${1:(done)} ->
+	before ${1:(done) }->
 		${2}
 snippet after
-	after ${1:(done)} ->
+	after ${1:(done) }->
 		${2}
 snippet beforeEach
-	beforeEach ${1:(done)} ->
+	beforeEach ${1:(done) }->
 		${2}
 snippet afterEach
-	afterEach ${1:(done)} ->
+	afterEach ${1:(done) }->
 		${2}
 # Chai - Assert
 snippet chai require assert
@@ -223,6 +223,12 @@ alias ee
 snippet expect not equal
 alias ene
 	expect(${1:expression}).to.not.equal(${2})
+snippet expect deep equal
+alias ede
+	expect(${1:expression}).to.deep.equal(${2})
+snippet expect eql
+alias eeql
+	expect(${1:expression}).to.eql(${2})
 snippet expect be a
 	expect(${1:expression}).to.be.a("${2:string}")
 snippet expect be instanceof
@@ -235,6 +241,8 @@ alias ebf
 	expect(${1:expression}).to.be.false
 snippet expect be null
 	expect(${1:expression}).to.be.null
+snippet expect be defined
+	expect(${1:expression}).to.be.defined
 snippet expect be undefined
 	expect(${1:expression}).to.be.undefined
 snippet expect be empty

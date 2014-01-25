@@ -402,6 +402,12 @@ alias ee
 snippet expect not equal
 alias ene
 	expect(${1:expression}).to.not.equal(${2});
+snippet expect deep equal
+alias ede
+	expect(${1:expression}).to.deep.equal(${2});
+snippet expect eql
+alias eeql
+	expect(${1:expression}).to.eql(${2});
 snippet expect be a
 	expect(${1:expression}).to.be.a("${2:string}");
 snippet expect be instanceof
@@ -414,6 +420,8 @@ alias ebf
 	expect(${1:expression}).to.be.false;
 snippet expect be null
 	expect(${1:expression}).to.be.null;
+snippet expect be defined
+	expect(${1:expression}).to.be.defined;
 snippet expect be undefined
 	expect(${1:expression}).to.be.undefined;
 snippet expect be empty
