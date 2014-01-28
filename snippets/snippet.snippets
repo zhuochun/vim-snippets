@@ -18,4 +18,8 @@ alias opt
 	options ${1:word}${2}
 snippet target
 alias tg
-	{${1:n}:TARGET}
+	${${1:n}:TARGET}
+snippet $
+	${${1:n}}
+snippet #
+	${${1:n}:#:${2:text}}

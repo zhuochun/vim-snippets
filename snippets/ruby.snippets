@@ -5,11 +5,14 @@
 # encoding for Ruby 1.9
 snippet enc
 	# encoding: utf-8
+	${1}
 
 # #!/usr/bin/env ruby
 snippet #!
+alias shebang
 	#!/usr/bin/env ruby
 	# encoding: utf-8
+	${1}
 
 # New Block
 snippet =b
@@ -633,66 +636,97 @@ alias ar
 # Minitest Spec
 #############################################
 snippet must_be
+options word
 	must_be ${1}
 snippet must_be_close_to
+options word
 	must_be_close_to ${1}
 snippet must_be_empty
+options word
 	must_be_empty ${1}
 snippet must_be_instance_of
+options word
 	must_be_instance_of ${1}
 snippet must_be_kind_of
+options word
 	must_be_kind_of ${1}
 snippet must_be_nil
+options word
 	must_be_nil ${1}
 snippet must_be_same_as
+options word
 	must_be_same_as ${1}
 snippet must_be_silent
+options word
 	must_be_silent ${1}
 snippet must_be_within_delta
+options word
 	must_be_within_delta ${1}
 snippet must_be_within_epsilon
+options word
 	must_be_within_epsilon ${1}
 snippet must_equal
+options word
 	must_equal ${1}
 snippet must_include
+options word
 	must_include ${1}
 snippet must_match
+options word
 	must_match ${1}
 snippet must_output
+options word
 	must_output ${1}
 snippet must_raise
+options word
 	must_raise ${1}
 snippet must_respond_to
+options word
 	must_respond_to ${1}
 snippet must_send
+options word
 	must_send ${1}
 snippet must_throw
+options word
 	must_throw ${1}
 snippet wont_be
+options word
 	wont_be ${1}
 snippet wont_be_close_to
+options word
 	wont_be_close_to ${1}
 snippet wont_be_empty
+options word
 	wont_be_empty ${1}
 snippet wont_be_instance_of
+options word
 	wont_be_instance_of ${1}
 snippet wont_be_kind_of
+options word
 	wont_be_kind_of ${1}
 snippet wont_be_nil
+options word
 	wont_be_nil ${1}
 snippet wont_be_same_as
+options word
 	wont_be_same_as ${1}
 snippet wont_be_within_delta
+options word
 	wont_be_within_delta ${1}
 snippet wont_be_within_epsilon
+options word
 	wont_be_within_epsilon ${1}
 snippet wont_equal
+options word
 	wont_equal ${1}
 snippet wont_include
+options word
 	wont_include ${1}
 snippet wont_match
+options word
 	wont_match ${1}
 snippet wont_respond_to
+options word
 	wont_respond_to ${1}
 
 #############################################
