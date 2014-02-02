@@ -1261,11 +1261,13 @@ snippet context
 	context "${1:message}" do
 		${2}
 	end
-snippet bef rspec each/all
+snippet before rspec
+alias bef
 	before :${1:each} do
 		${2}
 	end
-snippet aft rspec each/all
+snippet after rspec
+alias aft
 	after :${1:each} do
 		${2}
 	end
@@ -1273,10 +1275,10 @@ snippet let
 	let(:${1:object}) ${2}
 snippet let!
 	let!(:${1:object}) ${2}
-snippet subj object
-	subject(:${1:instance}) { ${2} }
 snippet subj default
 	subject { ${1} }
+snippet subj object
+	subject(:${1:instance}) { ${2} }
 snippet subj .
 	subject.${1:method}
 snippet spec
@@ -1293,8 +1295,6 @@ snippet it
 	it "${1:spec_name}" do
 		${2}
 	end
-snippet its
-	its(:${1:method}) { should ${2} }
 
 ##########################
 # RSpec Expects
@@ -1381,78 +1381,82 @@ alias srw
 ##########################
 # RSpect Should
 ##########################
-snippet is
+snippet its method should
+	its(:${1:method}) { should ${2} }
+snippet it should
+alias itsh
 	it { should ${1} }
-snippet isn
+snippet it should_not
+alias itsn
 	it { should_not ${1} }
 #ShouldaMatchers#ActionController
-snippet isfp
+snippet it should filter_param
 	it { should filter_param :${1:key} }
-snippet isrt
+snippet it should redirect_to
 	it { should redirect_to ${1:url} }
-snippet isrtp
+snippet it should render_template
 	it { should render_template ${1} }
-snippet isrwl
+snippet it should render_with_layout
 	it { should render_with_layout ${1} }
-snippet isrf
+snippet it should rescue_from
 	it { should rescue_from ${1:exception} }
-snippet isrw
+snippet it should respond_with
 	it { should respond_with ${1:status} }
-snippet isr
+snippet it should rout
 	it { should route(:${1:method}, '${2:path}') }
-snippet isss
+snippet it should set_session
 	it { should set_session :${1:key} }
-snippet issf
+snippet it should set_the_flash
 	it { should set_the_flash('${1}') }
 #ShouldaMatchers#ActiveModel
-snippet isama
+snippet it should allow_mass_assignment_of
 	it { should allow_mass_assignment_of :${1} }
-snippet isav
+snippet it should allow_value
 	it { should allow_value(${1}).for :${2} }
-snippet isee
+snippet it should ensure_exclusion_of
 	it { should ensure_exclusion_of :${1} }
-snippet isei
+snippet it should ensure_inclusion_of
 	it { should ensure_inclusion_of :${1} }
-snippet isel
+snippet it should ensure_length_of
 	it { should ensure_length_of(:${1}).is_at_least(${2}).is_at_most(${3}) }
-snippet isva
+snippet it should validate_acceptance_of
 	it { should validate_acceptance_of :${1} }
-snippet isvc
+snippet it should validate_confirmation_of
 	it { should validate_confirmation_of :${1} }
-snippet isvn
+snippet it should validate_numericality_of
 	it { should validate_numericality_of :${1} }
-snippet isvp
+snippet it should validate_presence_of
 	it { should validate_presence_of :${1} }
-snippet isvu
+snippet it should validate_uniqueness_of
 	it { should validate_uniqueness_of :${1} }
 #ShouldaMatchers#ActiveRecord
-snippet isana
+snippet it should accept_nested_attributes_for
 	it { should accept_nested_attributes_for :${1} }
-snippet isbt
+snippet it should belong_to
 	it { should belong_to :${1} }
-snippet isbtcc
+snippet it should belong_to counter
 	it { should belong_to(:${1}).counter_cache ${2:true} }
-snippet ishbtm
+snippet it should have_and_belong_to_many
 	it { should have_and_belong_to_many :${1} }
-snippet isbv
+snippet it should be_valid
 	it { should be_valid }${1}
-snippet ishc
+snippet it should have_db_column
 	it { should have_db_column :${1} }
-snippet ishi
+snippet it should have_db_index
 	it { should have_db_index :${1} }
-snippet ishm
+snippet it should have_many
 	it { should have_many :${1} }
-snippet ishmt
+snippet it should have_many through
 	it { should have_many(:${1}).through :${2} }
-snippet isho
+snippet it should have_one
 	it { should have_one :${1} }
-snippet ishro
+snippet it should have_readonly_attribute
 	it { should have_readonly_attribute :${1} }
-snippet iss
+snippet it should serialize
 	it { should serialize :${1} }
-snippet isres
+snippet it should respond_to
 	it { should respond_to :${1} }
-snippet isresw
+snippet it should respond_t
 	it { should respond_to(:${1}).with(${2}).arguments }
 snippet super_call
 	${1:super_class}.instance_method(:${2:method}).bind(self).call
@@ -1487,30 +1491,55 @@ snippet docr returns
 
 # Regex
 # avoid using $1-9 as it can be hard to track
-snippet regex named group
+snippet rgx named group
 	(?<${1:name}>${2:regex})
 # x modifier
-snippet regex across line
+snippet rgx across line
 	%r{
 		${1}
 	}x${2}
 # to_json
-snippet to_json only
+snippet json only
 	${1:instance}.to_json(include: ${2}, only: ${3})${4}
-snippet to_json except
+snippet json except
 	${1:instance}.to_json(include: ${2}, except: ${3})${4}
 
 #############################################
 # capybara cheatsheet
 #############################################
+snippet feature
+alias fea
+	feature "${1:feature}" do
+		${2}
+	end
+snippet background
+alias bg
+	background do
+		${1}
+	end
+snippet scenario
+alias sce
+	scenario "${1:use case}" do
+		${2}
+	end
+snippet scenario js:true
+	scenario "${1:use case}", js: true do
+		${2}
+	end
 snippet expect have_content
+alias hc
 	expect(page).to have_content(${1})
+snippet expect current_path
+	expect(current_path).to eq(${1})
 snippet expect has_selector
 	expect(page).to have_selector(${1})
 snippet expect has_xpath
 	expect(page).to have_xpath(${1})
 snippet expect has_css
 	expect(page).to have_css(${1})
+snippet visit
+alias vi
+	visit ${1:path}
 snippet click link
 alias cll
 	click_link ${1:id/text}
@@ -1528,10 +1557,12 @@ snippet check checkbox
 	check "${1:a checkbox}"
 snippet uncheck checkbox
 	uncheck "${1:a checkbox}"
-snippet attach file
-	attach_file "${1:field}", "${2:path_to_file}"
 snippet select dropdown
 	select "${1:option}", from: "${2:field}"
+snippet unselect dropdown
+	unselect "${1:option}", from: "${2:field}"
+snippet attach file
+	attach_file "${1:field}", "${2:path_to_file}"
 snippet find default
 	find("${1:selector}").${2:action}
 snippet find click on
@@ -1542,7 +1573,7 @@ snippet find link
 	find_link("${1:text}").${2:action}
 snippet find button
 	find_button("${1:text}").${2:action}
-snippet within general
+snippet within
 	within "${1:selector}" do
 		${2}
 	end
@@ -1558,7 +1589,7 @@ alias fgd
 		end
 	end
 snippet factory default
-alias fgf
+alias fgdf
 	factory :${1:name} do
 		${2:attr} ${3:value}
 	end
