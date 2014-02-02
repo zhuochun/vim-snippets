@@ -1072,29 +1072,42 @@ snippet validator
 		end
 	end
 snippet validate
-	validates :${1:method}
+	validate :${1:method}
 snippet validates
 	validates :${1:attribute}, ${2:validators}
 snippet validates acceptance
+alias valac
 	validates :${1:terms}, acceptance: true
 snippet validates confirmation
+alias valc
 	validates :${1:attribute}, confirmation: true
 snippet validates exclusion
+alias vale
 	validates :${1:attribute}, exclusion: { in: ${2:%w( mov avi )} }
 snippet validates format
+alias valf
 	validates :${1:attribute}, format: { with: /${2:regex}/ }
 snippet validates inclusion
+alias vali
 	validates :${1:attribute}, inclusion: { in: %w(${2: mov avi }) }
 snippet validates length
+alias vall
 	validates :${1:attribute}, length: { in: ${2:3}..${3:20} }
 snippet validates numericality
+alias valn
 	validates :${1:attribute}, numericality: ${1:true}
 snippet validates presence
+alias valp
 	validates :${1:attribute}, presence: true
 snippet validates uniqueness
+alias valu
 	validates :${1:attribute}, uniqueness: true
 snippet validates_associated
+alias valas
 	validates_associated :${1:attribute}
+snippet validates_with
+alias valw
+	validates_with ${1:Some}Validator
 snippet format
 	format.${1:js|xml|html} { ${2} }
 snippet where field:value
@@ -1322,10 +1335,10 @@ snippet expect be
 	expect(${1:target}).to be ${2}
 snippet expect not be
 	expect(${1:target}).not_to be ${2}
-snippet expect be_truthy
+snippet expect be_true
 alias ebt
 	expect(${1:target}).to be_true
-snippet expect be_falsey
+snippet expect be_false
 alias ebf
 	expect(${1:target}).to be_false
 snippet expect be_nil
