@@ -279,20 +279,17 @@ alias gs
 		.pipe(${2})${3:;}
 snippet gulp pipe
 alias gs
-	pipe(${1})${2:;}
+	pipe(${1:plugin}(${2}))${3:;}
 snippet gulp dest
 alias gd
 	gulp.dest('${1:./build}')${2:;}
+snippet gulp watch
+alias gw
+	gulp.watch('${1:glob}', ['${3:task}'${4}]);
 snippet gulp copy
 alias gcp
 	gulp.src('${1:src/**}')
 		.pipe(gulp.dest('${2:./build/**}'));
-snippet gulp watch
-alias gw
-	gulp.watch(['${1}'${2}], function() {
-		gulp.run('${3}');
-		${4}
-	});
 snippet gulp coffee
 	gulp.task('coffee', function() {
 		gulp.src('./coffee/*.coffee')

@@ -293,9 +293,10 @@ snippet upto
 snippet loop
 	loop { ${1} }
 snippet each
+alias ea
 	each { |${1:e}| ${2} }
 snippet each do
-alias ea
+alias ead
 	each do |${1:e}|
 		${2}
 	end
@@ -306,6 +307,7 @@ snippet each_char
 snippet each_cons
 	each_cons(${1:2}) { |${2:group}| ${3} }
 snippet each_index
+alias eai
 	each_index { |${1:i}| ${2} }
 snippet each_index do
 alias eaid
@@ -313,12 +315,15 @@ alias eaid
 		${2}
 	end
 snippet each_key
+alias eak
 	each_key { |${1:key}| ${2} }
 snippet each_key do
+alias eakd
 	each_key do |${1:key}|
 		${2}
 	end
 snippet each_line
+alias eal
 	each_line { |${1:line}| ${2} }
 snippet each_line do
 alias eald
