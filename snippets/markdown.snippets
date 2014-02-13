@@ -32,6 +32,25 @@ snippet jekyll project
 	permalink: /project/$2.html
 	---
 	${12}
+# Cleaver Slides
+snippet cleaver
+	title: ${1:title}
+	author:
+		name: ${2:`g:snips_author`}
+		email: ${3:`g:snips_email`}
+	style: css/style.css
+	output: ${4:output}.html
+
+	--
+
+	# $1
+	## ${5:sub title}
+
+	$6
+snippet slide
+	--
+
+	$1
 # HTML Syntax
 snippet img default
 	![${1:TARGET}](${2:/images/image.jpg})

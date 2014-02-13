@@ -1507,15 +1507,28 @@ snippet doca argument with default
 snippet docr returns
 	Returns ${1}
 
-# Regex
-# avoid using $1-9 as it can be hard to track
-snippet rgx named group
+# regex
+snippet regex named group
+alias ng
 	(?<${1:name}>${2:regex})
-# x modifier
-snippet rgx across line
+snippet regex across line
+alias rgx %r
 	%r{
 		${1}
-	}x${2}
+	}x
+snippet regex positive lookahead
+alias pla
+	(?=${1})
+snippet regex negative lookahead
+alias nla
+	(?!${1})
+snippet regex positive lookbehind
+alias plb
+	(?<=${1})
+snippet regex negative lookbehind
+alias nlb
+	(?<!${1})
+
 # to_json
 snippet json only
 	${1:instance}.to_json(include: ${2}, only: ${3})${4}

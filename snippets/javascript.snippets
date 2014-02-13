@@ -1,3 +1,7 @@
+# Shebang
+snippet shebang
+alias #!
+	#!/usr/bin/env node
 # Prototype
 snippet proto
 	${1:class_name}.prototype.${2:method_name} =
@@ -208,6 +212,19 @@ snippet prop
 			configurable : ${6:boolean}
 		}
 	);
+# regular expression
+snippet regex positive lookahead
+alias pla
+	(?=${1})
+snippet regex negative lookahead
+alias nla
+	(?!${1})
+snippet regex positive lookbehind
+alias plb
+	(?<=${1})
+snippet regex negative lookbehind
+alias nlb
+	(?<!${1})
 # backbones
 snippet view model
 	Backbone.View.extend({
