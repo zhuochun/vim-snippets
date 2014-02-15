@@ -13,13 +13,29 @@ alias al
 snippet include
 alias inc
 	include ${1:type}.snippets
-snippet options
-alias opt
-	options ${1:word}${2}
+snippet options word
+alias opw
+	options word${1}
+snippet options head
+alias oph
+	options head${1}
 snippet target
 alias tg
-	${${1:n}:TARGET}
+	${${1:1}:TARGET}
 snippet $
 	${${1:n}}
+snippet 1
+	\${1:${1:TARGET}}
+snippet 2
+	\${2:${1:TARGET}}
+snippet 3
+	\${3:${1:TARGET}}
+snippet 4
+	\${4:${1:TARGET}}
+snippet 5
+	\${5:${1:TARGET}}
+snippet n
+	${${1:n}:${2:TARGET}}
+# remove placeholder text
 snippet #
 	${${1:n}:#:${2:text}}
