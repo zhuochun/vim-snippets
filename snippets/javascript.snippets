@@ -55,7 +55,7 @@ snippet ter
 # switch
 snippet switch
 	switch (${1:expression}) {
-		case '${3:case}':
+		case "${3:case}":
 			${4}
 			break;
 		${5}
@@ -64,7 +64,7 @@ snippet switch
 	}
 # case
 snippet case
-	case '${1:case}':
+	case "${1:case}":
 		${2}
 		break;
 	${3}
@@ -110,10 +110,10 @@ snippet timeout
 	setTimeout(function () {${3}}${2}, ${1:10});
 # Get Elements
 snippet get
-	getElementsBy${1:TagName}('${2}')${3}
+	getElementsBy${1:TagName}("${2}")${3}
 # Get Element
 snippet gett
-	getElementBy${1:Id}('${2}')${3}
+	getElementBy${1:Id}("${2}")${3}
 # console.log (Firebug)
 snippet cl
 	console.log(${1});
@@ -172,7 +172,7 @@ snippet sing
 
 		return instance;
 	}
-# Crockford's object function
+# Crockford"s object function
 snippet obj
 	function object(o) {
 		function F() {}
@@ -284,44 +284,44 @@ snippet history
 # gulp
 snippet gulp init
 alias gi
-	var gulp = require('gulp')${1};
+	var gulp = require("gulp")${1};
 
-	gulp.task('default', function(){
+	gulp.task("default", function(){
 		// place code for your default task here
 	});
 snippet gulp task
 alias gt
-	gulp.task('${1:task-name}', function() {
+	gulp.task("${1:task-name}", function() {
 		${2}
 	});
 snippet gulp src
 alias gs
-	gulp.src('${1:./**}')
+	gulp.src("${1:./**}")
 		.pipe(${2})${3:;}
 snippet gulp pipe
 alias gs
 	pipe(${1:plugin}(${2}))${3:;}
 snippet gulp dest
 alias gd
-	gulp.dest('${1:./build}')${2:;}
+	gulp.dest("${1:./build}")${2:;}
 snippet gulp watch
 alias gw
-	gulp.watch('${1:glob}', ['${3:task}'${4}]);
+	gulp.watch("${1:glob}", ["${3:task}"${4}]);
 snippet gulp copy
 alias gcp
-	gulp.src('${1:src/**}')
-		.pipe(gulp.dest('${2:./build/**}'));
+	gulp.src("${1:src/**}")
+		.pipe(gulp.dest("${2:./build/**}"));
 snippet gulp coffee
-	gulp.task('coffee', function() {
-		gulp.src('./coffee/*.coffee')
+	gulp.task("coffee", function() {
+		gulp.src("./coffee/*.coffee")
 			.pipe(coffee(${1}))
-			.pipe(gulp.dest('./js'));
+			.pipe(gulp.dest("./js"));
 	});
 snippet gulp less
-	gulp.task('less', function() {
-		gulp.src('./less/*.less')
+	gulp.task("less", function() {
+		gulp.src("./less/*.less")
 			.pipe(less({compress: ${1:true}}))
-			.pipe(gulp.dest('./css'));
+			.pipe(gulp.dest("./css"));
 	});
 # BDD
 snippet describe
@@ -361,53 +361,53 @@ snippet chai browser assert
 	var assert = chai.assert${1:;}
 snippet assert
 alias as
-	assert(${1:expression}, '${2:message}');
+	assert(${1:expression}, "${2:message}");
 snippet assert equal
 alias ae
-	assert.equal(${1:actual}, ${2:expected}, '${3:message}');
+	assert.equal(${1:actual}, ${2:expected}, "${3:message}");
 snippet assert not equal
 alias ane
-	assert.notEqual(${1:actual}, ${2:expected}, '${3:message}');
+	assert.notEqual(${1:actual}, ${2:expected}, "${3:message}");
 snippet assert strict equal
 alias ase
-	assert.strictEqual(${1:actual}, ${2:expected}, '${3:message}');
+	assert.strictEqual(${1:actual}, ${2:expected}, "${3:message}");
 snippet assert not strict equal
 alias anse
-	assert.notStrictEqual(${1:actual}, ${2:expected}, '${3:message}');
+	assert.notStrictEqual(${1:actual}, ${2:expected}, "${3:message}");
 snippet assert deep equal
 alias ade
-	assert.deepEqual(${1:actual}, ${2:expected}, '${3:message}');
+	assert.deepEqual(${1:actual}, ${2:expected}, "${3:message}");
 snippet assert not deep equal
 alias ande
-	assert.notDeepEqual(${1:actual}, ${2:expected}, '${3:message}');
+	assert.notDeepEqual(${1:actual}, ${2:expected}, "${3:message}");
 snippet assert isTrue
 alias at
-	assert.isTrue(${1:value}, '${2:message}');
+	assert.isTrue(${1:value}, "${2:message}");
 snippet assert isFalse
 alias af
-	assert.isFalse(${1:value}, '${2:message}');
+	assert.isFalse(${1:value}, "${2:message}");
 snippet assert isNull
-	assert.isNull(${1:value}, '${2:message}');
+	assert.isNull(${1:value}, "${2:message}");
 snippet assert isUndefined
-	assert.isUndefined(${1:value}, '${2:message}');
+	assert.isUndefined(${1:value}, "${2:message}");
 snippet assert isDefined
-	assert.isDefined(${1:value}, '${2:message}');
+	assert.isDefined(${1:value}, "${2:message}");
 snippet assert isFunction
-	assert.isFunction(${1:value}, '${2:message}');
+	assert.isFunction(${1:value}, "${2:message}");
 snippet assert isObject
-	assert.isObject(${1:value}, '${2:message}');
+	assert.isObject(${1:value}, "${2:message}");
 snippet assert isArray
-	assert.isArray(${1:value}, '${2:message}');
+	assert.isArray(${1:value}, "${2:message}");
 snippet assert isString
-	assert.isString(${1:value}, '${2:message}');
+	assert.isString(${1:value}, "${2:message}");
 snippet assert isNumber
-	assert.isNumber(${1:value}, '${2:message}');
+	assert.isNumber(${1:value}, "${2:message}");
 snippet assert typeOf
-	assert.typeOf(${1:value}, ${2:name}, '${3:message}');
+	assert.typeOf(${1:value}, ${2:name}, "${3:message}");
 snippet assert match
-	assert.match(${1:value}, ${2:regex}, '${3:message}');
+	assert.match(${1:value}, ${2:regex}, "${3:message}");
 snippet assert lengthOf
-	assert.lengthOf(${1:object}, ${2:length}, '${3:message}');
+	assert.lengthOf(${1:object}, ${2:length}, "${3:message}");
 # Chai - Expect
 snippet chai require expect
 	var expect = require("chai").expect${1:;}
@@ -505,3 +505,125 @@ snippet jexpect toBeCloseTo
 snippet jexpect toThrow
 	expect(${1:expression}).toThrow();
 # angular
+snippet angular module
+alias ngm
+	var ${1:moduleName} = angular.module("$1", [${2:dependency}]);
+snippet angular module def
+	angular.module("${1:moduleName}", [${2:dependency}]);
+snippet angular config
+alias ngc
+options word
+	config([
+		"$routeProvider",
+		function($routeProvider) {
+			${1}
+		}
+	]);
+# angular route
+snippet angular route when
+alias ngrw
+	$routeProvider.when("${1:url}", {
+		templateUrl: "${2:templateUrl}",
+		controller: "${3:controller}"
+	});
+snippet angular route when with resolve
+alias ngrwr
+	$routeProvider.when("${1:url}", {
+		templateUrl: "${2:templateUrl}",
+		controller: "${3:controller}",
+		resolve: {
+			${4}
+		}
+	});
+snippet angular route otherwise
+alias ngro
+	$routeProvider.otherwise({
+		redirectTo: "${1:url}"
+	});
+# angular scope
+snippet $scope fun
+	$scope.${1:functionName} = function(${2:args}) {
+		${3}
+	};
+snippet $scope var
+	$scope.${1:variable} = ${2:value};
+snippet $scope watch
+	$scope.$watch("${1:watchExpr}", function(newVal, oldVal) {
+		${2}
+	});
+snippet $scope on
+	$scope.$on("${1:eventName}", function(event, ${2:args}) {
+		${3}
+	});
+snippet $scope broadcast
+	$scope.$broadcast("${1:eventName}", ${2:eventArgs});
+snippet $scope emit
+	$scope.$emit("${1:eventName}", ${2:eventArgs});
+# angular api
+snippet angular controller
+alias ngctrl
+options word
+	controller("${1:controllerName}", [
+		"$scope",
+		function($scope) {
+			${2}
+		});
+	]);
+snippet angular directive
+options word
+	directive("${1:directiveName}", function() {
+		return {
+			templateUrl: "${2:url}"
+		};
+	});
+snippet angular directive injectables
+alias ngdir
+options word
+	directive("${1:directiveName}", [
+		"${2:dependency}",
+		function($2) {
+			function link(scope, element, attrs) {
+				${3}
+			}
+
+			return {
+				link: link
+			};
+		}
+	]);
+snippet angular factory
+options word
+	factory("${1:factoryName}", function() {
+		${2}
+	});
+snippet angular factory injectables
+alias ngfa
+options word
+	factory("${1:factoryName}", [
+		"${2:dependency}",
+		function($2) {
+			${3}
+		});
+	]);
+snippet angular service
+options word
+	service("${1:serviceName}", function() {
+		${2}
+	});
+snippet angular service injectables
+alias ngse
+options word
+	service("${1:serviceName}", [
+		"${2:dependency}",
+		function($2) {
+			${3}
+		});
+	]);
+snippet angular filter
+alias ngfi
+options word
+	filter("${1:filterName}", function() {
+		return function(input, ${2:args}) {
+			${3}
+		};
+	});

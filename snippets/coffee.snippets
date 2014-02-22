@@ -267,3 +267,139 @@ snippet expect throw
 snippet expect satisfy
 	expect(${1:expression}).to.satisfy (${2:args}) ->
 		${3}
+# jasmine
+snippet jexpect toBe
+	expect(${1:expression}).toBe(${2:true})
+snippet jexpect toNotBe
+	expect(${1:expression}).toNotBe(${2:true})
+snippet jexpect toEqual
+	expect(${1:expression}).toEqual(${2:value})
+snippet jexpect toNotEqual
+	expect(${1:expression}).toNotEqual(${2:value})
+snippet jexpect toMatch
+	expect(${1:expression}).toMatch(${2:regex})
+snippet jexpect toNotMatch
+	expect(${1:expression}).toNotMatch(${2:regex})
+snippet jexpect toBeDefined
+	expect(${1:expression}).toBeDefined()
+snippet jexpect toBeUndefined
+	expect(${1:expression}).toBeUndefined()
+snippet jexpect toBeNull
+	expect(${1:expression}).toBeNull()
+snippet jexpect toBeTruthy
+	expect(${1:expression}).toBeTruthy()
+snippet jexpect toBeFalsy
+	expect(${1:expression}).toBeFalsy()
+snippet jexpect toContain
+	expect(${1:expression}).toContain(${2:string})
+snippet jexpect toNotContain
+	expect(${1:expression}).toNotContain(${2:string})
+snippet jexpect toBeLessThan
+	expect(${1:expression}).toBeLessThan(${2:number})
+snippet jexpect toBeGreaterThan
+	expect(${1:expression}).toBeGreaterThan(${2:number})
+snippet jexpect toBeNaN
+	expect(${1:expression}).toBeNaN()
+snippet jexpect toBeCloseTo
+	expect(${1:expression}).toBeCloseTo(${2:precision})
+snippet jexpect toThrow
+	expect(${1:expression}).toThrow()
+# angular
+snippet angular module
+alias ngm
+	${1:moduleName} = angular.module("$1", [${2:dependency}])
+snippet angular module def
+	angular.module("${1:moduleName}", [${2:dependency}])
+snippet angular config
+alias ngc
+options word
+	config([
+		"$routeProvider"
+		($routeProvider) ->
+			${1}
+	])
+# angular route
+snippet angular route when
+alias ngrw
+	$routeProvider.when '${1:url}',
+		templateUrl: '${2:templateUrl}'
+		controller: '${3:controller}'
+snippet angular route when with resolve
+alias ngrwr
+	$routeProvider.when '${1:url}',
+		templateUrl: '${2:templateUrl}'
+		controller: '${3:controller}'
+		resolve:
+			${4}
+snippet angular route otherwise
+alias ngro
+	$routeProvider.otherwise redirectTo: '${1:url}'
+# angular scope
+snippet $scope fun
+	$scope.${1:functionName} = (${2:args}) ->
+		${3}
+snippet $scope var
+	$scope.${1:variable} = ${2:value}
+snippet $scope watch
+	$scope.$watch '${1:watchExpr}', (newVal, oldVal) ->
+		${2}
+snippet $scope on
+	$scope.$on '${1:eventName}', (event, ${2:args}) ->
+		${3}
+snippet $scope broadcast
+	$scope.$broadcast '${1:eventName}', ${2:eventArgs}
+snippet $scope emit
+	$scope.$emit '${1:eventName}', ${2:eventArgs}
+# angular api
+snippet angular controller
+alias ngctrl
+options word
+	controller "${1:controllerName}", [
+		"$scope",
+		($scope) ->
+			${2}
+	]
+snippet angular directive
+options word
+	directive "${1:directiveName}", ->
+		templateUrl: "${2:url}"
+	}
+snippet angular directive injectables
+alias ngdir
+options word
+	directive "${1:directiveName}", [
+		"${2:dependency}"
+		($2) ->
+			link: (scope, element, attrs) ->
+				${3}
+	]
+snippet angular factory
+options word
+	factory "${1:factoryName}", ->
+		${2}
+snippet angular factory injectables
+alias ngfa
+options word
+	factory "${1:factoryName}", [
+		"${2:dependency}"
+		($2) ->
+			${3}
+	]
+snippet angular service
+options word
+	service "${1:serviceName}", ->
+		${2}
+snippet angular service injectables
+alias ngse
+options word
+	service "${1:serviceName}", [
+		"${2:dependency}"
+		($2) ->
+			${3}
+	]
+snippet angular filter
+alias ngfi
+options word
+	filter "${1:filterName}", ->
+		(input, ${2:args}) ->
+			${3}
