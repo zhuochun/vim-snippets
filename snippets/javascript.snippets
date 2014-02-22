@@ -2,6 +2,10 @@
 snippet shebang
 alias #!
 	#!/usr/bin/env node
+# Strict
+snippet use strict
+alias strict
+	"use strict";
 # Prototype
 snippet proto
 	${1:class_name}.prototype.${2:method_name} =
@@ -352,8 +356,9 @@ snippet afterEach
 	});
 # Chai - Assert
 snippet chai require assert
-alias cha
-	assert = require("chai").assert${1:,}
+	var assert = require("chai").assert${1:;}
+snippet chai browser assert
+	var assert = chai.assert${1:;}
 snippet assert
 alias as
 	assert(${1:expression}, '${2:message}');
@@ -405,8 +410,9 @@ snippet assert lengthOf
 	assert.lengthOf(${1:object}, ${2:length}, '${3:message}');
 # Chai - Expect
 snippet chai require expect
-alias che
-	expect = require("chai").expect${1:,}
+	var expect = require("chai").expect${1:;}
+snippet chai browser expect
+	var expect = chai.expect${1:;}
 snippet expect general
 alias ex
 	expect(${1:expression}).to.${2:equal}(${3});
@@ -461,3 +467,41 @@ snippet expect satisfy
 	expect(${1:expression}).to.satisfy(function(${2:args}) {
 		${3}
 	});
+# jasmine
+snippet jexpect toBe
+	expect(${1:expression}).toBe(${2:true});
+snippet jexpect toNotBe
+	expect(${1:expression}).toNotBe(${2:true});
+snippet jexpect toEqual
+	expect(${1:expression}).toEqual(${2:value});
+snippet jexpect toNotEqual
+	expect(${1:expression}).toNotEqual(${2:value});
+snippet jexpect toMatch
+	expect(${1:expression}).toMatch(${2:regex});
+snippet jexpect toNotMatch
+	expect(${1:expression}).toNotMatch(${2:regex});
+snippet jexpect toBeDefined
+	expect(${1:expression}).toBeDefined();
+snippet jexpect toBeUndefined
+	expect(${1:expression}).toBeUndefined();
+snippet jexpect toBeNull
+	expect(${1:expression}).toBeNull();
+snippet jexpect toBeTruthy
+	expect(${1:expression}).toBeTruthy();
+snippet jexpect toBeFalsy
+	expect(${1:expression}).toBeFalsy();
+snippet jexpect toContain
+	expect(${1:expression}).toContain(${2:string});
+snippet jexpect toNotContain
+	expect(${1:expression}).toNotContain(${2:string});
+snippet jexpect toBeLessThan
+	expect(${1:expression}).toBeLessThan(${2:number});
+snippet jexpect toBeGreaterThan
+	expect(${1:expression}).toBeGreaterThan(${2:number});
+snippet jexpect toBeNaN
+	expect(${1:expression}).toBeNaN();
+snippet jexpect toBeCloseTo
+	expect(${1:expression}).toBeCloseTo(${2:precision});
+snippet jexpect toThrow
+	expect(${1:expression}).toThrow();
+# angular
