@@ -864,53 +864,63 @@ alias btp
 snippet crw
 	cattr_accessor :${1:attr_names}
 snippet defcreate
+	# POST /$1
+	# POST /$1.json
 	def create
 		@${1:model_class_name} = ${2:ModelClassName}.new(params[:$1])
 
 		respond_to do |format|
 			if @$1.save
-				flash[:notice] = '$2 was successfully created.'
-				format.html { redirect_to(@$1) }
-				format.json  { render json: @$1, status: :created, location: @$1 }
+				format.html { redirect_to @$1, notice: '$2 was successfully created.' }
+				format.json { render json: @$1, status: :created, location: @$1 }
 			else
-				format.html { render :action => "new" }
-				format.json  { render json: @$1.errors, status: :unprocessable_entity }
+				format.html { render action: 'new' }
+				format.json { render json: @$1.errors, status: :unprocessable_entity }
 			end
 		end
 	end${3}
 snippet defdestroy
+	# DELETE /$1/1
+	# DELETE /$1/1.json
 	def destroy
 		@${1:model_class_name} = ${2:ModelClassName}.find(params[:id])
 		@$1.destroy
 
 		respond_to do |format|
-			format.html { redirect_to($1s_url) }
-			format.json  { head :ok }
+			format.html { redirect_to $1s_url }
+			format.json  { head :no_content }
 		end
 	end${3}
 snippet defedit
+	# GET /$1/1/edit
 	def edit
 		@${1:model_class_name} = ${2:ModelClassName}.find(params[:id])
-	end
+	end${3}
 snippet defindex
+	# GET /$1
+	# GET /$1.json
 	def index
 		@${1:model_class_name} = ${2:ModelClassName}.all
 
 		respond_to do |format|
 			format.html # index.html.erb
-			format.json  { render json: @$1s }
+			format.json { render json: @$1s }
 		end
 	end${3}
 snippet defnew
+	# GET /$1/new
+	# GET /$1/new.json
 	def new
 		@${1:model_class_name} = ${2:ModelClassName}.new
 
 		respond_to do |format|
 			format.html # new.html.erb
-			format.json  { render json: @$1 }
+			format.json { render json: @$1 }
 		end
 	end${3}
 snippet defshow
+	# GET /$1/1
+	# GET /$1/1.json
 	def show
 		@${1:model_class_name} = ${2:ModelClassName}.find(params[:id])
 
@@ -920,16 +930,17 @@ snippet defshow
 		end
 	end${3}
 snippet defupdate
+	# PUT /$1/1
+	# PUT /$1/1.json
 	def update
 		@${1:model_class_name} = ${2:ModelClassName}.find(params[:id])
 
 		respond_to do |format|
 			if @$1.update_attributes(params[:$1])
-				flash[:notice] = '$2 was successfully updated.'
-				format.html { redirect_to(@$1) }
-				format.json { head :ok }
+				format.html { redirect_to @$1, notice: '$2 was successfully updated.' }
+				format.json { head :no_content }
 			else
-				format.html { render action: "edit" }
+				format.html { render action: 'edit' }
 				format.json { render json: @$1.errors, status: :unprocessable_entity }
 			end
 		end
@@ -1385,29 +1396,23 @@ alias es
 # mock and stub
 snippet stub
 alias st
-	stub(:${1:method})
+	stub(${1:method}: ${2:return})
 snippet stub returns
 alias str
 	stub(:${1:method}).and_return(${3:result})
-snippet should_receive
-alias sr
-	should_receive(:${1:method})
-snippet should_receive with and return
-alias srw
-	should_receive(:${1:method}).with(${2:attrs}).and_return(${3:result})
-alias expect receive once
+snippet expect receive once
 	expect(${1:target}).to receive(:${2:method}).once
-alias expect receive twice
+snippet expect receive twice
 	expect(${1:target}).to receive(:${2:method}).twice
-alias expect receive times
+snippet expect receive times
 	expect(${1:target}).to receive(:${2:method}).exactly(${3:3}).times
-alias expect receive at_least times
+snippet expect receive at_least times
 	expect(${1:target}).to receive(:${2:method}).at_least(${3:3}).times
-alias expect receive at_most times
+snippet expect receive at_most times
 	expect(${1:target}).to receive(:${2:method}).at_most(${3:3}).times
-alias expect receive with
+snippet expect receive with
 	expect(${1:target}).to receive(:${2:method}).with(${3:args})
-alias expect receive with anything
+snippet expect receive with anything
 	expect(${1:target}).to receive(:${2:method}).with(anything())
 
 ##########################
