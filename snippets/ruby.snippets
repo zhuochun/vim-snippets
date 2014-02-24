@@ -1395,6 +1395,20 @@ alias sr
 snippet should_receive with and return
 alias srw
 	should_receive(:${1:method}).with(${2:attrs}).and_return(${3:result})
+alias expect receive once
+	expect(${1:target}).to receive(:${2:method}).once
+alias expect receive twice
+	expect(${1:target}).to receive(:${2:method}).twice
+alias expect receive times
+	expect(${1:target}).to receive(:${2:method}).exactly(${3:3}).times
+alias expect receive at_least times
+	expect(${1:target}).to receive(:${2:method}).at_least(${3:3}).times
+alias expect receive at_most times
+	expect(${1:target}).to receive(:${2:method}).at_most(${3:3}).times
+alias expect receive with
+	expect(${1:target}).to receive(:${2:method}).with(${3:args})
+alias expect receive with anything
+	expect(${1:target}).to receive(:${2:method}).with(anything())
 
 ##########################
 # RSpect Should
