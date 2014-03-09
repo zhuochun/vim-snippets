@@ -273,194 +273,262 @@ snippet Dir [".."]
 snippet dir
 	Filename.dirname(__FILE__)
 snippet deli
+options word
 	delete_if { |${1:e}| ${2} }
 snippet fill
+options word
 	fill(${1:range}) { |${2:i}| ${3} }
 # flatten_once()
 snippet flao
+options word
 	inject(Array.new) { |${1:arr}, ${2:a}| $1.push(*$2)}${3}
 snippet zip
+options word
 	zip(${1:enums}) { |${2:row}| ${3} }
 # downto(0) { |n| .. }
 snippet downto
+options word
 	downto(${1:0}) { |${2:n}| ${3} }
 snippet step
+options word
 	step(${1:2}) { |${2:n}| ${3} }
 snippet times
+options word
 	times { |${1:n}| ${2} }
 snippet upto
+options word
 	upto(${1:1.0/0.0}) { |${2:n}| ${3} }
 snippet loop
+options word
 	loop { ${1} }
 snippet each
 alias ea
+options word
 	each { |${1:e}| ${2} }
 snippet each do
 alias ead
+options word
 	each do |${1:e}|
 		${2}
 	end
 snippet each_byte
+options word
 	each_byte { |${1:byte}| ${2} }
 snippet each_char
+options word
 	each_char { |${1:chr}| ${2} }
 snippet each_cons
+options word
 	each_cons(${1:2}) { |${2:group}| ${3} }
 snippet each_index
 alias eai
+options word
 	each_index { |${1:i}| ${2} }
 snippet each_index do
 alias eaid
+options word
 	each_index do |${1:i}|
 		${2}
 	end
 snippet each_key
 alias eak
+options word
 	each_key { |${1:key}| ${2} }
 snippet each_key do
 alias eakd
+options word
 	each_key do |${1:key}|
 		${2}
 	end
 snippet each_line
 alias eal
+options word
 	each_line { |${1:line}| ${2} }
 snippet each_line do
 alias eald
+options word
 	each_line do |${1:line}|
 		${2}
 	end
 snippet each_pair
+options word
 	each_pair { |${1:name}, ${2:val}| ${3} }
 snippet each_pair do
+options word
 	each_pair do |${1:name}, ${2:val}|
 		${3}
 	end
 snippet each_slice
+options word
 	each_slice(${1:2}) { |${2:group}| ${3} }
 snippet each_slice do
+options word
 	each_slice(${1:2}) do |${2:group}|
 		${3}
 	end
 snippet each_value
+options word
 	each_value { |${1:val}| ${2} }
 snippet each_value do
+options word
 	each_value do |${1:val}|
 		${2}
 	end
 snippet each_with_index
 alias eawi
+options word
 	each_with_index { |${1:e}, ${2:i}| ${3} }
 snippet each_with_index do
 alias eawid
+options word
 	each_with_index do |${1:e}, ${2:i}|
 		${3}
 	end
 snippet eawo
+options word
 	each_with_object(${1:init}) { |${2:e}, ${3:var}| ${4} }
 snippet eawod
+options word
 	each_with_object(${1:init}) do |${2:e}, ${3:var}|
 		${4}
 	end
 snippet reve
+options word
 	reverse_each { |${1:e}| ${2} }
 snippet reved
+options word
 	reverse_each do |${1:e}|
 		${2}
 	end
 snippet inject
+options word
 	inject(${1:init}) { |${2:mem}, ${3:var}| ${4} }
 snippet inject do
+options word
 	inject(${1:init}) do |${2:mem}, ${3:var}|
 		${4}
 	end
 snippet reduce
+options word
 	reduce(${1:init}) { |${2:mem}, ${3:var}| ${4} }
 snippet reduce do
+options word
 	reduce(${1:init}) do |${2:mem}, ${3:var}|
 		${4}
 	end
 snippet map method
+options word
 	map(&:${1:id})
 snippet map block
+options word
 	map { |${1:e}| ${2} }
 snippet map do block
+options word
 	map do |${1:e}|
 		${2}
 	end
 snippet mapwi-
+options word
 	enum_with_index.map { |${1:e}, ${2:i}| ${3} }
 snippet sort
+options word
 	sort { |a, b| ${1} }
 snippet sort_by
+options word
 	sort_by { |${1:e}| ${2} }
 snippet ran
+options word
 	sort_by { rand }
 snippet all
+options word
 	all? { |${1:e}| ${2} }
 snippet any
+options word
 	any? { |${1:e}| ${2} }
 snippet classify
+options word
 	classify { |${1:e}| ${2} }
 snippet collect
+options word
 	collect { |${1:e}| ${2} }
 snippet collect do
+options word
 	collect do |${1:e}|
 		${2}
 	end
 snippet detect
+options word
 	detect { |${1:e}| ${2} }
 snippet detect do
+options word
 	detect do |${1:e}|
 		${2}
 	end
 snippet fetch
+options word
 	fetch(${1:name}) { |${2:key}| ${3} }
 snippet find
+options word
 	find { |${1:e}| ${2} }
 snippet find do
+options word
 	find do |${1:e}|
 		${2}
 	end
 snippet find_all
+options word
 	find_all { |${1:e}| ${2} }
 snippet find_all do
+options word
 	find_all do |${1:e}|
 		${2}
 	end
 snippet fino
+options word
 	find_or_initialize_by_name(${1:attributes}) do |${1:e}|
 		${2}
 	end
 snippet grep
+options word
 	grep(${1:/pattern/}) { |${2:match}| ${3} }
 snippet sub
+options word
 	${1:g}sub(${2:/pattern/}) { |${3:match}| ${4} }
 snippet scan
+options word
 	scan(${1:/pattern/}) { |${2:match}| ${3} }
 snippet scan do
+options word
 	scan(${1:/pattern/}) do |${2:match}|
 		${3}
 	end
 snippet max
+options word
 	max { |a, b| ${1} }
 snippet min
+options word
 	min { |a, b| ${1} }
 snippet par
+options word
 	partition { |${1:e}| ${2} }
 snippet pard
+options word
 	partition do |${1:e}|
 		${2}
 	end
 snippet reject
+options word
 	reject { |${1:e}| ${2} }
 snippet reject do
+options word
 	reject do |${1:e}|
 		${2}
 	end
 snippet select
+options word
 	select { |${1:e}| ${2} }
 snippet select do
+options word
 	select do |${1:e}|
 		${2}
 	end
@@ -1396,10 +1464,52 @@ alias es
 # mock and stub
 snippet stub
 alias st
+options word
 	stub(${1:method}: ${2:return})
 snippet stub returns
 alias str
+options word
 	stub(:${1:method}).and_return(${3:result})
+snippet stub chain
+alias stc
+options word
+	stub_chain(:${1:one}, :${2:two}).and_return(${3:return_value})
+snippet should_receive
+options word
+	should_receive(:${1:message}).and_return(:${2:return_value})
+snippet should_receive args
+options word
+	should_receive(:${1:message}).with(${2:args})
+snippet should_receive anything
+options word
+	should_receive(:${1:message}).with(anything())
+snippet should_receive once
+options word
+	should_receive(:${1:message}).once
+snippet should_receive twice
+options word
+	should_receive(:${1:message}).twice
+snippet should_receive exactly times
+options word
+	should_receive(:${1:message}).exactly(${2:n}).times
+snippet should_receive at_least once
+options word
+	should_receive(:${1:message}).at_least(:once)
+snippet should_receive at_least twice
+options word
+	should_receive(:${1:message}).at_least(:twice)
+snippet should_receive at_least times
+options word
+	should_receive(:${1:message}).at_least(${2:n}).times
+snippet should_receive at_most once
+options word
+	should_receive(:${1:message}).at_most(:once)
+snippet should_receive at_most twice
+options word
+	should_receive(:${1:message}).at_most(:twice)
+snippet should_receive at_most times
+options word
+	should_receive(:${1:message}).at_most(${2:n}).times
 snippet expect receive once
 	expect(${1:target}).to receive(:${2:method}).once
 snippet expect receive twice

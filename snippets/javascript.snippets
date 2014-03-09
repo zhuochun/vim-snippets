@@ -5,6 +5,7 @@ alias #!
 # Strict
 snippet use strict
 alias strict
+options head
 	"use strict";
 # Prototype
 snippet proto
@@ -109,19 +110,23 @@ snippet do
 snippet timeout
 	setTimeout(function () {${3}}${2}, ${1:10});
 # Get Elements
-snippet get
+snippet get tagname
+options word
 	getElementsBy${1:TagName}("${2}")${3}
 # Get Element
-snippet gett
+snippet get id
+options word
 	getElementBy${1:Id}("${2}")${3}
 # console.log (Firebug)
-snippet cl
+snippet console log
+alias cl
 	console.log(${1});
 # return
 snippet ret
 	return ${1:result}
 # hasOwnProperty
 snippet has
+options word
 	hasOwnProperty(${1})
 # docstring
 snippet /**
@@ -244,13 +249,16 @@ snippet view model
 snippet view collection
 	Backbone.View.extend({
 		events: {
+
 		},
 		initialize: function() {
 			${1}
+
 			this.collection.on("add", this.addOne, this);
 			this.collection.on("reset", this.addAll, this);
 		},
 		addOne: function(subject) {
+
 		},
 		addAll: function() {
 			this.collection.forEach(this.addOne, this);
@@ -272,8 +280,10 @@ snippet router
 			"${1:path}": "${2:handler}"
 		},
 		index: function() {
+
 		},
 		${2}: function() {
+
 		},
 		initialize: function(${3:options}) {
 			${4}
