@@ -225,7 +225,7 @@ alias self
 	end
 # def initialize
 snippet def init
-alias init
+alias init constructor
 	def initialize(${1:args})
 		${2}
 	end
@@ -1524,6 +1524,16 @@ snippet expect receive with
 	expect(${1:target}).to receive(:${2:method}).with(${3:args})
 snippet expect receive with anything
 	expect(${1:target}).to receive(:${2:method}).with(anything())
+# rspec rails
+snippet expect be_a_new
+	expect(${1:object}).to be_a_new(${2:Object})
+snippet expect render template
+	expect(${1:response}).to render_template(${2:"new"})
+snippet expect render partial template
+	expect(${1:view}).to render_template(partial: ${2:"_form"}, locals: { ${3} } )
+	redirect_to
+snippet expect redirect_to
+	expect(${1:response}).to redirect_to(${2:path})
 
 ##########################
 # RSpect Should

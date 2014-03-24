@@ -7,6 +7,18 @@ snippet uni
 		${1:representation}
 snippet from
 	from ${1:package} import ${2:module}
+# Short snippets
+snippet t
+	True
+snippet f
+	False
+snippet .
+alias @
+	self.
+snippet "
+	"""
+	${1:doc}
+	"""
 # Module Docstring
 snippet docs
 	"""
@@ -17,7 +29,8 @@ snippet docs
 	Description: ${2}
 	"""
 
-snippet wh
+snippet while
+alias wh
 	while ${1:condition}:
 		${2}
 # dowh - does the same as do...while in other languages
@@ -30,13 +43,21 @@ snippet with
 	with ${1:expr} as ${2:var}:
 		${3}
 # New Class
-snippet cl
+snippet class
+alias cl
+	class ${1:ClassName}:
+		"""${2:docstring for $1}"""
+		def __init__(self, ${3:arg}):
+			self.$4 = $4
+
+snippet class inheritance
+alias cli
 	class ${1:ClassName}(${2:object}):
 		"""${3:docstring for $1}"""
 		def __init__(self, ${4:arg}):
 			${5:super($1, self).__init__()}
 			self.$4 = $4
-			${6}
+
 # New Function
 snippet def
 	def ${1:fname}(${2:`indent('.') ? 'self' : ''`}):
@@ -65,10 +86,12 @@ snippet property
 snippet if
 	if ${1:condition}:
 		${2}
-snippet el
+snippet else
+alias el
 	else:
 		${1}
-snippet ei
+snippet else if
+alias ei
 	elif ${1:condition}:
 		${2}
 # For
@@ -83,10 +106,9 @@ snippet clatin1
 snippet cascii
 	# -*- coding: ascii -*-
 # Lambda
-snippet ld
-	${1:var} = lambda ${2:vars} : ${3:action}
-snippet .
-	self.
+snippet lambda
+alias ld
+	lambda ${1:vars} : ${2:action}
 snippet try Try/Except
 	try:
 		${1}
@@ -117,6 +139,7 @@ snippet try Try/Except/Else/Finally
 		${6}
 # if __name__ == '__main__':
 snippet ifmain
+alias main
 	if __name__ == '__main__':
 		${1:main()}
 # __magic__
@@ -136,10 +159,14 @@ snippet pudb
 	import pudb; pudb.set_trace()
 snippet pprint
 	import pprint; pprint.pprint(${1})${2}
-snippet "
-	"""
-	${1:doc}
-	"""
+snippet fut
+	from __future__ import ${1:method}
+snippet from import
+	from ${1:module} import ${2:method}
+snippet from import *
+	from ${1:module} import *
+snippet import
+	import ${1:module}
 # test function/method
 snippet test
 	def test_${1:description}(${2:`indent('.') ? 'self' : ''`}):
@@ -150,8 +177,6 @@ snippet testcase
 
 		def test_${2:description}(self):
 			${3}
-snippet fut
-	from __future__ import ${1}
 #getopt
 snippet getopt
 	try:
@@ -174,18 +199,18 @@ snippet getopt
 snippet glog
 	import logging
 	logger = logging.getLogger(${1:__name__})
-snippet le
+snippet logger error
 	logger.error(${1:msg})
-# conflict with lambda=ld, therefor we change into Logger.debuG
-snippet lg
+snippet logger debug
 	logger.debug(${1:msg})
-snippet lw
+snippet logger warning
 	logger.warning(${1:msg})
-snippet lc
+snippet logger critical
 	logger.critical(${1:msg})
-snippet li
+snippet logger info
 	logger.info(${1:msg})
 snippet epydoc
+alias doc
 	"""
 	${1:Description}
 
