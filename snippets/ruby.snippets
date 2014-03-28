@@ -1346,12 +1346,17 @@ snippet tctss
 ##########################
 #     Rspec snippets     #
 ##########################
+snippet describe
+alias desc
+	describe "${1:a behaviour}" do
+		${2:pending "Not implemented"}
+	end
 snippet desc class
 	describe ${1:class_name} do
 		${2}
 	end
 snippet desc method
-	describe "${1:#method}" do
+	describe "#${1:method}" do
 		${2:pending "Not implemented"}
 	end
 snippet context
@@ -1510,23 +1515,33 @@ options word
 snippet should_receive at_most times
 options word
 	should_receive(:${1:message}).at_most(${2:n}).times
+snippet expect any_instance_of receive
+	expect_any_instance_of(${1:Object}).to receive(:${2:method})
 snippet expect receive once
-	expect(${1:target}).to receive(:${2:method}).once
+	expect(${1:obj}).to receive(:${2:method}).once
 snippet expect receive twice
-	expect(${1:target}).to receive(:${2:method}).twice
+	expect(${1:obj}).to receive(:${2:method}).twice
 snippet expect receive times
-	expect(${1:target}).to receive(:${2:method}).exactly(${3:3}).times
+	expect(${1:obj}).to receive(:${2:method}).exactly(${3:3}).times
 snippet expect receive at_least times
-	expect(${1:target}).to receive(:${2:method}).at_least(${3:3}).times
+	expect(${1:obj}).to receive(:${2:method}).at_least(${3:3}).times
 snippet expect receive at_most times
-	expect(${1:target}).to receive(:${2:method}).at_most(${3:3}).times
+	expect(${1:obj}).to receive(:${2:method}).at_most(${3:3}).times
 snippet expect receive with
-	expect(${1:target}).to receive(:${2:method}).with(${3:args})
+	expect(${1:obj}).to receive(:${2:method}).with(${3:args})
+snippet expect receive with regex
+	expect(${1:obj}).to receive(:${2:method}).with(/${3:regex}/)
+snippet expect receive with instance_of
+	expect(${1:obj}).to receive(:${2:method}).with(an_instance_of(${3:Object}))
+snippet expect receive with hash
+	expect(${1:obj}).to receive(:${2:method}).with(hash_including(${3:key: val}))
 snippet expect receive with anything
-	expect(${1:target}).to receive(:${2:method}).with(anything())
+	expect(${1:obj}).to receive(:${2:method}).with(anything())
+snippet expect receive and raise
+	expect(${1:obj}).to receive(:${2:method}).and_raise("${3:an error}")
 # rspec rails
 snippet expect be_a_new
-	expect(${1:object}).to be_a_new(${2:Object})
+	expect(${1:obj}).to be_a_new(${2:Object})
 snippet expect render template
 	expect(${1:response}).to render_template(${2:"new"})
 snippet expect render partial template
@@ -1707,6 +1722,8 @@ snippet expect has_xpath
 	expect(page).to have_xpath(${1})
 snippet expect has_css
 	expect(page).to have_css(${1})
+snippet expect checked
+	expect(find("${1:selector}").checked?).to be_true
 snippet visit
 alias vi
 	visit ${1:path}

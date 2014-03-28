@@ -12,12 +12,12 @@ options word
 	<% ${1} %>
 snippet rce
 options word
-	<%= ${1} %>${2}
+	<%= ${1} %>
 snippet =
 options word
-	<%= ${1} %>${2}
+	<%= ${1} %>
 snippet end
-	<% end %>${1}
+	<% end %>
 snippet each
 	<% ${1}.each do |${2}| %>
 		${3}
@@ -53,7 +53,7 @@ options word
 snippet yield
 	<%= yield :${1:content_symbol} %>${2}
 snippet yield optional
-	<%= yield :${1:content_symbol} if content_for?(:$1) %>${2}
+	<%= yield :${1:content_symbol} if content_for?(:$1) %>
 snippet content_for?
 	content_for?(:${1:head})
 snippet content for
