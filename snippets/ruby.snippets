@@ -1689,6 +1689,24 @@ snippet json only
 snippet json except
 	${1:instance}.to_json(include: ${2}, except: ${3})${4}
 
+# Here Document
+snippet heredoc
+	<<-${1:EOS}
+		${2}
+	$1
+snippet heredoc strip
+	<<-${1:END}.strip_heredoc
+		${2}
+	$1
+snippet sql
+	<<-SQL
+		${1}
+	SQL
+snippet eof
+	<<-EOF
+		${1}
+	EOF
+
 #############################################
 # capybara cheatsheet
 #############################################
