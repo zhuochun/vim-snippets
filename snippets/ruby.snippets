@@ -240,6 +240,8 @@ snippet defds
 	def_delegators :${1:@del_obj}, :${2:del_methods}
 snippet alias method
 	alias_method :${1:new_name}, :${2:old_name}
+snippet alias attribute
+	alias_attribute :${1:new_name}, :${2:old_name}
 snippet __ file
 	__FILE__
 snippet __ line
@@ -562,8 +564,8 @@ snippet optp
 	ARGV.options do |opts|
 		opts.banner = "Usage: #{File.basename($PROGRAM_NAME)}
 snippet opt
-	opts.on( "-${1:o}", "--${2:long-option-name}", ${3:String},
-	         "${4:Option description.}") do |${5:opt}|
+	opts.on("-${1:o}", "--${2:long-option-name}", ${3:String},
+			"${4:Option description.}") do |${5:opt}|
 		${6}
 	end
 
@@ -1015,8 +1017,10 @@ snippet defupdate
 	end${3}
 snippet delegate to
 	delegate :${1:methods}, to: :${2:object}
-snippet delegate to .. prefix .. allow_nil
-	delegate :${1:methods}, to: :${2:object}, prefix: :${3:prefix}, allow_nil: ${4:allow_nil}
+snippet delegate to prefix
+	delegate :${1:methods}, to: :${2:object}, prefix: ${3:true}
+snippet delegate to allow_nil
+	delegate :${1:methods}, to: :${2:object}, allow_nil: ${3:true}
 snippet flash
 	flash[:${1:notice}] = "${2}"
 snippet hasabtm
@@ -1474,11 +1478,15 @@ options word
 snippet stub returns
 alias str
 options word
-	stub(:${1:method}).and_return(${3:result})
+	stub(:${1:method}).and_return(${3:return_value})
 snippet stub chain
 alias stc
 options word
 	stub_chain(:${1:one}, :${2:two}).and_return(${3:return_value})
+snippet stub instance
+alias any_instance
+options word
+	any_instance.stub(:${1:method}).and_return(${2:return_value})
 snippet should_receive
 options word
 	should_receive(:${1:message}).and_return(:${2:return_value})
@@ -1515,6 +1523,9 @@ options word
 snippet should_receive at_most times
 options word
 	should_receive(:${1:message}).at_most(${2:n}).times
+snippet should_receive any_number_of_times
+options word
+	should_receive(:${1:message}).any_number_of_times
 snippet expect any_instance_of receive
 	expect_any_instance_of(${1:Object}).to receive(:${2:method})
 snippet expect receive once
@@ -1527,6 +1538,8 @@ snippet expect receive at_least times
 	expect(${1:obj}).to receive(:${2:method}).at_least(${3:3}).times
 snippet expect receive at_most times
 	expect(${1:obj}).to receive(:${2:method}).at_most(${3:3}).times
+snippet expect receive any_number_of_times
+	expect(${1:obj}).to receive(:${2:method}).any_number_of_times
 snippet expect receive with
 	expect(${1:obj}).to receive(:${2:method}).with(${3:args})
 snippet expect receive with regex
@@ -1546,7 +1559,6 @@ snippet expect render template
 	expect(${1:response}).to render_template(${2:"new"})
 snippet expect render partial template
 	expect(${1:view}).to render_template(partial: ${2:"_form"}, locals: { ${3} } )
-	redirect_to
 snippet expect redirect_to
 	expect(${1:response}).to redirect_to(${2:path})
 
