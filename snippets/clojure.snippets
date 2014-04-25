@@ -14,9 +14,12 @@ snippet defmm
 	(defmulti ${1:name} "${2:doc-string}" ${3:dispatch-fn})
 snippet defma
 	(defmacro ${1:name} "${2:doc-string}" ${3:dispatch-fn})
-snippet defn
+snippet defn doc
 	(defn ${1:name} "${2:doc-string}" [${3:arg-list}]
 	  ${4})
+snippet defn
+	(defn ${1:name} [${2:arg-list}]
+	  ${3})
 snippet defp
 	(defprotocol ${1:name}
 	  ${2})
@@ -28,6 +31,8 @@ snippet deft
 	(deftest ${1:name}
 	    (is (= ${2:assertion})))
 	  ${3})
+snippet #
+	#(${1:lambda})
 snippet is
 	(is (= ${1} ${2}))
 snippet defty
