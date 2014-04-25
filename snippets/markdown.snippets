@@ -52,6 +52,19 @@ snippet slide
 
 	$1
 # HTML Syntax
+snippet attr
+	{: ${1:attr}="${2:value}"}
+snippet class
+	{: .${1:css-class}}
+snippet id
+	{: #${1:an-id}}
+snippet footnote
+alias fn
+	[^${1:1}]
+	[^$1]: ${2:description}
+snippet abbreviation
+alias abbr
+	*[${1:abbr}]: ${2:description}
 snippet img default
 alias img
 	![${1:TARGET}](${2:/images/image.jpg})
