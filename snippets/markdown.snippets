@@ -87,12 +87,22 @@ snippet table
 	${3:td} | ${4:td}
 # Code embedded
 snippet code jekyll
-alias jek
+alias cj jek
 	{% highlight ${1:language} ${2:linenos }%}
 	${3:TARGET}
 	{% endhighlight %}
+snippet code jekyll ruby
+alias cjr
+	{% highlight ruby %}
+	${3:TARGET}
+	{% endhighlight %}
+snippet code jekyll javascript
+alias cjj
+	{% highlight javascript %}
+	${3:TARGET}
+	{% endhighlight %}
 snippet code github
-alias hub
+alias cg ch hub
 	\`\`\` ${2:language}
 	${1:TARGET}
 	\`\`\`

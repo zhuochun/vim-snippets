@@ -27,9 +27,11 @@ snippet private
 	private
 
 	${1}
-snippet y
+snippet yield
+alias y
 	yield
-snippet bg
+snippet block_given
+alias bg
 	block_given?
 snippet rb
 	#!/usr/bin/env ruby -wKU
@@ -170,6 +172,8 @@ snippet class Rails 4.0 Model
 			end
 		end
 	end
+snippet class RuntimeError
+	class ${1:NewExtented}Error < RuntimeError; end
 snippet struct
 	Struct.new(:${1:attr_name})
 snippet module basic
@@ -197,6 +201,18 @@ snippet module ClassMethods
 			receiver.send :include, InstanceMethods
 		end
 	end
+snippet module ActiveSupport::Concern
+	module ${1:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`}
+		extend ActiveSupport::Concern
+
+		included do
+			${1:validates :example, presence: true}
+		end
+
+		def ${2:sample_method}
+			${3:code}
+		end
+	end
 # attr_reader
 snippet attr
 	attr_reader :${1:attr_names}
@@ -212,6 +228,8 @@ snippet atta
 	attr_accessible :${1:attr_names}
 snippet ana
 	accepts_nested_attributes_for :${1:association}
+snippet enum
+	enum ${1:name}: [:${2:option_1}, :${3:other_options}]
 # ivc == instance variable cache
 snippet ivc
 	@${1:variable_name} ||= ${2:chached_value}
@@ -221,14 +239,14 @@ snippet include
 snippet extend
 	extend ${1:ActiveSupport::}${2:Memoizable}
 # include Enumerable
-snippet Enum
+snippet enumerable
 	include Enumerable
 
 	def each(&block)
 		${1}
 	end
 # include Comparable
-snippet Comp
+snippet comparable
 	include Comparable
 
 	def <=>(other)
@@ -243,6 +261,10 @@ alias self
 	def self.${1:class_method_name}
 		${2}
 	end
+snippet def self.[]
+	def self.[](${1:attr})
+		${2}
+	end
 # def initialize
 snippet def init
 alias init constructor
@@ -254,10 +276,27 @@ snippet def method_missing
 	def method_missing(meth, *args, &blk)
 		${1}
 	end
-snippet defd
+snippet def delegator
 	def_delegator :${1:@del_obj}, :${2:del_meth}, :${3:new_name}
-snippet defds
+snippet def delegators
 	def_delegators :${1:@del_obj}, :${2:del_methods}
+snippet define_method
+	define_method "${1:method_name}" do
+		${2:implementation}
+	end
+snippet define_method args
+	define_method "${1:method_name}" do |*args, &block|
+		${2:implementation}
+		send "$1", *args, &block
+	end
+snippet class_eval
+	${1:klass}.class_eval do
+		${2:implementation}
+	end
+snippet instance_eval
+	${1:instance}.instance_eval do
+		${2:implementation}
+	end
 snippet alias method
 	alias_method :${1:new_name}, :${2:old_name}
 snippet alias attribute
@@ -288,12 +327,13 @@ snippet file foreach
 	File.foreach(${1:"path/to/file"}) { |${2:line}| ${3} }
 snippet file read
 	File.read(${1:"path/to/file"})${2}
+snippet file dirname
+alias dir
+	File.dirname(${1:__FILE__})
 snippet Dir glob
 	Dir.glob(${1:"dir/glob/*"}) { |${2:file}| ${3} }
 snippet Dir [".."]
 	Dir[${1:"glob/**/*.rb"}]${2}
-snippet dir
-	Filename.dirname(__FILE__)
 snippet deli
 options word
 	delete_if { |${1:e}| ${2} }
@@ -568,14 +608,15 @@ snippet do empty
 		${1}
 	end
 snippet do default
+alias do
 	do |${1:v}|
 		${2}
 	end
 snippet open
 	open(${1:"path/or/url/or/pipe"}, "${2:w}") { |${3:io}| ${4} }
 # path_from_here()
-snippet fpath
-	File.join(File.dirname(__FILE__), *%2[${1:rel path here}])${2}
+snippet file path from here
+	File.join(File.dirname(__FILE__), "${1:path}")
 # unix_filter {}
 snippet unif
 	ARGF.each_line${1} do |${2:line}|
@@ -690,43 +731,43 @@ snippet patch api
 snippet delete api
 	delete "${1:path}"
 # Responses Code
-snippet r200 ok
+snippet status 200 ok
 	:ok
-snippet r201 created
+snippet status 201 created
 	:created
-snippet r202 accepted
+snippet status 202 accepted
 	:accepted
-snippet r203 non_authoritative_information
+snippet status 203 non_authoritative_information
 	:non_authoritative_information
-snippet r204 no_content
+snippet status 204 no_content
 	:no_content
-snippet r301 moved_permanently
+snippet status 301 moved_permanently
 	:moved_permanently
-snippet r302 found
+snippet status 302 found
 	:found
-snippet r304 not_modified
+snippet status 304 not_modified
 	:not_modified
-snippet r307 temporary_redirect
+snippet status 307 temporary_redirect
 	:temporary_redirect
-snippet r308 permanent_redirect
+snippet status 308 permanent_redirect
 	:permanent_redirect
-snippet r400 bad_request
+snippet status 400 bad_request
 	:bad_request
-snippet r401 unauthorized
+snippet status 401 unauthorized
 	:unauthorized
-snippet r403 forbidden
+snippet status 403 forbidden
 	:forbidden
-snippet r404 not_found
+snippet status 404 not_found
 	:not_found
-snippet r405 method_not_allowed
+snippet status 405 method_not_allowed
 	:method_not_allowed
-snippet r406 not_acceptable
+snippet status 406 not_acceptable
 	:not_acceptable
-snippet r415 unsupported_media_type
+snippet status 415 unsupported_media_type
 	:unsupported_media_type
-snippet r422 unprocessable_entity
+snippet status 422 unprocessable_entity
 	:unprocessable_entity
-snippet r500 internal_server_error
+snippet status 500 internal_server_error
 	:internal_server_error
 
 #############################################
@@ -948,8 +989,12 @@ snippet deec
 	Marshal.load(Marshal.dump(${1:obj_to_copy}))${2}
 snippet Pn-
 	PStore.new(${1:"file_name.pstore"})${2}
-snippet tra
+snippet transaction
 	transaction(${1:true}) { ${2} }
+snippet transaction do
+	transaction do
+		${1}
+	end
 # xmlread(..)
 snippet xml-
 	REXML::Document.new(File.read(${1:"path/to/file"}))${2}
@@ -1002,10 +1047,11 @@ snippet begin
 		# always executed
 	end
 #debugging
-snippet debug
+snippet debugger
 alias dbg
 	require 'ruby-debug'; debugger; true;
-snippet pry
+snippet debugger pry
+alias pry
 	require 'pry'; binding.pry
 
 #############################################
@@ -1134,6 +1180,12 @@ snippet delegate to allow_nil
 	delegate :${1:methods}, to: :${2:object}, allow_nil: ${3:true}
 snippet flash
 	flash[:${1:notice}] = "${2}"
+snippet content_tag
+	content_tag :${1:div}, ${2:content}, ${3:options}
+snippet content_tag do
+	content_tag :${1:div}, ${2:options} do
+		${3:content}
+	end
 snippet hasabtm
 	has_and_belongs_to_many :${1:object}, join_table: "${2:table_name}", foreign_key: "${3}_id"${4}
 snippet hasm
@@ -1167,13 +1219,13 @@ snippet logw
 snippet mapc
 	${1:map}.${2:connect} '${3:controller/:action/:id}'
 snippet mapca
-	${1:map}.catch_all "*${2:anything}", :controller => "${3:default}", :action => "${4:error}"${5}
+	${1:map}.catch_all "*${2:anything}", controller: "${3:default}", action: "${4:error}"${5}
 snippet mapr
 	${1:map}.resource :${2:resource}
 snippet maprs
 	${1:map}.resources :${2:resource}
 snippet mapwo
-	${1:map}.with_options :${2:controller} => '${3:thing}' do |$3|
+	${1:map}.with_options ${2:controller}: '${3:thing}' do |$3|
 		${4}
 	end
 snippet mbs before_save
@@ -1201,7 +1253,8 @@ snippet params def
 		params.require(:$1).permit(:${2:fields})
 	end
 snippet respond_to
-alias rest
+	respond_to :${1:json}
+snippet respond_to do
 	respond_to do |format|
 		format.${1:html} { ${2} }
 		format.${3:json} { render json: ${4:json_data}, status: :ok }
@@ -1423,6 +1476,7 @@ snippet to_param
 snippet method missing
 	def method_missing(method_name, *args, &block)
 		@${1:instance}.send(method_name, *args, &block)
+		super
 	end
 snippet respond respond_to_missing?
 	def respond_to_missing?(method_name, *args, &block)
@@ -1442,6 +1496,8 @@ snippet patch to
 	patch "${1:path}", to: "${2:controller}#${3:action}"
 snippet resources
 	resources :${1:model}
+snippet resources controller
+	resources :${1:model}, controller: "${2:demo/controllers}"
 snippet resources only
 	resources :${1:model}, only: [:${2:methods}]
 snippet resources except

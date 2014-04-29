@@ -5,17 +5,16 @@ include ruby.snippets
 # .erb and .rhmtl files
 
 snippet rc
-options word
 	<% ${1:TARGET} %>
 snippet %
-options word
 	<% ${1:TARGET} %>
 snippet rce
-options word
 	<%= ${1:TARGET} %>
 snippet =
-options word
 	<%= ${1:TARGET} %>
+snippet j
+alias escape_javascript
+	<%=j ${1:TARGET} %>
 snippet end
 	<% end %>
 snippet each
@@ -27,29 +26,37 @@ snippet for
 		${3:TARGET}
 	<% end %>
 snippet render
-options word
 	<%= render "${1:item}" %>
 snippet render partial
-options word
 	<%= render partial: "${1:item}" %>
 snippet render partial locals
-options word
 	<%= render partial: "${1:item}", locals: { ${2:name}: "${3:value}"$4 } %>
 snippet render partial status
-options word
 	<%= render partial: "${1:item}", status: ${2:500} %>
 snippet render partial collection
-options word
 	<%= render partial: "${1:item}", collection: ${2:items} %>
 snippet render file
-options word
 	<%= render file: "${1:file}"${2} %>
 snippet render template
-options word
 	<%= render template: "${1:file}"${2} %>
-snippet link
-options word
-	<%= link_to "${1:link text...}", ${2} %>
+# url helpers
+snippet link_to
+alias lt
+	<%= link_to "${1:link}", ${2:path} %>
+snippet link_to do
+alias ltd
+	<%= link_to ${1:path} do %>
+		${2:content}
+	<% end %>
+snippet link_to back
+alias back
+	<%= link_to "Back", url_for(:back) %>
+snippet link_to_if
+	<%= link_to_if(${1:condition}, ${2:link}, ${3:path}) %>
+snippet link_to_unless
+	<%= link_to_unless(${1:condition}, ${2:link}, ${3:path}) %>
+snippet button_to
+	<%= button_to "${1:button text}", ${2:action}, method: :${3:delete} %>
 snippet yield
 	<%= yield :${1:content_symbol} %>${2}
 snippet yield optional
@@ -61,23 +68,56 @@ snippet content for
 		${2}
 	<% end %>
 snippet content tag
-	<%= content_tag :${1:div}, ${2:content}${3:, options} %>
+	<%= content_tag :${1:div}, ${2:content}, ${3:options} %>
 snippet content tag do
 	<%= content_tag :${1:div} do %>
 		${2}
 	<% end %>
-snippet form_for simple
-	<%= simple_form_for @${1:model} do |f| %>
+snippet content tag for
+	<%= content_tag_for :${1:div}, ${2:model} do %>
+		${3}
+	<% end %>
+snippet content div for
+alias div_for
+	<%= div_for ${1:model} do %>
 		${2}
 	<% end %>
+snippet dom_class
+	<%= dom_class ${1:model}, ${2:prefix} %>
+snippet dom_id
+	<%= dom_id ${1:model}, ${2:prefix} %>
+# text helpers
+snippet cycle
+	cycle(${1:first_value}, ${2:values})
+snippet truncate
+	truncate(${1:text}, length: ${2:30})
+# sanitize helpers
+snippet sanitize
+	<%= sanitize ${1:html} %>
+snippet strip_links
+	strip_links(${1:html})
+snippet strip_tags
+	strip_tags(${1:html})
 snippet form_for
-	<%= form_for @${1:model} do |f| %>
+	<%= form_for ${1:@model} do |f| %>
+		${2}
+	<% end %>
+snippet form_for builder
+	<%= form_for ${1:@model}, builder: ${2:Special}Builder do |f| %>
+		${3}
+	<% end %>
+snippet form_for simple
+	<%= simple_form_for ${1:@model} do |f| %>
 		${2}
 	<% end %>
 snippet form_for with error
 	<% error_messages_for :${1:model} %>
 
-	<%= form_for @${2:model} do |f| %>
+	<%= form_for ${2:@model} do |f| %>
+		${3}
+	<% end %>
+snippet form fields
+	<%= fields_for :${1:model}, @$1 do |${2:f}| %>
 		${3}
 	<% end %>
 snippet form input
@@ -113,10 +153,6 @@ alias text_area
 snippet form text_field
 alias text_field
 	<%= ${1:f}.text_field :${2:attribute} %>
-snippet form fields
-	<%= fields_for :${1:model}, @$1 do |${2:f}| %>
-		${3}
-	<% end %>
 snippet form collection select
 alias collection_select
 	<%= ${1:f}.collection_select(:${2:method}, ${3:collection}, :${4:value_method}, :${5:text_method}) %>
@@ -126,23 +162,23 @@ alias collection_radio_buttons
 snippet form collection checkbox
 alias collection_check_boxes
 	<%= ${1:f}.collection_check_boxes(:${2:method}, ${3:collection}, :${4:value_method}, :${5:text_method}) %>
-snippet img
-options word
-	<%= link_to "${1:link text...}", ${2} %>
+snippet img tag
 	<%= image_tag "${1}"${2} %>
+snippet img path
+	image_path("${1:name}")
+snippet img url
+	image_url("${1:name}")
 snippet ofcfs
 	<%= options_from_collection_for_select ${1:collection}, ${2:value_method}, ${3:text_method}, ${4:selected_value} %>
+snippet js
+alias javascript
+	<%= javascript_include_tag "${1}" %>
 snippet js :all
 	<%= javascript_include_tag ${1::all} %>
-snippet js
-	<%= javascript_include_tag "${1}" %>
-snippet javascript
-	<%= javascript_include_tag "${1}" %>
 snippet css
+alias style stylesheet
 	<%= stylesheet_link_tag "${1}" %>
-snippet style
-	<%= stylesheet_link_tag "${1}" %>
-snippet stylecache
+snippet css cache
 	<%= stylesheet_link_tag ${1::all}, :cache => ${2:true} %>
 # conditions
 snippet if
@@ -157,6 +193,8 @@ snippet if else
 	<% end %>
 snippet else
 	<% else %>
+snippet elsif
+	<% elsif ${1:condition} %>
 # i18
 snippet i18 translate
 alias i18t
@@ -164,17 +202,21 @@ alias i18t
 snippet i18 localize
 alias i18l
 	I18n.l('${1:type.key}')${2}
-# back button
-snippet back
-	<%= link_to 'Back', url_for(:back) %>
 # cache helpers
 snippet cache fragment
 	<% cache ${1:key} do %>
 		${2:TARGET}
 	<% end %>
 # function helpers
-snippet plur
+snippet pluralize
 	pluralize(${1:size}, '${2:word}')
+# time helpers
+snippet distance_of_time_in_words
+	distance_of_time_in_words(${1:from_time}, ${2:to_time})
+snippet distance_of_time_in_words_to_now
+	distance_of_time_in_words_to_now(${1:from_time})
+snippet time_ago_in_words
+	time_ago_in_words(${1:from_time})
 # number helpers
 snippet number to_currency
 	number_to_currency ${1}
