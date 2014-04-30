@@ -1,91 +1,104 @@
 snippet comm
 	(comment
-	  ${1}
-	  )
+		${1})
 snippet condp
 	(condp ${1:pred} ${2:expr}
-	  ${3})
+		${3})
 snippet def
 	(def ${1})
-snippet defm
+snippet defmethod
 	(defmethod ${1:multifn} "${2:doc-string}" ${3:dispatch-val} [${4:args}]
-	  ${5})
-snippet defmm
+		${5})
+snippet defmulti
 	(defmulti ${1:name} "${2:doc-string}" ${3:dispatch-fn})
-snippet defma
+snippet defmacro
 	(defmacro ${1:name} "${2:doc-string}" ${3:dispatch-fn})
-snippet defn doc
-	(defn ${1:name} "${2:doc-string}" [${3:arg-list}]
-	  ${4})
 snippet defn
 	(defn ${1:name} [${2:arg-list}]
-	  ${3})
-snippet defp
+		${3})
+snippet defn doc
+	(defn ${1:name} "${2:doc-string}" [${3:arg-list}]
+		${4})
+snippet defn args
+	(defn ${1:name} [& args]
+		${2})
+snippet defprotocol
 	(defprotocol ${1:name}
-	  ${2})
-snippet defr
+		${2})
+snippet defrecord
 	(defrecord ${1:name} [${2:fields}]
-	  ${3:protocol}
-	  ${4})
-snippet deft
+		${3:protocol}
+		${4})
+snippet deftest
 	(deftest ${1:name}
-	    (is (= ${2:assertion})))
-	  ${3})
+		(is (= ${2:assertion})))
+		${3})
 snippet #
 	#(${1:lambda})
 snippet is
 	(is (= ${1} ${2}))
-snippet defty
+snippet deftype
 	(deftype ${1:Name} [${2:fields}]
-	  ${3:Protocol}
-	  ${4})
+		${3:Protocol}
+		${4})
 snippet doseq
 	(doseq [${1:elem} ${2:coll}]
-	  ${3})
+		${3})
 snippet fn
 	(fn [${1:arg-list}] ${2})
 snippet if
 	(if ${1:test-expr}
-	  ${2:then-expr}
-	  ${3:else-expr})
+		${2:then-expr}
+		${3:else-expr})
 snippet if-let
 	(if-let [${1:result} ${2:test-expr}]
 		(${3:then-expr} $1)
 		(${4:else-expr}))
-snippet imp
+snippet import
+	(:import [${1:package}])
+snippet import keys
 	(:import [${1:package}])
 	& {:keys [${1:keys}] :or {${2:defaults}}}
+snippet method
+alias .
+	(.${1:method} ${2:obj})
+snippet new
+	(${1:Class}. ${2:args})
 snippet let
 	(let [${1:name} ${2:expr}]
 		${3})
 snippet letfn
 	(letfn [(${1:name) [${2:args}]
-	          ${3})])
+		${3})])
 snippet map
 	(map ${1:func} ${2:coll})
-snippet mapl
+snippet map lambda
 	(map #(${1:lambda}) ${2:coll})
 snippet met
 	(${1:name} [${2:this} ${3:args}]
-	  ${4})
+		${4})
 snippet ns
 	(ns ${1:name}
-	  ${2})
+		${2})
 snippet dotimes
 	(dotimes [_ 10]
-	  (time
-	    (dotimes [_ ${1:times}]
-	      ${2})))
+		(time
+			(dotimes [_ ${1:times}]
+				${2})))
 snippet pmethod
 	(${1:name} [${2:this} ${3:args}])
-snippet refer
+snippet refer-clojure
 	(:refer-clojure :exclude [${1}])
 snippet require
+	(:require ${1:namespace})
+snippet require as
 	(:require [${1:namespace} :as [${2}]])
 snippet use
 	(:use [${1:namespace} :only [${2}]])
 snippet print
 	(println ${1})
+snippet str
+	(str ${1:str} ${2:str})
 snippet reduce
 	(reduce ${1:(fn [p n] ${3})} ${2})
 snippet when
@@ -93,3 +106,7 @@ snippet when
 snippet when-let
 	(when-let [${1:result} ${2:test}]
 		${3:body})
+snippet atom
+	(def ${1:name} (atom ${1:value}))
+snippet deref
+	(deref ${2:global-var})
