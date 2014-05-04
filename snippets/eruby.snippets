@@ -12,8 +12,8 @@ snippet rce
 	<%= ${1:TARGET} %>
 snippet =
 	<%= ${1:TARGET} %>
-snippet j
-alias escape_javascript
+snippet escape_javascript
+alias j
 	<%=j ${1:TARGET} %>
 snippet end
 	<% end %>
@@ -134,7 +134,7 @@ alias hidden_field
 	<%= ${1:f}.hidden_field :${2:attribute} %>
 snippet form label
 alias label
-	<%= ${1:f}.label :${2:attribute}, '${3:$2}' %>
+	<%= ${1:f}.label :${2:attribute}, "${3:$2}" %>
 snippet form password
 alias password
 	<%= ${1:f}.password_field :${2:attribute} %>
@@ -197,11 +197,11 @@ snippet elsif
 	<% elsif ${1:condition} %>
 # i18
 snippet i18 translate
-alias i18t
-	I18n.t('${1:type.key}')${2}
+alias t
+	<%=t "${1:type.key}" %>
 snippet i18 localize
-alias i18l
-	I18n.l('${1:type.key}')${2}
+alias l
+	<%=l "${1:type.key}" %>
 # cache helpers
 snippet cache fragment
 	<% cache ${1:key} do %>
@@ -209,7 +209,7 @@ snippet cache fragment
 	<% end %>
 # function helpers
 snippet pluralize
-	pluralize(${1:size}, '${2:word}')
+	pluralize(${1:size}, "${2:word}")
 # time helpers
 snippet distance_of_time_in_words
 	distance_of_time_in_words(${1:from_time}, ${2:to_time})

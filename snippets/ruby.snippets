@@ -677,7 +677,7 @@ snippet mock expect
 # TestCase in Rails
 #############################################
 snippet testcase
-	require 'test_helper'
+	require "test_helper"
 
 	class ${1:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`} < ActionController::TestCase
 		test "${2}" do
@@ -691,7 +691,7 @@ snippet protect_from_forgery
 alias forgery
 	protect_from_forgery with: :null_session
 snippet header
-	self.headers['${1:WWW-Authenticate}'] = ${2:string}
+	self.headers["${1:WWW-Authenticate}"] = ${2:string}
 snippet authenticate_with_http_basic
 	authenticate_with_http_basic do |username, password|
 		${1:User}.authenticate(username, password)
@@ -1037,7 +1037,7 @@ snippet b
 	{ |${1:var}| ${2} }
 snippet begin
 	begin
-		raise 'A test exception.'
+		raise "A test exception."
 	rescue Exception => e
 		puts e.message
 		puts e.backtrace.inspect
@@ -1049,10 +1049,10 @@ snippet begin
 #debugging
 snippet debugger
 alias dbg
-	require 'ruby-debug'; debugger; true;
+	require "ruby-debug"; debugger; true;
 snippet debugger pry
 alias pry
-	require 'pry'; binding.pry
+	require "pry"; binding.pry
 
 #############################################
 # Rails snippets - for pure Ruby, see above #
@@ -1081,7 +1081,7 @@ alias asrj
 	assert_rjs :${1:replace}, "${2:dom id}"
 snippet assert_select
 alias asselect
-	assert_select '${1:path}', ${2:text}: '${3:inner_html' ${4:do}
+	assert_select "${1:path}", ${2:text}: "${3:inner_html" ${4:do}
 snippet belongs_to
 alias bt
 	belongs_to :${1:association}
@@ -1098,10 +1098,10 @@ snippet defcreate
 
 		respond_to do |format|
 			if @$1.save
-				format.html { redirect_to @$1, notice: '$2 was successfully created.' }
+				format.html { redirect_to @$1, notice: "$2 was successfully created." }
 				format.json { render json: @$1, status: :created, location: @$1 }
 			else
-				format.html { render action: 'new' }
+				format.html { render action: "new" }
 				format.json { render json: @$1.errors, status: :unprocessable_entity }
 			end
 		end
@@ -1164,10 +1164,10 @@ snippet defupdate
 
 		respond_to do |format|
 			if @$1.update_attributes(params[:$1])
-				format.html { redirect_to @$1, notice: '$2 was successfully updated.' }
+				format.html { redirect_to @$1, notice: "$2 was successfully updated." }
 				format.json { head :no_content }
 			else
-				format.html { render action: 'edit' }
+				format.html { render action: "edit" }
 				format.json { render json: @$1.errors, status: :unprocessable_entity }
 			end
 		end
@@ -1200,10 +1200,13 @@ snippet hasod
 	has_one :${1:object}, dependent: :${2:destroy}
 snippet i18 translate
 alias i18t
-	I18n.t('${1:type.key}')${2}
+	I18n.t("${1:type.key}")${2}
+snippet i18 translate shorthand
+alias t
+	t("${1:type.key}")
 snippet i18 localize
 alias i18l
-	I18n.l('${1:type.key}')${2}
+	I18n.l("${1:type.key}")${2}
 snippet log
 	${1:Rails.logger}.${2:debug} ${3}
 snippet logd
@@ -1217,7 +1220,7 @@ snippet logi
 snippet logw
 	logger.warn { "${1:message}" }${2}
 snippet mapc
-	${1:map}.${2:connect} '${3:controller/:action/:id}'
+	${1:map}.${2:connect} "${3:controller/:action/:id}"
 snippet mapca
 	${1:map}.catch_all "*${2:anything}", controller: "${3:default}", action: "${4:error}"${5}
 snippet mapr
@@ -1225,7 +1228,7 @@ snippet mapr
 snippet maprs
 	${1:map}.resources :${2:resource}
 snippet mapwo
-	${1:map}.with_options ${2:controller}: '${3:thing}' do |$3|
+	${1:map}.with_options ${2:controller}: "${3:thing}" do |$3|
 		${4}
 	end
 snippet mbs before_save
@@ -1273,13 +1276,13 @@ alias rfu
 	render file: "${1:filepath}", use_full_path: ${2:false}
 snippet render inline
 alias ri
-	render inline: "${1:<%= 'hello' %>}"
+	render inline: "${1:<%= "hello" %>}"
 snippet render inline locals
 alias ril
-	render inline: "${1:<%= 'hello' %>}", locals: { ${2::name}: "${3:value}"${4} }
+	render inline: "${1:<%= "hello" %>}", locals: { ${2::name}: "${3:value}"${4} }
 snippet render inline type
 alias rit
-	render inline: "${1:<%= 'hello' %>}", type: ${2::rxml}
+	render inline: "${1:<%= "hello" %>}", type: ${2::rxml}
 snippet render xml
 alias rxml
 	render xml: ${1:text to render}
@@ -1592,7 +1595,7 @@ snippet tcl
 	t.integer :lock_version, :null => false, :default => 0
 	${1}
 snippet tcr
-	t.references :${1:taggable}, :polymorphic => { :default => '${2:Photo}' }
+	t.references :${1:taggable}, :polymorphic => { :default => "${2:Photo}" }
 	${3}
 snippet tcs
 	t.string :${1:title}
@@ -1850,11 +1853,11 @@ snippet it should rescue_from
 snippet it should respond_with
 	it { should respond_with ${1:status} }
 snippet it should rout
-	it { should route(:${1:method}, '${2:path}') }
+	it { should route(:${1:method}, "${2:path}") }
 snippet it should set_session
 	it { should set_session :${1:key} }
 snippet it should set_the_flash
-	it { should set_the_flash('${1}') }
+	it { should set_the_flash("${1}") }
 #ShouldaMatchers#ActiveModel
 snippet it should allow_mass_assignment_of
 	it { should allow_mass_assignment_of :${1} }
