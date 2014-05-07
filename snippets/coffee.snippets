@@ -115,9 +115,16 @@ snippet swi
 snippet when
 	when ${2:value}
 		${3:# body...}
-# Log
-snippet log
-	console.log ${1}
+# Console
+snippet console log
+alias cl
+	console.log(${1})
+snippet console assert
+	console.assert(${1})
+snippet console trace
+	console.trace()${1}
+snippet console dir
+	console.dir(${1})
 # Try __ Catch
 snippet try
 	try

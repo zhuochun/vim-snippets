@@ -117,10 +117,16 @@ options word
 snippet get id
 options word
 	getElementBy${1:Id}("${2}")${3}
-# console.log (Firebug)
+# Console
 snippet console log
 alias cl
 	console.log(${1});
+snippet console assert
+	console.assert(${1});
+snippet console trace
+	console.trace();${1}
+snippet console dir
+	console.dir(${1});
 # return
 snippet ret
 	return ${1:result}
