@@ -125,6 +125,9 @@ snippet console trace
 	console.trace()${1}
 snippet console dir
 	console.dir(${1})
+# Helpers
+snippet toArray
+    Array.prototype.slice.call(${1:array-like-object})
 # Try __ Catch
 snippet try
 	try

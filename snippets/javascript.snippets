@@ -227,6 +227,9 @@ snippet prop
 			configurable : ${6:boolean}
 		}
 	);
+# helpers
+snippet toArray
+    Array.prototype.slice.call(${1:array-like-object})
 # regular expression
 snippet regex positive lookahead
 alias pla

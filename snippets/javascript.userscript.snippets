@@ -1,0 +1,72 @@
+# Snippets for Greasemonkey User Scripts
+snippet userscript meta
+alias meta
+	// ==UserScript==
+	// @name        ${1:Script}
+	// @namespace   `g:snips_github`
+	// @description ${2:description}
+	// @version     ${3:1.0}
+	// @icon        ${4:http://www.example.net/icon.png}
+	// @downloadURL ${5:https://www.example.com/myscript.user.js}
+	// @updateURL   ${6:https://www.example.com/myscript.meta.js}
+	// @match       ${7:https://www.example.com/*}
+	// ==/UserScript==
+snippet include globs
+	// @include     ${1:url}
+snippet include regex
+	// @include     /^${1:url}/
+snippet exclude globs
+	// @exclude     ${1:url}
+snippet exclude regex
+	// @exclude     /^${1:url}/
+snippet match
+	// @match       ${1:url}
+snippet require
+	// @require     ${1:http://www.example.com/dependent.js}
+snippet resource
+	// @resource    ${1:resourcename} ${2:http://www.example.com/example.png}
+snippet gm style
+	GM_addStyle(${1:styles})
+snippet gm resource text
+	GM_getResourceText("${1:resourcename}")
+snippet gm open tab
+	GM_openInTab(${1:url})
+snippet gm clipboard
+	GM_setClipboard(${1:text});
+snippet gm http get
+	GM_xmlhttpRequest({
+		method: "GET",
+		url: "${1:http://www.example.com/}",
+		onload: function(response) {
+			${2:response.responseText}
+		}
+	});
+snippet gm http post
+	GM_xmlhttpRequest({
+		method: "POST",
+		url: "${1:http://www.example.net/}",
+		data: "${2:data}",
+		headers: {
+			"Content-Type": "application/x-www-form-urlencoded"
+		},
+		onload: function(response) {
+			${3:response}
+		}
+	});
+snippet gm info name
+	GM_info.name
+snippet gm info version
+	GM_info.version
+snippet gm set value
+	GM_setValue(${1:key}, ${2:val})
+snippet gm get value
+	GM_getValue(${1:key}, ${2:default})
+snippet gm del value
+	GM_deleteValue(${1:key})
+snippet gm list values
+	GM_listValues()
+snippet gm list values loop
+	var key, keys = GM_listValues();
+	for (var i = 0; key = keys[i]; i++) {
+		${1:val} = GM_getValue(key);
+	}
