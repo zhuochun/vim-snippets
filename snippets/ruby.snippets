@@ -226,8 +226,10 @@ snippet attp
 	attr_protected :${1:attr_names}
 snippet atta
 	attr_accessible :${1:attr_names}
-snippet ana
+snippet accepts_nested_attributes_for
 	accepts_nested_attributes_for :${1:association}
+snippet const
+	Object.const_get(${1:name}.capitalize)
 snippet enum
 	enum ${1:name}: [:${2:option_1}, :${3:other_options}]
 # ivc == instance variable cache
@@ -1616,6 +1618,18 @@ snippet tctss
 ##########################
 #     Rspec snippets     #
 ##########################
+snippet rspec unit
+	require 'spec_helper'
+
+	describe "${1:a behaviour}" do
+		${2:pending "Not implemented"}
+	end
+snippet rspec feature
+	require 'spec_helper'
+
+	feature "${1:an action}" do
+		${2:pending "Not implemented"}
+	end
 snippet describe
 alias desc
 	describe "${1:a behaviour}" do
@@ -1990,8 +2004,8 @@ snippet eof
 #############################################
 snippet feature
 alias fea
-	feature "${1:feature}" do
-		${2}
+	feature "${1:an action}" do
+		${2:pending "Not implemented"}
 	end
 snippet background
 alias bg
