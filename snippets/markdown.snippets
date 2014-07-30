@@ -152,18 +152,18 @@ alias mifengtd
 	author_email: stone1551@gmail.com
 	author_name: 弥缝
 	author_url: "http://www.mifengtd.cn"
-	categories:
-		- ${1:时间管理}
-	date: `strftime("%Y-%m-%d %H:%M:%S")`
 	layout: post
 	published: true
+	status: publish
+	date: `strftime("%Y-%m-%d %H:%M:%S")`
 	title: "${2:title}"
 	seo_title: "$2"
 	seo_description: ""
 	seo_keywords: ""
-	status: publish
-	tags:
-		- ${3:标签}
 	---
 snippet more
 	<a id="more"></a>
+snippet tougao
+	<span style="color: #008000;">本文来自 ${1:作者} 原创投稿。</span>
+snippet zhuanzai
+	<span style="color: #008000;">本文转载来自 ${1:作者} 。</span>
