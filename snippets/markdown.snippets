@@ -169,11 +169,11 @@ snippet span
 	<span style="color: #008000;">${1:内容}</span>
 snippet img mifengtd center
 alias imgmc
-	<a href="${2}" target="_blank">
-		<img alt="$1" src="${3}" width="${4}" height="${5}" class="aligncenter">
+	<a href="http://www.mifengtd.cn/articles/${1:`vim_snippets#Filename()`}.html" target="_blank">
+		<img alt="${2}" src="http://images.mifengtd.cn/`strftime("%Y/%m")`/${3}" width="${4}" height="${5}" class="aligncenter">
 	</a>
 snippet img mifengtd right
 alias imgmr
-	<a href="${1}" target="_blank">
-		<img alt="${2}" src="${3}" width="${4}" height="${5}" class="alignright">
+	<a href="http://www.mifengtd.cn/articles/${1:`vim_snippets#Filename()`}.html" target="_blank">
+		<img alt="${2}" src="http://images.mifengtd.cn/`strftime("%Y/%m")`/${3}" width="${4}" height="${5}" class="alignright">
 	</a>
