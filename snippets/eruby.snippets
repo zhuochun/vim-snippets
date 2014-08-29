@@ -61,6 +61,11 @@ snippet yield
 	<%= yield :${1:content_symbol} %>${2}
 snippet yield optional
 	<%= yield :${1:content_symbol} if content_for?(:$1) %>
+snippet current_page? path
+alias cp
+	current_page?(${1:path})
+snippet current_page? controller
+	current_page?(controller: ${1:path}, action: ${2:action})
 snippet content_for?
 	content_for?(:${1:head})
 snippet content for
@@ -245,3 +250,11 @@ snippet can destroy
 	can? :destroy, ${1:Model}
 snippet can customize
 	can? :${1:view}, ${2:Model}
+# pundit gem
+snippet policy
+	policy(@${1}).${2}?
+# flutie gem
+snippet body class
+	<%= body_class %>
+snippet body extra class
+	content_for(:extra_body_classes, '${1}')

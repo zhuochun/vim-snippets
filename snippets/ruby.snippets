@@ -1630,17 +1630,15 @@ snippet rspec feature
 	feature "${1:an action}" do
 		${2:pending "Not implemented"}
 	end
+snippet rspec rails
+	require 'rails_helper'
+
+	RSpec.describe "${1}", type: :${2} do
+		${3}
+	end
 snippet describe
 alias desc
-	describe "${1:a behaviour}" do
-		${2:pending "Not implemented"}
-	end
-snippet desc class
-	describe ${1:class_name} do
-		${2}
-	end
-snippet desc method
-	describe "#${1:method}" do
+	describe ${1:name} do
 		${2:pending "Not implemented"}
 	end
 snippet context
@@ -2143,3 +2141,22 @@ snippet can destroy
 	can? :destroy, ${1:Model}
 snippet can customize
 	can? :${1:view}, ${2:Model}
+
+#############################################
+# pundit gem
+#############################################
+snippet policy
+	class ${1:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`} < ApplicationPolicy
+		${2}
+	end
+snippet policy application
+	class ${1:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`}
+		attr_reader :user, :${2:record}
+
+		def initialize(user, $2)
+			@user = user
+			@$2 = $2
+		end
+
+		${3}
+	end
