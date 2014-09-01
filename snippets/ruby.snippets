@@ -103,11 +103,12 @@ snippet memo hash
 	@${1:variable} ||= {}
 	@$1[args] ||= ${2:method}(*args)
 snippet class basic
-alias cl
+alias cla
 	class ${1:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`}
 		${2}
 	end
 snippet class initialize
+alias cli
 	class ${1:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`}
 		def initialize(${2:args})
 			${3}
@@ -131,6 +132,7 @@ snippet class BlankSlate
 		instance_methods.each { |meth| undef_method(meth) unless meth =~ /\A__/ }
 	end
 snippet class Self
+alias claself
 	class << ${1:self}
 		${2}
 	end
@@ -161,6 +163,7 @@ snippet class Rails Model
 		end
 	end
 snippet class Rails 4.0 Model
+alias clr
 	class ${1:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`}
 		include ActiveModel::Model
 
@@ -177,6 +180,7 @@ snippet class RuntimeError
 snippet struct
 	Struct.new(:${1:attr_name})
 snippet module basic
+alias mod
 	module ${1:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`}
 		${2}
 	end
@@ -259,7 +263,7 @@ snippet Forw-
 	extend Forwardable
 # def self
 snippet def self.method
-alias self
+alias defs
 	def self.${1:class_method_name}
 		${2}
 	end
@@ -269,7 +273,7 @@ snippet def self.[]
 	end
 # def initialize
 snippet def init
-alias init constructor
+alias defi init
 	def initialize(${1:args})
 		${2}
 	end
@@ -304,8 +308,10 @@ snippet alias method
 snippet alias attribute
 	alias_attribute :${1:new_name}, :${2:old_name}
 snippet __ file
+alias __f
 	__FILE__
 snippet __ line
+alias __l
 	__LINE__
 snippet app
 	if __FILE__ == $PROGRAM_NAME
@@ -1051,7 +1057,7 @@ snippet begin
 #debugging
 snippet debugger
 alias dbg
-	require "ruby-debug"; debugger; true;
+	require "ruby-debug"; debugger;
 snippet debugger pry
 alias pry
 	require "pry"; binding.pry
@@ -1804,6 +1810,66 @@ options word
 snippet should_receive any_number_of_times
 options word
 	should_receive(:${1:message}).any_number_of_times
+snippet should allow_mass_assignment_of
+	it { should allow_mass_assignment_of(${1}) }
+snippet should allow_value
+	it { should allow_value(${1}) }
+snippet should validate_inclusion_of
+	it { should validate_inclusion_of(${1}) }
+snippet should validate_exclusion_of
+	it { should validate_exclusion_of(${1}) }
+snippet should ensure_length_of
+	it { should ensure_length_of(${1}) }
+snippet should have_secure_password
+	it { should have_secure_password(${1}) }
+snippet should validate_confirmation_of
+	it { should validate_confirmation_of(${1}) }
+snippet should validate_numericality_of
+	it { should validate_numericality_of(${1}) }
+snippet should validate_presence_of
+	it { should validate_presence_of(${1}) }
+snippet should validate_uniqueness_of
+	it { should validate_uniqueness_of(${1}) }
+snippet should accept_nested_attributes_for
+	it { should accept_nested_attributes_for(${1}) }
+snippet should belong_to
+	it { should belong_to(${1}) }
+snippet should define_enum_for
+	it { should define_enum_for(${1}) }
+snippet should have_many
+	it { should have_many(${1}) }
+snippet should have_one
+	it { should have_one(${1}) }
+snippet should have_and_belong_to_many
+	it { should have_and_belong_to_many(${1}) }
+snippet should have_db_column
+	it { should have_db_column(${1}) }
+snippet should have_db_index
+	it { should have_db_index(${1}) }
+snippet should have_readonly_attribute
+	it { should have_readonly_attribute(${1}) }
+snippet should serialize
+	it { should serialize(${1}) }
+snippet should filter_param
+	it { should filter_param(${1}) }
+snippet should redirect_to
+	it { should redirect_to(${1}) }
+snippet should render_template
+	it { should render_template(${1}) }
+snippet should render_with_layout
+	it { should render_with_layout(${1}) }
+snippet should rescue_from
+	it { should rescue_from(${1}) }
+snippet should respond_with
+	it { should respond_with(${1}) }
+snippet should route
+	it { should route(${1}) }
+snippet should set_session
+	it { should set_session(${1}) }
+snippet should set_the_flash
+	it { should set_the_flash(${1}) }
+snippet should delegate_method
+	it { should delegate_method(${1}) }
 snippet expect any_instance_of receive
 	expect_any_instance_of(${1:Object}).to receive(:${2:method})
 snippet expect receive once
