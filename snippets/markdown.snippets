@@ -1,6 +1,7 @@
 # Markdown
 # Jekyll Post
 snippet jekyll post
+alias post
 	---
 	layout: post
 	${2:menu: true}
@@ -14,6 +15,7 @@ snippet jekyll post
 	${6}
 # Jekyll Project
 snippet jekyll project
+alias project
 	---
 	layout: project
 	title: '${1:title}'
@@ -47,7 +49,7 @@ snippet cleaver
 	## ${5:sub title}
 
 	$6
-snippet slide
+snippet cleaver slide
 	--
 
 	$1
@@ -87,24 +89,34 @@ snippet table
 	${3:td} | ${4:td}
 # Code embedded
 snippet code jekyll
-alias cj jek
-	{% highlight ${1:language} ${2:linenos }%}
-	${3:TARGET}
+alias cj
+	{% highlight ${1:language}%}
+	${2:TARGET}
+	{% endhighlight %}
+snippet code jekyll bash
+alias cjb
+	{% highlight bash %}
+	${1:TARGET}
 	{% endhighlight %}
 snippet code jekyll ruby
 alias cjr
 	{% highlight ruby %}
-	${3:TARGET}
+	${1:TARGET}
 	{% endhighlight %}
 snippet code jekyll javascript
 alias cjj
 	{% highlight javascript %}
-	${3:TARGET}
+	${1:TARGET}
+	{% endhighlight %}
+snippet code jekyll coffee
+alias cjc
+	{% highlight coffee %}
+	${1:TARGET}
 	{% endhighlight %}
 snippet code github
-alias cg ch hub
-	\`\`\` ${2:language}
-	${1:TARGET}
+alias cg
+	\`\`\` ${1:language}
+	${2:TARGET}
 	\`\`\`
 snippet code github more
 	\`\`\` ${1:language} ${2:title} ${3:URL} ${4:link_text}
@@ -123,14 +135,6 @@ snippet blockquote link
 	{% blockquote ${1:author} ${2:URL} ${3:link_text} %}
 	${4:TARGET}
 	{% endblockquote %}
-snippet codeblock short
-	{% codeblock %}
-	${1:code_snippet}
-	{% endcodeblock %}
-snippet codeblock full
-	{% codeblock ${1:title} lang:${2:language} ${3:URL} ${4:link_text} %}
-	${5:code_snippet}
-	{% endcodeblock %}
 snippet gist full
 	{% gist ${1:gist_id} ${2:filename} %}
 snippet gist short
