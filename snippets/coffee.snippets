@@ -5,6 +5,7 @@ snippet for basic with do
 			${3:// body}
 # For loop
 snippet for basic
+alias for
 	for ${1:name} in ${2:array}
 # Array comprehension
 snippet for object
@@ -57,19 +58,19 @@ snippet fun bound without params
 	(${1:args}) =>
 		${2:# body...}
 # Class
-snippet class class ..
+snippet class
 	class ${1:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`}
 		${2}
-snippet class class .. constructor: ..
+snippet class constructor
 	class ${1:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`}
 		constructor: (${2:@args}) ->
 			${3}
 
 		${4}
-snippet class class .. extends ..
+snippet class extends
 	class ${1:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`} extends ${2:ParentClass}
 		${3}
-snippet class class .. extends .. constructor: ..
+snippet class extends constructor
 	class ${1:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`} extends ${2:ParentClass}
 		constructor: (${3:@args}) ->
 			${4}
@@ -90,7 +91,8 @@ snippet else
 	else ${1:condition}
 		${2:# body...}
 # If __ Else
-snippet ife
+snippet if else
+alias ife
 	if ${1:condition}
 		${2:# body...}
 	else
@@ -101,14 +103,14 @@ snippet elseif
 		${2:# body...}
 # Ternary If
 snippet ifthen
-	if ${1:condition} then ${2:value} else ${3:other}
-snippet ?
+alias ?
 	if ${1:condition} then ${2:value} else ${3:other}
 # Unless
 snippet unless
 	${1:action} unless ${2:condition}
 # Switch
-snippet swi
+snippet switch
+alias swi
 	switch ${1:object}
 		when ${2:value}
 			${3:# body...}
@@ -126,8 +128,36 @@ snippet console trace
 snippet console dir
 	console.dir(${1})
 # Helpers
-snippet toArray
+snippet array slice
+alias toArray
     Array.prototype.slice.call(${1:array-like-object})
+# object
+snippet object keys
+alias keys
+	Object.keys(${1:obj})${2}
+snippet object type
+alias type
+	Object.prototype.toString.call(${1}) == "[object ${2:Object}]"
+# es6
+snippet map
+alias collect
+options head
+	map((${1:i}) -> ${2})
+snippet filter
+alias select
+options head
+	filter((${1:i}) -> ${2})
+snippet reduce
+alias inject
+options head
+	reduce (${1}, ${2:val}) ->
+		${4}
+	, ${3}
+snippet forEach
+alias each
+options head
+	forEach (${1:elem}, ${2:idx}) ->
+		${3}
 # Try __ Catch
 snippet try
 	try
@@ -315,6 +345,8 @@ snippet jexpect toBeCloseTo
 snippet jexpect toThrow
 	expect(${1:expression}).toThrow()
 # angular
+snippet ng
+	angular.
 snippet angular module
 alias ngm
 	${1:moduleName} = angular.module("$1", [${2:dependency}])
@@ -329,42 +361,57 @@ options word
 			${1}
 	])
 # angular route
+snippet angular route
+alias ngr
+	$routeProvider.
+		when "${1:url}",
+			templateUrl: "${2:templateUrl}"
+			controller: "${3:controller}"
 snippet angular route when
 alias ngrw
-	$routeProvider.when '${1:url}',
-		templateUrl: '${2:templateUrl}'
-		controller: '${3:controller}'
-snippet angular route when with resolve
+	when "${1:url}",
+		templateUrl: "${2:templateUrl}"
+		controller: "${3:controller}"
+snippet angular route when resolve
 alias ngrwr
-	$routeProvider.when '${1:url}',
-		templateUrl: '${2:templateUrl}'
-		controller: '${3:controller}'
+	$routeProvider.when "${1:url}",
+		templateUrl: "${2:templateUrl}"
+		controller: "${3:controller}"
 		resolve:
 			${4}
 snippet angular route otherwise
 alias ngro
-	$routeProvider.otherwise redirectTo: '${1:url}'
+	otherwise redirectTo: '${1:url}'
 # angular scope
+snippet scope
+alias sco
+	$scope
 snippet $scope fun
+alias scf
+options head
 	$scope.${1:functionName} = (${2:args}) ->
 		${3}
 snippet $scope var
+alias scv
+options head
 	$scope.${1:variable} = ${2:value}
 snippet $scope watch
-	$scope.$watch '${1:watchExpr}', (newVal, oldVal) ->
+options head
+	$scope.$watch "${1:watchExpr}", (newVal, oldVal) ->
 		${2}
 snippet $scope on
-	$scope.$on '${1:eventName}', (event, ${2:args}) ->
+options head
+	$scope.$on "${1:eventName}", (event, ${2:args}) ->
 		${3}
 snippet $scope broadcast
-	$scope.$broadcast '${1:eventName}', ${2:eventArgs}
+	$scope.$broadcast "${1:eventName}", ${2:eventArgs}
 snippet $scope emit
-	$scope.$emit '${1:eventName}', ${2:eventArgs}
+	$scope.$emit "${1:eventName}", ${2:eventArgs}
 # angular api
 snippet angular controller
 alias ngctrl
 options word
-	controller "${1:controllerName}", [
+	controller "${1:What}Controller", [
 		"$scope",
 		($scope) ->
 			${2}
@@ -372,16 +419,20 @@ options word
 snippet angular directive
 options word
 	directive "${1:directiveName}", ->
-		templateUrl: "${2:url}"
-	}
+		restrict: "${2:AE}"
+		scope:
+			${4}
+		templateUrl: "${3:url}"
 snippet angular directive injectables
 alias ngdir
 options word
 	directive "${1:directiveName}", [
 		"${2:dependency}"
 		($2) ->
-			link: (scope, element, attrs) ->
-				${3}
+			restrict: "${3:AE}"
+			scope:
+				${5}
+			templateUrl: "${4:url}"
 	]
 snippet angular factory
 options word
@@ -408,8 +459,16 @@ options word
 			${3}
 	]
 snippet angular filter
-alias ngfi
 options word
 	filter "${1:filterName}", ->
 		(input, ${2:args}) ->
 			${3}
+snippet angular filter injectables
+alias ngfi
+options word
+	filter "${1:filterName}", [
+		"${2:dependency}"
+		(${2}) ->
+			(input) ->
+				${3}
+	]

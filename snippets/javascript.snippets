@@ -108,7 +108,7 @@ snippet do
 	} while (${1:/* condition */});
 # setTimeout function
 snippet timeout
-	setTimeout(function () {${3}}${2}, ${1:10});
+	setTimeout(function () {${3}}, ${1:10});
 # Get Elements
 snippet get tagname
 options word
@@ -136,6 +136,7 @@ options word
 	hasOwnProperty(${1})
 # docstring
 snippet /**
+alias doc
 	/**
 	 * ${1:description}
 	 *
@@ -228,8 +229,41 @@ snippet prop
 		}
 	);
 # helpers
-snippet toArray
+snippet array slice
+alias toArray
     Array.prototype.slice.call(${1:array-like-object})
+# object
+snippet object keys
+alias keys
+	Object.keys(${1:obj})${2}
+snippet object type
+alias type
+	Object.prototype.toString.call(${1}) == "[object ${2:Object}]"
+# es6
+snippet map
+alias collect
+options head
+	map(function(${1:i}) {
+		return ${2};
+	});
+snippet filter
+alias select
+options head
+	filter(function(${1:i}) {
+		return ${2};
+	});
+snippet reduce
+alias inject
+options head
+	reduce(function(${1}, ${2:val}) {
+		return ${4};
+	}, ${3});
+snippet forEach
+alias each
+options head
+	forEach(function(${1:elem}, ${2:idx}) {
+		${3}
+	});
 # regular expression
 snippet regex positive lookahead
 alias pla
@@ -524,11 +558,13 @@ snippet jexpect toBeCloseTo
 snippet jexpect toThrow
 	expect(${1:expression}).toThrow();
 # angular
+snippet ng
+	angular.
+snippet angular module def
+	var ${1:moduleName} = angular.module("$1", [${2:dependency}]);
 snippet angular module
 alias ngm
-	var ${1:moduleName} = angular.module("$1", [${2:dependency}]);
-snippet angular module def
-	angular.module("${1:moduleName}", [${2:dependency}]);
+	angular.module("${1:moduleName}", [${2:dependency}])${0}
 snippet angular config
 alias ngc
 options word
@@ -539,81 +575,121 @@ options word
 		}
 	]);
 # angular route
+snippet angular route
+alias ngr
+	$routeProvider.
+	when("${1:url}", {
+		controller: "${3:controller}",
+		templateUrl: "${2:templateUrl}"
+	})${0:.}
 snippet angular route when
 alias ngrw
-	$routeProvider.when("${1:url}", {
-		templateUrl: "${2:templateUrl}",
-		controller: "${3:controller}"
-	});
-snippet angular route when with resolve
-alias ngrwr
-	$routeProvider.when("${1:url}", {
-		templateUrl: "${2:templateUrl}",
+	when("${1:url}", {
 		controller: "${3:controller}",
+		templateUrl: "${2:templateUrl}"
+	})${0:.}
+snippet angular route when resolve
+alias ngrwr
+	when("${1:url}", {
+		controller: "${3:controller}",
+		templateUrl: "${2:templateUrl}",
 		resolve: {
 			${4}
 		}
-	});
+	})${0:.}
 snippet angular route otherwise
 alias ngro
-	$routeProvider.otherwise({
+	otherwise({
 		redirectTo: "${1:url}"
 	});
 # angular scope
-snippet $scope fun
+snippet scope
+alias sco
+	$scope
+snippet scope fun
+alias scf
+options head
 	$scope.${1:functionName} = function(${2:args}) {
 		${3}
 	};
-snippet $scope var
+snippet scope var
+alias scv
+options head
 	$scope.${1:variable} = ${2:value};
-snippet $scope watch
+snippet scope watch
+options head
 	$scope.$watch("${1:watchExpr}", function(newVal, oldVal) {
 		${2}
 	});
-snippet $scope on
+snippet scope on
+options head
 	$scope.$on("${1:eventName}", function(event, ${2:args}) {
 		${3}
 	});
-snippet $scope broadcast
+snippet scope broadcast
 	$scope.$broadcast("${1:eventName}", ${2:eventArgs});
-snippet $scope emit
+snippet scope emit
 	$scope.$emit("${1:eventName}", ${2:eventArgs});
 # angular api
 snippet angular controller
 alias ngctrl
 options word
-	controller("${1:controllerName}", [
+	controller("${1:What}Controller", [
 		"$scope",
 		function($scope) {
 			${2}
-		});
+		}
 	]);
 snippet angular directive
+alias ngdir
 options word
 	directive("${1:directiveName}", function() {
 		return {
-			templateUrl: "${2:url}"
+			restrict: "${2:AE}",
+			scope: {
+				${4}
+			},
+			templateUrl: "${3:url}"
 		};
 	});
 snippet angular directive injectables
-alias ngdir
 options word
 	directive("${1:directiveName}", [
 		"${2:dependency}",
 		function($2) {
-			function link(scope, element, attrs) {
-				${3}
-			}
-
 			return {
-				link: link
+				restrict: "${3:AE}",
+				scope: {
+					${5}
+				},
+				templateUrl: "${4:url}"
 			};
 		}
 	]);
+snippet angular directive link
+	link: function(scope, element, attrs) {
+		${1}
+	}
+snippet angular directive controller
+	controllerAs: '${1}',
+	controller: function($scope, $element, $attrs) {
+		${2}
+	}
+snippet angular directive scope value
+alias s@
+	${1:key}: "@${2:val}",${0}
+snippet angular directive scope binding
+alias s=
+	${1:key}: "=${2:val}",${0}
+snippet angular directive scope function
+alias s&
+	${1:key}: "&${2:val}",${0}
 snippet angular factory
 options word
 	factory("${1:factoryName}", function() {
-		${2}
+		return {
+			${2}
+		};
 	});
 snippet angular factory injectables
 alias ngfa
@@ -621,8 +697,10 @@ options word
 	factory("${1:factoryName}", [
 		"${2:dependency}",
 		function($2) {
-			${3}
-		});
+			return {
+				${3}
+			};
+		}
 	]);
 snippet angular service
 options word
@@ -636,13 +714,23 @@ options word
 		"${2:dependency}",
 		function($2) {
 			${3}
-		});
+		}
 	]);
 snippet angular filter
-alias ngfi
 options word
 	filter("${1:filterName}", function() {
 		return function(input, ${2:args}) {
 			${3}
 		};
 	});
+snippet angular filter injectables
+alias ngfi
+options word
+	filter("${1:filterName}", [
+		"${2:dependency}",
+		function($2) {
+			return function(input, ${2:args}) {
+				${3}
+			};
+		}
+	]);

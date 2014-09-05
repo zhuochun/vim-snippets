@@ -4,16 +4,15 @@ include ruby.snippets
 # Rails
 # .erb and .rhmtl files
 
-snippet rc
-	<% ${1:TARGET} %>
 snippet %
+options word
 	<% ${1:TARGET} %>
-snippet rce
-	<%= ${1:TARGET} %>
 snippet =
+options word
 	<%= ${1:TARGET} %>
 snippet escape_javascript
 alias j
+options word
 	<%=j ${1:TARGET} %>
 snippet end
 	<% end %>
@@ -49,12 +48,12 @@ alias ltd
 		${2:content}
 	<% end %>
 snippet link_to back
-alias back
+alias ltb
 	<%= link_to "Back", url_for(:back) %>
 snippet link_to_if
-	<%= link_to_if(${1:condition}, ${2:link}, ${3:path}) %>
+	<%= link_to_if ${1:condition}, ${2:link}, ${3:path} %>
 snippet link_to_unless
-	<%= link_to_unless(${1:condition}, ${2:link}, ${3:path}) %>
+	<%= link_to_unless ${1:condition}, ${2:link}, ${3:path} %>
 snippet button_to
 	<%= button_to "${1:button text}", ${2:action}, method: :${3:delete} %>
 snippet yield
@@ -68,28 +67,32 @@ snippet current_page? controller
 	current_page?(controller: ${1:path}, action: ${2:action})
 snippet content_for?
 	content_for?(:${1:head})
-snippet content for
+snippet content_for? do
 	<% content_for :${1:head} do %>
 		${2}
 	<% end %>
-snippet content tag
+snippet content_tag
+alias ct
 	<%= content_tag :${1:div}, ${2:content}, ${3:options} %>
-snippet content tag do
+snippet content_tag do
+alias ctd
 	<%= content_tag :${1:div} do %>
 		${2}
 	<% end %>
-snippet content tag for
+snippet content_tag for
 	<%= content_tag_for :${1:div}, ${2:model} do %>
 		${3}
 	<% end %>
-snippet content div for
+snippet content_div for
 alias div_for
 	<%= div_for ${1:model} do %>
 		${2}
 	<% end %>
 snippet dom_class
+alias class
 	<%= dom_class ${1:model}, ${2:prefix} %>
 snippet dom_id
+alias id
 	<%= dom_id ${1:model}, ${2:prefix} %>
 # text helpers
 snippet cycle
@@ -184,13 +187,14 @@ snippet css
 alias style stylesheet
 	<%= stylesheet_link_tag "${1}" %>
 snippet css cache
-	<%= stylesheet_link_tag ${1::all}, :cache => ${2:true} %>
+	<%= stylesheet_link_tag ${1::all}, cache: ${2:true} %>
 # conditions
 snippet if
 	<% if ${1} %>
 		${2:TARGET}
 	<% end %>
 snippet if else
+alias ife
 	<% if ${1} %>
 		${2:TARGET}
 	<% else %>
@@ -203,9 +207,11 @@ snippet elsif
 # i18
 snippet i18 translate
 alias t
+options word
 	<%=t "${1:type.key}" %>
 snippet i18 localize
 alias l
+options word
 	<%=l "${1:type.key}" %>
 # cache helpers
 snippet cache fragment
@@ -238,6 +244,9 @@ snippet number with_delimiter
 snippet number with_precision
 	number_with_precision ${1}
 # cancan gem
+snippet can default
+alias can
+	can? :${1:action}, ${2:Model}
 snippet can manage
 	can? :manage, ${1:Model}
 snippet can read
@@ -248,8 +257,6 @@ snippet can update
 	can? :update, ${1:Model}
 snippet can destroy
 	can? :destroy, ${1:Model}
-snippet can customize
-	can? :${1:view}, ${2:Model}
 # pundit gem
 snippet policy
 	policy(@${1}).${2}?
