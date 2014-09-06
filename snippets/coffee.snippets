@@ -139,6 +139,13 @@ snippet object type
 alias type
 	Object.prototype.toString.call(${1}) == "[object ${2:Object}]"
 # es6
+snippet find
+options head
+	find((${1:i}) -> ${2})
+snippet findIndex
+alias index
+options head
+	findIndex((${1:i}) -> ${2})
 snippet map
 alias collect
 options head
@@ -166,7 +173,7 @@ snippet try
 		${3}
 # Require
 snippet req
-	${2:$1} = require '${1:sys}'${3}
+	${2:$1} = require "${1:sys}"
 # Export
 snippet exp
 	${1:root} = exports ? this
@@ -203,53 +210,53 @@ alias cha
 	assert = require("chai").assert${1:,}
 snippet assert
 alias as
-	assert(${1:expression}, '${2:message}')
+	assert(${1:expression})
 snippet assert equal
 alias ae
-	assert.equal(${1:actual}, ${2:expected}, '${3:message}')
+	assert.equal(${1:actual}, ${2:expected})
 snippet assert not equal
 alias ane
-	assert.notEqual(${1:actual}, ${2:expected}, '${3:message}')
+	assert.notEqual(${1:actual}, ${2:expected})
 snippet assert strict equal
 alias ase
-	assert.strictEqual(${1:actual}, ${2:expected}, '${3:message}')
+	assert.strictEqual(${1:actual}, ${2:expected})
 snippet assert not strict equal
 alias anse
-	assert.notStrictEqual(${1:actual}, ${2:expected}, '${3:message}')
+	assert.notStrictEqual(${1:actual}, ${2:expected})
 snippet assert deep equal
 alias ade
-	assert.deepEqual(${1:actual}, ${2:expected}, '${3:message}')
+	assert.deepEqual(${1:actual}, ${2:expected})
 snippet assert not deep equal
 alias ande
-	assert.notDeepEqual(${1:actual}, ${2:expected}, '${3:message}')
+	assert.notDeepEqual(${1:actual}, ${2:expected})
 snippet assert isTrue
 alias at
-	assert.isTrue(${1:value}, '${2:message}')
+	assert.isTrue(${1:value})
 snippet assert isFalse
 alias af
-	assert.isFalse(${1:value}, '${2:message}')
+	assert.isFalse(${1:value})
 snippet assert isNull
-	assert.isNull(${1:value}, '${2:message}')
+	assert.isNull(${1:value})
 snippet assert isUndefined
-	assert.isUndefined(${1:value}, '${2:message}')
+	assert.isUndefined(${1:value})
 snippet assert isDefined
-	assert.isDefined(${1:value}, '${2:message}')
+	assert.isDefined(${1:value})
 snippet assert isFunction
-	assert.isFunction(${1:value}, '${2:message}')
+	assert.isFunction(${1:value})
 snippet assert isObject
-	assert.isObject(${1:value}, '${2:message}')
+	assert.isObject(${1:value})
 snippet assert isArray
-	assert.isArray(${1:value}, '${2:message}')
+	assert.isArray(${1:value})
 snippet assert isString
-	assert.isString(${1:value}, '${2:message}')
+	assert.isString(${1:value})
 snippet assert isNumber
-	assert.isNumber(${1:value}, '${2:message}')
+	assert.isNumber(${1:value})
 snippet assert typeOf
-	assert.typeOf(${1:value}, ${2:name}, '${3:message}')
+	assert.typeOf(${1:value}, ${2:name})
 snippet assert match
-	assert.match(${1:value}, ${2:regex}, '${3:message}')
+	assert.match(${1:value}, ${2:regex})
 snippet assert lengthOf
-	assert.lengthOf(${1:object}, ${2:length}, '${3:message}')
+	assert.lengthOf(${1:object}, ${2:length})
 # Chai - Expect
 snippet chai require expect
 alias che
@@ -434,6 +441,13 @@ options word
 				${5}
 			templateUrl: "${4:url}"
 	]
+snippet angular directive link
+	link: (scope, element, attrs, ${1:ctrls}) ->
+		${2}
+snippet angular directive controller
+	controllerAs: "${1}",
+	controller: ($scope, $element, $attrs) ->
+		${2}
 snippet angular factory
 options word
 	factory "${1:factoryName}", ->

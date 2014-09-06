@@ -240,6 +240,17 @@ snippet object type
 alias type
 	Object.prototype.toString.call(${1}) == "[object ${2:Object}]"
 # es6
+snippet find
+options head
+	find(function(${1:i}) {
+		return ${2};
+	});
+snippet findIndex
+alias index
+options head
+	findIndex(function(${1:i}) {
+		return ${2};
+	});
 snippet map
 alias collect
 options head
@@ -410,62 +421,58 @@ snippet afterEach
 # Chai - Assert
 snippet chai require assert
 	var assert = require("chai").assert${1:;}
-snippet chai browser assert
-	var assert = chai.assert${1:;}
 snippet assert
 alias as
-	assert(${1:expression}, "${2:message}");
+	assert(${1:expression})
 snippet assert equal
 alias ae
-	assert.equal(${1:actual}, ${2:expected}, "${3:message}");
+	assert.equal(${1:actual}, ${2:expected})
 snippet assert not equal
 alias ane
-	assert.notEqual(${1:actual}, ${2:expected}, "${3:message}");
+	assert.notEqual(${1:actual}, ${2:expected})
 snippet assert strict equal
 alias ase
-	assert.strictEqual(${1:actual}, ${2:expected}, "${3:message}");
+	assert.strictEqual(${1:actual}, ${2:expected})
 snippet assert not strict equal
 alias anse
-	assert.notStrictEqual(${1:actual}, ${2:expected}, "${3:message}");
+	assert.notStrictEqual(${1:actual}, ${2:expected})
 snippet assert deep equal
 alias ade
-	assert.deepEqual(${1:actual}, ${2:expected}, "${3:message}");
+	assert.deepEqual(${1:actual}, ${2:expected})
 snippet assert not deep equal
 alias ande
-	assert.notDeepEqual(${1:actual}, ${2:expected}, "${3:message}");
+	assert.notDeepEqual(${1:actual}, ${2:expected})
 snippet assert isTrue
 alias at
-	assert.isTrue(${1:value}, "${2:message}");
+	assert.isTrue(${1:value})
 snippet assert isFalse
 alias af
-	assert.isFalse(${1:value}, "${2:message}");
+	assert.isFalse(${1:value})
 snippet assert isNull
-	assert.isNull(${1:value}, "${2:message}");
+	assert.isNull(${1:value})
 snippet assert isUndefined
-	assert.isUndefined(${1:value}, "${2:message}");
+	assert.isUndefined(${1:value})
 snippet assert isDefined
-	assert.isDefined(${1:value}, "${2:message}");
+	assert.isDefined(${1:value})
 snippet assert isFunction
-	assert.isFunction(${1:value}, "${2:message}");
+	assert.isFunction(${1:value})
 snippet assert isObject
-	assert.isObject(${1:value}, "${2:message}");
+	assert.isObject(${1:value})
 snippet assert isArray
-	assert.isArray(${1:value}, "${2:message}");
+	assert.isArray(${1:value})
 snippet assert isString
-	assert.isString(${1:value}, "${2:message}");
+	assert.isString(${1:value})
 snippet assert isNumber
-	assert.isNumber(${1:value}, "${2:message}");
+	assert.isNumber(${1:value})
 snippet assert typeOf
-	assert.typeOf(${1:value}, ${2:name}, "${3:message}");
+	assert.typeOf(${1:value}, ${2:name})
 snippet assert match
-	assert.match(${1:value}, ${2:regex}, "${3:message}");
+	assert.match(${1:value}, ${2:regex})
 snippet assert lengthOf
-	assert.lengthOf(${1:object}, ${2:length}, "${3:message}");
+	assert.lengthOf(${1:object}, ${2:length})
 # Chai - Expect
 snippet chai require expect
 	var expect = require("chai").expect${1:;}
-snippet chai browser expect
-	var expect = chai.expect${1:;}
 snippet expect general
 alias ex
 	expect(${1:expression}).to.${2:equal}(${3});
@@ -566,12 +573,16 @@ snippet angular module
 alias ngm
 	angular.module("${1:moduleName}", [${2:dependency}])${0}
 snippet angular config
+	config(function(${1:$routeProvider}) {
+		${2}
+	});
+snippet angular config injectables
 alias ngc
 options word
 	config([
-		"$routeProvider",
-		function($routeProvider) {
-			${1}
+		"${1:$routeProvider}",
+		function($1) {
+			${2}
 		}
 	]);
 # angular route
@@ -667,23 +678,23 @@ options word
 		}
 	]);
 snippet angular directive link
-	link: function(scope, element, attrs) {
-		${1}
-	}
+	link: function(scope, element, attrs, ${1:ctrls}) {
+		${2}
+	}${0:,}
 snippet angular directive controller
-	controllerAs: '${1}',
+	controllerAs: "${1}",
 	controller: function($scope, $element, $attrs) {
 		${2}
-	}
+	}${0:,}
 snippet angular directive scope value
 alias s@
-	${1:key}: "@${2:val}",${0}
+	${1:key}: "@${2:val}"${0:,}
 snippet angular directive scope binding
 alias s=
-	${1:key}: "=${2:val}",${0}
+	${1:key}: "=${2:val}"${0:,}
 snippet angular directive scope function
 alias s&
-	${1:key}: "&${2:val}",${0}
+	${1:key}: "&${2:val}"${0:,}
 snippet angular factory
 options word
 	factory("${1:factoryName}", function() {
