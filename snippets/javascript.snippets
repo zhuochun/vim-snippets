@@ -567,56 +567,13 @@ snippet jexpect toThrow
 # angular
 snippet ng
 	angular.
-snippet angular module def
-	var ${1:moduleName} = angular.module("$1", [${2:dependency}]);
 snippet angular module
 alias ngm
 	angular.module("${1:moduleName}", [${2:dependency}])${0}
-snippet angular config
-	config(function(${1:$routeProvider}) {
-		${2}
-	});
-snippet angular config injectables
-alias ngc
-options word
-	config([
-		"${1:$routeProvider}",
-		function($1) {
-			${2}
-		}
-	]);
-# angular route
-snippet angular route
-alias ngr
-	$routeProvider.
-	when("${1:url}", {
-		controller: "${3:controller}",
-		templateUrl: "${2:templateUrl}"
-	})${0:.}
-snippet angular route when
-alias ngrw
-	when("${1:url}", {
-		controller: "${3:controller}",
-		templateUrl: "${2:templateUrl}"
-	})${0:.}
-snippet angular route when resolve
-alias ngrwr
-	when("${1:url}", {
-		controller: "${3:controller}",
-		templateUrl: "${2:templateUrl}",
-		resolve: {
-			${4}
-		}
-	})${0:.}
-snippet angular route otherwise
-alias ngro
-	otherwise({
-		redirectTo: "${1:url}"
-	});
 # angular scope
 snippet scope
-alias sco
-	$scope
+alias sc
+	$scope.
 snippet scope fun
 alias scf
 options head
@@ -641,11 +598,30 @@ snippet scope broadcast
 	$scope.$broadcast("${1:eventName}", ${2:eventArgs});
 snippet scope emit
 	$scope.$emit("${1:eventName}", ${2:eventArgs});
-# angular api
-snippet angular controller
-alias ngctrl
+# angular core
+snippet angular config
 options word
-	controller("${1:What}Controller", [
+	.config(function(${1:$routeProvider}) {
+		${2}
+	})
+snippet angular config injectables
+alias ngc
+options word
+	.config([
+		"${1:$routeProvider}",
+		function($1) {
+			${2}
+		}
+	});
+snippet angular controller
+options word
+	.controller("${1:Some}Controller", function($scope${2}) {
+		${3}
+	});
+snippet angular controller injectables
+alias ngctr
+options word
+	.controller("${1:Some}Controller", [
 		"$scope",
 		function($scope) {
 			${2}
@@ -654,7 +630,7 @@ options word
 snippet angular directive
 alias ngdir
 options word
-	directive("${1:directiveName}", function() {
+	.directive("${1:directiveName}", function() {
 		return {
 			restrict: "${2:AE}",
 			scope: {
@@ -665,7 +641,7 @@ options word
 	});
 snippet angular directive injectables
 options word
-	directive("${1:directiveName}", [
+	.directive("${1:directiveName}", [
 		"${2:dependency}",
 		function($2) {
 			return {
@@ -697,7 +673,7 @@ alias s&
 	${1:key}: "&${2:val}"${0:,}
 snippet angular factory
 options word
-	factory("${1:factoryName}", function() {
+	.factory("${1:some}Factory", function() {
 		return {
 			${2}
 		};
@@ -705,7 +681,7 @@ options word
 snippet angular factory injectables
 alias ngfa
 options word
-	factory("${1:factoryName}", [
+	.factory("${1:some}Factory", [
 		"${2:dependency}",
 		function($2) {
 			return {
@@ -715,13 +691,13 @@ options word
 	]);
 snippet angular service
 options word
-	service("${1:serviceName}", function() {
+	.service("${1:some}Service", function() {
 		${2}
 	});
 snippet angular service injectables
 alias ngse
 options word
-	service("${1:serviceName}", [
+	.service("${1:some}Service", [
 		"${2:dependency}",
 		function($2) {
 			${3}
@@ -729,7 +705,7 @@ options word
 	]);
 snippet angular filter
 options word
-	filter("${1:filterName}", function() {
+	.filter("${1:filterName}", function() {
 		return function(input, ${2:args}) {
 			${3}
 		};
@@ -737,7 +713,7 @@ options word
 snippet angular filter injectables
 alias ngfi
 options word
-	filter("${1:filterName}", [
+	.filter("${1:filterName}", [
 		"${2:dependency}",
 		function($2) {
 			return function(input, ${2:args}) {
@@ -745,3 +721,31 @@ options word
 			};
 		}
 	]);
+# angular route
+snippet angular route
+alias ngr
+	$routeProvider
+	.when("${1:url}", {
+		controller: "${2:controller}",
+		templateUrl: "${3:templateUrl}"
+	})${0}
+snippet angular route when
+alias ngrw
+	.when("${1:url}", {
+		controller: "${2:controller}",
+		templateUrl: "${3:templateUrl}"
+	})${0}
+snippet angular route when resolve
+alias ngrwr
+	.when("${1:url}", {
+		controller: "${2:controller}",
+		templateUrl: "${3:templateUrl}",
+		resolve: {
+			${4}
+		}
+	})${0}
+snippet angular route otherwise
+alias ngro
+	.otherwise({
+		redirectTo: "${1:url}"
+	});

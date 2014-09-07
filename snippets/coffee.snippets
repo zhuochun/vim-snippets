@@ -356,76 +356,61 @@ snippet ng
 	angular.
 snippet angular module
 alias ngm
-	${1:moduleName} = angular.module("$1", [${2:dependency}])
-snippet angular module def
-	angular.module("${1:moduleName}", [${2:dependency}])
-snippet angular config
-alias ngc
-options word
-	config([
-		"$routeProvider"
-		($routeProvider) ->
-			${1}
-	])
-# angular route
-snippet angular route
-alias ngr
-	$routeProvider.
-		when "${1:url}",
-			templateUrl: "${2:templateUrl}"
-			controller: "${3:controller}"
-snippet angular route when
-alias ngrw
-	when "${1:url}",
-		templateUrl: "${2:templateUrl}"
-		controller: "${3:controller}"
-snippet angular route when resolve
-alias ngrwr
-	$routeProvider.when "${1:url}",
-		templateUrl: "${2:templateUrl}"
-		controller: "${3:controller}"
-		resolve:
-			${4}
-snippet angular route otherwise
-alias ngro
-	otherwise redirectTo: '${1:url}'
+	angular.module("${1:moduleName}", [${2:dependency}])${0}
 # angular scope
 snippet scope
 alias sco
 	$scope
-snippet $scope fun
+snippet scope fun
 alias scf
 options head
 	$scope.${1:functionName} = (${2:args}) ->
 		${3}
-snippet $scope var
+snippet scope var
 alias scv
 options head
 	$scope.${1:variable} = ${2:value}
-snippet $scope watch
+snippet scope watch
 options head
 	$scope.$watch "${1:watchExpr}", (newVal, oldVal) ->
 		${2}
-snippet $scope on
+snippet scope on
 options head
 	$scope.$on "${1:eventName}", (event, ${2:args}) ->
 		${3}
-snippet $scope broadcast
+snippet scope broadcast
 	$scope.$broadcast "${1:eventName}", ${2:eventArgs}
-snippet $scope emit
+snippet scope emit
 	$scope.$emit "${1:eventName}", ${2:eventArgs}
-# angular api
+# angular core
+snippet angular config
+options word
+	.config(function(${1:$routeProvider}) {
+		${2}
+	});
+snippet angular config injectables
+alias ngc
+options word
+	.config([
+		"$routeProvider"
+		($routeProvider) ->
+			${1}
+	])
 snippet angular controller
+options word
+	.controller "${1:What}Controller", ($scope${2}) ->
+		${3}
+snippet angular controller injectables
 alias ngctrl
 options word
-	controller "${1:What}Controller", [
+	.controller "${1:What}Controller", [
 		"$scope",
 		($scope) ->
 			${2}
 	]
 snippet angular directive
 options word
-	directive "${1:directiveName}", ->
+	.directive "${1:directiveName}", ->
 		restrict: "${2:AE}"
 		scope:
 			${4}
@@ -433,7 +418,7 @@ options word
 snippet angular directive injectables
 alias ngdir
 options word
-	directive "${1:directiveName}", [
+	.directive "${1:directiveName}", [
 		"${2:dependency}"
 		($2) ->
 			restrict: "${3:AE}"
@@ -450,39 +435,61 @@ snippet angular directive controller
 		${2}
 snippet angular factory
 options word
-	factory "${1:factoryName}", ->
+	.factory "${1:some}Factory", ->
 		${2}
 snippet angular factory injectables
 alias ngfa
 options word
-	factory "${1:factoryName}", [
+	.factory "${1:some}Factory", [
 		"${2:dependency}"
 		($2) ->
 			${3}
 	]
 snippet angular service
 options word
-	service "${1:serviceName}", ->
+	.service "${1:some}Service", ->
 		${2}
 snippet angular service injectables
 alias ngse
 options word
-	service "${1:serviceName}", [
+	.service "${1:some}Service", [
 		"${2:dependency}"
 		($2) ->
 			${3}
 	]
 snippet angular filter
 options word
-	filter "${1:filterName}", ->
+	.filter "${1:filterName}", ->
 		(input, ${2:args}) ->
 			${3}
 snippet angular filter injectables
 alias ngfi
 options word
-	filter "${1:filterName}", [
+	.filter "${1:filterName}", [
 		"${2:dependency}"
 		(${2}) ->
 			(input) ->
 				${3}
 	]
+# angular route
+snippet angular route
+alias ngr
+	$routeProvider
+	.when "${1:url}",
+		templateUrl: "${2:templateUrl}"
+		controller: "${3:controller}"
+snippet angular route when
+alias ngrw
+	.when "${1:url}",
+		templateUrl: "${2:templateUrl}"
+		controller: "${3:controller}"
+snippet angular route when resolve
+alias ngrwr
+	.when "${1:url}",
+		templateUrl: "${2:templateUrl}"
+		controller: "${3:controller}"
+		resolve:
+			${4}
+snippet angular route otherwise
+alias ngro
+	.otherwise redirectTo: '${1:url}'
