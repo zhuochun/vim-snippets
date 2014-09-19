@@ -7,6 +7,14 @@ snippet use strict
 alias strict
 options head
 	"use strict";
+# Node
+snippet require
+alias req
+	var $1 = require("./${1:module}");
+# Export
+snippet exports
+alias exp
+	module.exports = ${1}
 # Prototype
 snippet proto
 	${1:class_name}.prototype.${2:method_name} =
@@ -108,6 +116,7 @@ snippet do
 	} while (${1:/* condition */});
 # setTimeout function
 snippet timeout
+alias to
 	setTimeout(function () {${3}}, ${1:10});
 # Get Elements
 snippet get tagname
@@ -118,15 +127,20 @@ snippet get id
 options word
 	getElementBy${1:Id}("${2}")${3}
 # Console
-snippet console log
-alias cl
+snippet console.log
+alias cl clg
 	console.log(${1});
+snippet console.error
+alias ce cerr
+	console.error(${1});
 snippet console assert
 	console.assert(${1});
 snippet console trace
 	console.trace();${1}
 snippet console dir
 	console.dir(${1});
+snippet console.timeStamp
+	console.timeStamp(${1:annotation});
 # return
 snippet ret
 	return ${1:result}
@@ -528,48 +542,52 @@ snippet expect satisfy
 		${3}
 	});
 # jasmine
-snippet jexpect toBe
+snippet expect jasmine toBe
 	expect(${1:expression}).toBe(${2:true});
-snippet jexpect toNotBe
+snippet expect jasmine toNotBe
 	expect(${1:expression}).toNotBe(${2:true});
-snippet jexpect toEqual
+snippet expect jasmine toEqual
 	expect(${1:expression}).toEqual(${2:value});
-snippet jexpect toNotEqual
+snippet expect jasmine toNotEqual
 	expect(${1:expression}).toNotEqual(${2:value});
-snippet jexpect toMatch
+snippet expect jasmine toMatch
 	expect(${1:expression}).toMatch(${2:regex});
-snippet jexpect toNotMatch
+snippet expect jasmine toNotMatch
 	expect(${1:expression}).toNotMatch(${2:regex});
-snippet jexpect toBeDefined
+snippet expect jasmine toBeDefined
 	expect(${1:expression}).toBeDefined();
-snippet jexpect toBeUndefined
+snippet expect jasmine toBeUndefined
 	expect(${1:expression}).toBeUndefined();
-snippet jexpect toBeNull
+snippet expect jasmine toBeNull
 	expect(${1:expression}).toBeNull();
-snippet jexpect toBeTruthy
+snippet expect jasmine toBeTruthy
 	expect(${1:expression}).toBeTruthy();
-snippet jexpect toBeFalsy
+snippet expect jasmine toBeFalsy
 	expect(${1:expression}).toBeFalsy();
-snippet jexpect toContain
+snippet expect jasmine toContain
 	expect(${1:expression}).toContain(${2:string});
-snippet jexpect toNotContain
+snippet expect jasmine toNotContain
 	expect(${1:expression}).toNotContain(${2:string});
-snippet jexpect toBeLessThan
+snippet expect jasmine toBeLessThan
 	expect(${1:expression}).toBeLessThan(${2:number});
-snippet jexpect toBeGreaterThan
+snippet expect jasmine toBeGreaterThan
 	expect(${1:expression}).toBeGreaterThan(${2:number});
-snippet jexpect toBeNaN
+snippet expect jasmine toBeNaN
 	expect(${1:expression}).toBeNaN();
-snippet jexpect toBeCloseTo
+snippet expect jasmine toBeCloseTo
 	expect(${1:expression}).toBeCloseTo(${2:precision});
-snippet jexpect toThrow
+snippet expect jasmine toThrow
 	expect(${1:expression}).toThrow();
 # angular
-snippet ng
+snippet angular
+alias ng
 	angular.
 snippet angular module
 alias ngm
 	angular.module("${1:moduleName}", [${2:dependency}])${0}
+snippet angular module get
+alias ngmm
+	angular.module("${1:moduleName}")${0}
 # angular scope
 snippet scope
 alias sc
@@ -599,13 +617,13 @@ snippet scope broadcast
 snippet scope emit
 	$scope.$emit("${1:eventName}", ${2:eventArgs});
 # angular core
-snippet angular config
+snippet config angular
+alias ngc
 options word
 	.config(function(${1:$routeProvider}) {
 		${2}
 	})
-snippet angular config injectables
-alias ngc
+snippet config injectables angular
 options word
 	.config([
 		"${1:$routeProvider}",
@@ -613,13 +631,13 @@ options word
 			${2}
 		}
 	});
-snippet angular controller
+snippet controller angular
+alias ngctr
 options word
 	.controller("${1:Some}Controller", function($scope${2}) {
 		${3}
 	});
-snippet angular controller injectables
-alias ngctr
+snippet controller injectables angular
 options word
 	.controller("${1:Some}Controller", [
 		"$scope",
@@ -627,7 +645,7 @@ options word
 			${2}
 		}
 	]);
-snippet angular directive
+snippet directive angular
 alias ngdir
 options word
 	.directive("${1:directiveName}", function() {
@@ -639,7 +657,7 @@ options word
 			templateUrl: "${3:url}"
 		};
 	});
-snippet angular directive injectables
+snippet directive injectables angular
 options word
 	.directive("${1:directiveName}", [
 		"${2:dependency}",
@@ -653,33 +671,33 @@ options word
 			};
 		}
 	]);
-snippet angular directive link
+snippet directive link angular
 	link: function(scope, element, attrs, ${1:ctrls}) {
 		${2}
 	}${0:,}
-snippet angular directive controller
+snippet directive controller angular
 	controllerAs: "${1}",
 	controller: function($scope, $element, $attrs) {
 		${2}
 	}${0:,}
-snippet angular directive scope value
+snippet directive scope value angular
 alias s@
 	${1:key}: "@${2:val}"${0:,}
-snippet angular directive scope binding
+snippet directive scope binding angular
 alias s=
 	${1:key}: "=${2:val}"${0:,}
-snippet angular directive scope function
+snippet directive scope function angular
 alias s&
 	${1:key}: "&${2:val}"${0:,}
-snippet angular factory
+snippet factory angular
+alias ngfa
 options word
 	.factory("${1:some}Factory", function() {
 		return {
 			${2}
 		};
 	});
-snippet angular factory injectables
-alias ngfa
+snippet factory injectables angular
 options word
 	.factory("${1:some}Factory", [
 		"${2:dependency}",
@@ -689,13 +707,13 @@ options word
 			};
 		}
 	]);
-snippet angular service
+snippet service angular
+alias ngse
 options word
 	.service("${1:some}Service", function() {
 		${2}
 	});
-snippet angular service injectables
-alias ngse
+snippet service injectables angular
 options word
 	.service("${1:some}Service", [
 		"${2:dependency}",
@@ -703,15 +721,15 @@ options word
 			${3}
 		}
 	]);
-snippet angular filter
+snippet filter angular
+alias ngfi
 options word
 	.filter("${1:filterName}", function() {
 		return function(input, ${2:args}) {
 			${3}
 		};
 	});
-snippet angular filter injectables
-alias ngfi
+snippet filter injectables angular
 options word
 	.filter("${1:filterName}", [
 		"${2:dependency}",
@@ -722,20 +740,20 @@ options word
 		}
 	]);
 # angular route
-snippet angular route
+snippet route angular
 alias ngr
 	$routeProvider
 	.when("${1:url}", {
 		controller: "${2:controller}",
 		templateUrl: "${3:templateUrl}"
 	})${0}
-snippet angular route when
+snippet when route angular
 alias ngrw
 	.when("${1:url}", {
 		controller: "${2:controller}",
 		templateUrl: "${3:templateUrl}"
 	})${0}
-snippet angular route when resolve
+snippet when route resolve angular
 alias ngrwr
 	.when("${1:url}", {
 		controller: "${2:controller}",
@@ -744,7 +762,7 @@ alias ngrwr
 			${4}
 		}
 	})${0}
-snippet angular route otherwise
+snippet otherwise route angular
 alias ngro
 	.otherwise({
 		redirectTo: "${1:url}"

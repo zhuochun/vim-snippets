@@ -1,18 +1,28 @@
-# Closure loop
-snippet for basic with do
-	for ${1:name} in ${2:array}
-		do ($1) ->
-			${3:// body}
+# Node
+snippet require
+alias req
+	$1 = require "./${1:module}"
+# Export
+snippet exports
+alias exp
+	module.exports = ${1}
+# Asset Pipeline
+snippet require asset pipeline
+	#= require ${1:file}
+# String Interpolation
+snippet #
+	#{ ${1} }
 # For loop
-snippet for basic
+# Array comprehension
+snippet for array
 alias for
 	for ${1:name} in ${2:array}
-# Array comprehension
-snippet for object
-	for ${1:key}, ${2:value} in ${3:objects}
 snippet for array comprehension
-	for ${1:name} in ${2:array}
+	for ${1:name}, ${2:idx} in ${2:array}
 		${3:# body...}
+snippet for object
+alias foro
+	for ${1:key}, ${2:value} in ${3:objects}
 # Object comprehension
 snippet for object comprehension
 	for ${1:key}, ${2:value} of ${3:object}
@@ -21,42 +31,41 @@ snippet for object comprehension
 snippet for range comprehension (inclusive)
 	for ${1:name} in [${2:start}..${3:finish}]
 		${4:# body...}
-snippet for range comprehension (by inclusive)
+snippet for range by comprehension (inclusive)
 	for ${1:name} in [${2:start}..${3:finish}] by ${4:step}
 		${5:# body...}
 # Range comprehension (exclusive)
 snippet for range comprehension (exclusive)
 	for ${1:name} in [${2:start}...${3:finish}]
 		${4:# body...}
-snippet for range comprehension (by exclusive)
+snippet for range by comprehension (exclusive)
 	for ${1:name} in [${2:start}...${3:finish}] by ${4:step}
 		${5:# body...}
-# object
+# Object
 snippet obj
 	${1:object} =
 		${2:key}: ${3:value}
 snippet :
 	${2:key}: ${3:value}
+# Slice and Splicing
+snippet [ inclusive
+	[${1}..${2}]
+snippet [ exclusive
+	[${1}...${2}]
 # Function
-snippet ->
-	(${1:args}) ->
-		${2:# body...}
 snippet fun with params
+alias ->
 	(${1:args}) ->
 		${2:# body...}
 snippet fun without params
-	->
-	${2:# body...}
+	-> ${1:# body...}
 # Function (bound)
-snippet =>
-	(${1:args}) =>
-		${2:# body...}
 snippet fun bound with params
+alias =>
 	(${1:args}) =>
 		${2:# body...}
 snippet fun bound without params
-	(${1:args}) =>
-		${2:# body...}
+	=> ${1:# body...}
 # Class
 snippet class
 	class ${1:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`}
@@ -114,19 +123,27 @@ alias swi
 	switch ${1:object}
 		when ${2:value}
 			${3:# body...}
+		else ${0}
 snippet when
-	when ${2:value}
-		${3:# body...}
+	when ${1:value}
+		${2:# body...}
+snippet when then
+	when ${1:value} then ${2:# body...}
 # Console
-snippet console log
-alias cl
-	console.log(${1})
-snippet console assert
-	console.assert(${1})
-snippet console trace
-	console.trace()${1}
-snippet console dir
-	console.dir(${1})
+snippet console.log
+alias cl clg
+	console.log ${1}
+snippet console.error
+alias ce cerr
+	console.error ${1}
+snippet console.assert
+	console.assert ${1}
+snippet console.trace
+	console.trace ${1}
+snippet console.dir
+	console.dir ${1}
+snippet console.timeStamp
+	console.timeStamp ${1:annotation}
 # Helpers
 snippet array slice
 alias toArray
@@ -171,15 +188,6 @@ snippet try
 		${1}
 	catch ${2:error}
 		${3}
-# Require
-snippet req
-	${2:$1} = require "${1:sys}"
-# Export
-snippet exp
-	${1:root} = exports ? this
-# Asset Pipeline
-snippet rreq
-	#= require ${1:file}
 # BDD Testings
 snippet describe
 alias des
@@ -315,48 +323,52 @@ snippet expect satisfy
 	expect(${1:expression}).to.satisfy (${2:args}) ->
 		${3}
 # jasmine
-snippet jexpect toBe
+snippet expect jasmine toBe
 	expect(${1:expression}).toBe(${2:true})
-snippet jexpect toNotBe
+snippet expect jasmine toNotBe
 	expect(${1:expression}).toNotBe(${2:true})
-snippet jexpect toEqual
+snippet expect jasmine toEqual
 	expect(${1:expression}).toEqual(${2:value})
-snippet jexpect toNotEqual
+snippet expect jasmine toNotEqual
 	expect(${1:expression}).toNotEqual(${2:value})
-snippet jexpect toMatch
+snippet expect jasmine toMatch
 	expect(${1:expression}).toMatch(${2:regex})
-snippet jexpect toNotMatch
+snippet expect jasmine toNotMatch
 	expect(${1:expression}).toNotMatch(${2:regex})
-snippet jexpect toBeDefined
+snippet expect jasmine toBeDefined
 	expect(${1:expression}).toBeDefined()
-snippet jexpect toBeUndefined
+snippet expect jasmine toBeUndefined
 	expect(${1:expression}).toBeUndefined()
-snippet jexpect toBeNull
+snippet expect jasmine toBeNull
 	expect(${1:expression}).toBeNull()
-snippet jexpect toBeTruthy
+snippet expect jasmine toBeTruthy
 	expect(${1:expression}).toBeTruthy()
-snippet jexpect toBeFalsy
+snippet expect jasmine toBeFalsy
 	expect(${1:expression}).toBeFalsy()
-snippet jexpect toContain
+snippet expect jasmine toContain
 	expect(${1:expression}).toContain(${2:string})
-snippet jexpect toNotContain
+snippet expect jasmine toNotContain
 	expect(${1:expression}).toNotContain(${2:string})
-snippet jexpect toBeLessThan
+snippet expect jasmine toBeLessThan
 	expect(${1:expression}).toBeLessThan(${2:number})
-snippet jexpect toBeGreaterThan
+snippet expect jasmine toBeGreaterThan
 	expect(${1:expression}).toBeGreaterThan(${2:number})
-snippet jexpect toBeNaN
+snippet expect jasmine toBeNaN
 	expect(${1:expression}).toBeNaN()
-snippet jexpect toBeCloseTo
+snippet expect jasmine toBeCloseTo
 	expect(${1:expression}).toBeCloseTo(${2:precision})
-snippet jexpect toThrow
+snippet expect jasmine toThrow
 	expect(${1:expression}).toThrow()
 # angular
-snippet ng
+snippet angular
+alias ng
 	angular.
 snippet angular module
 alias ngm
 	angular.module("${1:moduleName}", [${2:dependency}])${0}
+snippet angular module get
+alias ngmm
+	angular.module("${1:moduleName}")${0}
 # angular scope
 snippet scope
 alias sco
@@ -383,12 +395,12 @@ snippet scope broadcast
 snippet scope emit
 	$scope.$emit "${1:eventName}", ${2:eventArgs}
 # angular core
-snippet angular config
+snippet config angular
 options word
 	.config(function(${1:$routeProvider}) {
 		${2}
 	});
-snippet angular config injectables
+snippet config injectables angular
 alias ngc
 options word
 	.config([
@@ -396,11 +408,11 @@ options word
 		($routeProvider) ->
 			${1}
 	])
-snippet angular controller
+snippet controller angular
 options word
 	.controller "${1:What}Controller", ($scope${2}) ->
 		${3}
-snippet angular controller injectables
+snippet controller injectables angular
 alias ngctrl
 options word
 	.controller "${1:What}Controller", [
@@ -408,14 +420,14 @@ options word
 		($scope) ->
 			${2}
 	]
-snippet angular directive
+snippet directive angular
 options word
 	.directive "${1:directiveName}", ->
 		restrict: "${2:AE}"
 		scope:
 			${4}
 		templateUrl: "${3:url}"
-snippet angular directive injectables
+snippet directive injectables angular
 alias ngdir
 options word
 	.directive "${1:directiveName}", [
@@ -426,18 +438,18 @@ options word
 				${5}
 			templateUrl: "${4:url}"
 	]
-snippet angular directive link
+snippet directive link angular
 	link: (scope, element, attrs, ${1:ctrls}) ->
 		${2}
-snippet angular directive controller
+snippet directive controller angular
 	controllerAs: "${1}",
 	controller: ($scope, $element, $attrs) ->
 		${2}
-snippet angular factory
+snippet factory angular
 options word
 	.factory "${1:some}Factory", ->
 		${2}
-snippet angular factory injectables
+snippet factory injectables angular
 alias ngfa
 options word
 	.factory "${1:some}Factory", [
@@ -445,11 +457,11 @@ options word
 		($2) ->
 			${3}
 	]
-snippet angular service
+snippet service angular
 options word
 	.service "${1:some}Service", ->
 		${2}
-snippet angular service injectables
+snippet service injectables angular
 alias ngse
 options word
 	.service "${1:some}Service", [
@@ -457,12 +469,12 @@ options word
 		($2) ->
 			${3}
 	]
-snippet angular filter
+snippet filter angular
 options word
 	.filter "${1:filterName}", ->
 		(input, ${2:args}) ->
 			${3}
-snippet angular filter injectables
+snippet filter injectables angular
 alias ngfi
 options word
 	.filter "${1:filterName}", [
@@ -472,24 +484,24 @@ options word
 				${3}
 	]
 # angular route
-snippet angular route
+snippet route angular
 alias ngr
 	$routeProvider
 	.when "${1:url}",
 		templateUrl: "${2:templateUrl}"
 		controller: "${3:controller}"
-snippet angular route when
+snippet when route angular
 alias ngrw
 	.when "${1:url}",
 		templateUrl: "${2:templateUrl}"
 		controller: "${3:controller}"
-snippet angular route when resolve
+snippet when route resolve angular
 alias ngrwr
 	.when "${1:url}",
 		templateUrl: "${2:templateUrl}"
 		controller: "${3:controller}"
 		resolve:
 			${4}
-snippet angular route otherwise
+snippet otherwise route angular
 alias ngro
 	.otherwise redirectTo: '${1:url}'
