@@ -1,0 +1,100 @@
+# Basic
+snippet html5 template
+alias doc
+	doctype html
+	html
+		head
+			meta(charset="utf-8")
+			title ${1:Untitled}
+			link(rel="stylesheet", href="${2:style}.css")
+		body
+			${0}
+snippet style
+alias css
+	link(rel="stylesheet", href="${1:style}.css")
+snippet script
+	script(src="${1:script}.js")
+snippet attributes
+	&attributes(${1:attributes})
+snippet interpolation
+alias #
+	#{ ${1} }
+snippet extends
+	extends ./${1:path.jade}
+snippet include
+	include ./${1:path.jade}
+snippet include:filter
+	include:${1:markdown} ./${2:path.$1}
+snippet block
+	block ${1:name}
+		${0}
+snippet markdown filter
+	:markdown
+		${0}
+snippet coffee filter
+	:coffee
+		${0}
+snippet mixin
+	mixin ${1:name}(${2})
+		${0}
+snippet mixin rest arg
+	mixin ${1:name}(${2}, ...${3:rest})
+		${0}
+snippet mixin use
+alias +
+	+${1:name}(${2})
+snippet var
+alias -
+	- var ${1:variable} = ${2}
+snippet each
+	each val, idx in ${1:array/object}
+		${0}
+snippet while
+	while ${1:condition}
+		${0}
+snippet if
+	if ${1:condition}
+		${2:TARGET}
+snippet unless
+	unless ${1:condition}
+		${2:TARGET}
+snippet if else
+alias ife
+	if ${1:condition}
+		${2:TARGET}
+	else
+		${0}
+snippet else if
+alias eli
+	else if ${1:condition}
+		${2:TARGET}
+snippet for
+	- for (${1}; ${2}; ${3})
+snippet case
+	case ${1:condition}
+		when ${2:match}
+			${3}
+		default
+			${4}
+snippet case block
+	case ${1:condition}
+		when ${2:match}: ${3}
+		default: ${4}
+snippet when
+	when ${1:match}
+		${2}
+# Angular HTML
+snippet ng template
+	script#${1:id}(type="text/ng-template").
+snippet ng repeat
+	div(ng-repeat='${1} in ${2}')
+snippet ng repeat filter
+	div(ng-repeat='${1} in ${2}' | ${3})
+snippet ng repeat index
+	div(ng-repeat='${1} in ${2}' track by $index)
+snippet ng hide
+	div(ng-hide='${1}')
+snippet ng show
+	div(ng-show='${1}')
+snippet ng if
+	div(ng-if='${1}')
