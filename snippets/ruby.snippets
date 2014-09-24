@@ -1022,21 +1022,25 @@ snippet namespace
 		${2}
 	end
 snippet task default
-	desc "${1:Task description}"
-	task ${2:task_name}: ${3:[:dependent, :tasks]} do
+	desc "${1:description}"
+	task ${2:name}: [:${3:dependent}] do
 		${4}
 	end
-snippet task params
-	desc "${1:Task description}"
-	task ${2:task_name}, [:${3:arg}${4:,}] do |t, args|
+snippet task with args
+	desc "${1:description}"
+	task ${2:name}, [:${3:arg}] do |t, args|
+		args.with_defaults($3: $4)
+		${5}
+	end
+snippet task with args and prerequisites
+	desc "${1:description}"
+	task ${2:name}, [:${3:arg}] => [:${4:prereq}] do |t, args|
 		args.with_defaults($3: $5)
 		${6}
 	end
-snippet task params with prerequisites
-	desc "${1:Task description}"
-	task ${2:task_name}, [:${3:arg}] => [:${4:prereq}] do |t, args|
-		args.with_defaults($3: $5)
-		${6}
+snippet task file
+	file "${1:output}" => ["${2:dependent}"] do |t|
+		${3}
 	end
 snippet rake
 	Rake::Task[:${1:task_name}].${2:invoke}
