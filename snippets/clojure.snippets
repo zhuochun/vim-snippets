@@ -1,5 +1,6 @@
 # def
 snippet def
+alias =
 	(def ${1})
 snippet defmethod
 	(defmethod ${1:multifn} "${2:doc-string}" ${3:dispatch-val} [${4:args}]
@@ -14,9 +15,13 @@ snippet defn
 snippet defn doc
 	(defn ${1:name} "${2:doc-string}" [${3:arg-list}]
 		${4:expression})
-snippet defn args
+snippet defn args rest
 	(defn ${1:name} [${2:args} & ${3:rest}]
 		${4:expression})
+snippet defn arity
+	(defn ${1:name}
+		([${2:args}] ${3:expression})
+		([${4:args}] ${5:expression}))
 snippet defprotocol
 	(defprotocol ${1:Name}
 		${2:expression})
@@ -36,20 +41,24 @@ snippet atom
 	(def ${1:name} (atom ${1:value}))
 snippet deref
 	(deref ${2:global-var})
+# destruction
+snippet keys
+	{:keys [${1}]}${0}
 # anonymous function
 snippet fn
 	(fn [${1:arg-list}] ${2})
-# shorthands
-snippet lambda
+# fn shorthands
+snippet # lambda
 	#(${1:lambda})
-snippet regex
+snippet # regex
 alias #
 	#"${1:regex}"
-snippet set
+snippet # set
 	#{${1:values}}
-snippet quote
+snippet '
 	'(${1:values})
 snippet :
+options word
 	:${1:key} ${2:val}
 snippet !=
 	not=
