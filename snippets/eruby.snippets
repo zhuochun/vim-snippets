@@ -25,23 +25,23 @@ snippet for
 		${3:TARGET}
 	<% end %>
 snippet render
-	<%= render "${1:item}" %>
+	<%= render '${1:item}' %>
 snippet render partial
-	<%= render partial: "${1:item}" %>
+	<%= render partial: '${1:item}' %>
 snippet render partial locals
-	<%= render partial: "${1:item}", locals: { ${2:name}: "${3:value}"$4 } %>
+	<%= render partial: '${1:item}', locals: { ${2:name}: '${3:value}'$4 } %>
 snippet render partial status
-	<%= render partial: "${1:item}", status: ${2:500} %>
+	<%= render partial: '${1:item}', status: ${2:500} %>
 snippet render partial collection
-	<%= render partial: "${1:item}", collection: ${2:items} %>
+	<%= render partial: '${1:item}', collection: ${2:items} %>
 snippet render file
-	<%= render file: "${1:file}"${2} %>
+	<%= render file: '${1:file}'${2} %>
 snippet render template
-	<%= render template: "${1:file}"${2} %>
+	<%= render template: '${1:file}'${2} %>
 # url helpers
 snippet link_to
 alias lt
-	<%= link_to "${1:link}", ${2:path} %>
+	<%= link_to '${1:link}', ${2:path} %>
 snippet link_to do
 alias ltd
 	<%= link_to ${1:path} do %>
@@ -49,13 +49,13 @@ alias ltd
 	<% end %>
 snippet link_to back
 alias ltb
-	<%= link_to "Back", url_for(:back) %>
+	<%= link_to 'Back', url_for(:back) %>
 snippet link_to_if
 	<%= link_to_if ${1:condition}, ${2:link}, ${3:path} %>
 snippet link_to_unless
 	<%= link_to_unless ${1:condition}, ${2:link}, ${3:path} %>
 snippet button_to
-	<%= button_to "${1:button text}", ${2:action}, method: :${3:delete} %>
+	<%= button_to '${1:button text}', ${2:action}, method: :${3:delete} %>
 snippet yield
 	<%= yield :${1:content_symbol} %>${2}
 snippet yield optional
@@ -142,7 +142,7 @@ alias hidden_field
 	<%= ${1:f}.hidden_field :${2:attribute} %>
 snippet form label
 alias label
-	<%= ${1:f}.label :${2:attribute}, "${3:$2}" %>
+	<%= ${1:f}.label :${2:attribute}, '${3:$2}' %>
 snippet form password
 alias password
 	<%= ${1:f}.password_field :${2:attribute} %>
@@ -154,7 +154,7 @@ alias radio_button
 	<%= ${1:f}.radio_button :${2:attribute}, :${3:tag_value} %>
 snippet form submit
 alias submit_btn
-	<%= ${1:f}.submit "${2:submit}" %>
+	<%= ${1:f}.submit '${2:submit}' %>
 snippet form text_area
 alias text_area
 	<%= ${1:f}.text_area :${2:attribute} %>
@@ -171,21 +171,21 @@ snippet form collection checkbox
 alias collection_check_boxes
 	<%= ${1:f}.collection_check_boxes(:${2:method}, ${3:collection}, :${4:value_method}, :${5:text_method}) %>
 snippet img tag
-	<%= image_tag "${1}"${2} %>
+	<%= image_tag '${1}'${2} %>
 snippet img path
-	image_path("${1:name}")
+	image_path('${1:name}')
 snippet img url
-	image_url("${1:name}")
+	image_url('${1:name}')
 snippet ofcfs
 	<%= options_from_collection_for_select ${1:collection}, ${2:value_method}, ${3:text_method}, ${4:selected_value} %>
 snippet js
 alias javascript
-	<%= javascript_include_tag "${1}" %>
+	<%= javascript_include_tag '${1}' %>
 snippet js :all
 	<%= javascript_include_tag ${1::all} %>
 snippet css
 alias style stylesheet
-	<%= stylesheet_link_tag "${1}" %>
+	<%= stylesheet_link_tag '${1}' %>
 snippet css cache
 	<%= stylesheet_link_tag ${1::all}, cache: ${2:true} %>
 # conditions
@@ -208,11 +208,11 @@ snippet elsif
 snippet i18 translate
 alias t
 options word
-	<%=t "${1:type.key}" %>
+	<%=t '${1:type.key}' %>
 snippet i18 localize
 alias l
 options word
-	<%=l "${1:type.key}" %>
+	<%=l '${1:type.key}' %>
 # cache helpers
 snippet cache fragment
 	<% cache ${1:key} do %>
@@ -220,7 +220,7 @@ snippet cache fragment
 	<% end %>
 # function helpers
 snippet pluralize
-	pluralize(${1:size}, "${2:word}")
+	pluralize(${1:size}, '${2:word}')
 # time helpers
 snippet distance_of_time_in_words
 	distance_of_time_in_words(${1:from_time}, ${2:to_time})

@@ -42,12 +42,12 @@ snippet beg
 	end
 snippet require
 alias req
-	require "${1}"${2}
+	require '${1}'${2}
 snippet require_relative
 alias reqr
-	require_relative "${1}"${2}
+	require_relative '${1}'${2}
 snippet :
-	${1:key}: ${2:"value"}
+	${1:key}: ${2:'value'}
 snippet #
 	# =>
 snippet end
@@ -287,13 +287,13 @@ snippet def delegator
 snippet def delegators
 	def_delegators :${1:@del_obj}, :${2:del_methods}
 snippet define_method
-	define_method "${1:method_name}" do
+	define_method '${1:method_name}' do
 		${2:implementation}
 	end
 snippet define_method args
-	define_method "${1:method_name}" do |*args, &block|
+	define_method '${1:method_name}' do |*args, &block|
 		${2:implementation}
-		send "$1", *args, &block
+		send '$1', *args, &block
 	end
 snippet class_eval
 	${1:klass}.class_eval do
@@ -320,28 +320,28 @@ snippet app
 # usage_if()
 snippet usai
 	if ARGV.${1}
-		abort "Usage: #{$PROGRAM_NAME} ${2:ARGS_GO_HERE}"${3}
+		abort 'Usage: #{$PROGRAM_NAME} ${2:ARGS_GO_HERE}'${3}
 	end
 # usage_unless()
 snippet usau
 	unless ARGV.${1}
-		abort "Usage: #{$PROGRAM_NAME} ${2:ARGS_GO_HERE}"${3}
+		abort 'Usage: #{$PROGRAM_NAME} ${2:ARGS_GO_HERE}'${3}
 	end
 snippet array
 	Array.new(${1:10}) { |${2:i}| ${3} }
 snippet hash
 	Hash.new { |${1:hash}, ${2:key}| $1[$2] = ${3} }
 snippet file foreach
-	File.foreach(${1:"path/to/file"}) { |${2:line}| ${3} }
+	File.foreach(${1:'path/to/file'}) { |${2:line}| ${3} }
 snippet file read
-	File.read(${1:"path/to/file"})${2}
+	File.read(${1:'path/to/file'})${2}
 snippet file dirname
 alias dir
 	File.dirname(${1:__FILE__})
 snippet Dir glob
-	Dir.glob(${1:"dir/glob/*"}) { |${2:file}| ${3} }
-snippet Dir [".."]
-	Dir[${1:"glob/**/*.rb"}]${2}
+	Dir.glob(${1:'dir/glob/*'}) { |${2:file}| ${3} }
+snippet Dir ['..']
+	Dir[${1:'glob/**/*.rb'}]${2}
 snippet deli
 options word
 	delete_if { |${1:e}| ${2} }
@@ -621,10 +621,10 @@ alias do
 		${2}
 	end
 snippet open
-	open(${1:"path/or/url/or/pipe"}, "${2:w}") { |${3:io}| ${4} }
+	open(${1:'path/or/url/or/pipe'}, '${2:w}') { |${3:io}| ${4} }
 # path_from_here()
 snippet file path from here
-	File.join(File.dirname(__FILE__), "${1:path}")
+	File.join(File.dirname(__FILE__), '${1:path}')
 # unix_filter {}
 snippet unif
 	ARGF.each_line${1} do |${2:line}|
@@ -632,15 +632,15 @@ snippet unif
 	end
 # option_parse {}
 snippet optp
-	require "optparse"
+	require 'optparse'
 
-	options = {${1:default => "args"}}
+	options = {${1:default: 'args'}}
 
 	ARGV.options do |opts|
-		opts.banner = "Usage: #{File.basename($PROGRAM_NAME)}
+		opts.banner = 'Usage: #{File.basename($PROGRAM_NAME)}'
 snippet opt
-	opts.on("-${1:o}", "--${2:long-option-name}", ${3:String},
-			"${4:Option description.}") do |${5:opt}|
+	opts.on('-${1:o}', '--${2:long-option-name}', ${3:String},
+			'${4:Option description.}') do |${5:opt}|
 		${6}
 	end
 
@@ -648,16 +648,16 @@ snippet opt
 # MiniTest
 #############################################
 snippet minitest
-	gem "minitest"
-	require "minitest/autorun"
+	gem 'minitest'
+	require 'minitest/autorun'
 	${1}
 
 	class ${2:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`} < Minitest::Test
 		${3}
 	end
 snippet minitest spec
-	gem "minitest"
-	require "minitest/autorun"
+	gem 'minitest'
+	require 'minitest/autorun'
 	${1}
 
 	describe ${2:object} do
@@ -665,7 +665,7 @@ snippet minitest spec
 	end
 # Test Methods
 snippet test rails
-	test "${1:something}" do
+	test '${1:something}' do
 		${2}
 	end
 snippet test def
@@ -685,21 +685,21 @@ snippet mock expect
 # TestCase in Rails
 #############################################
 snippet testcase
-	require "test_helper"
+	require 'test_helper'
 
 	class ${1:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`} < ActionController::TestCase
-		test "${2}" do
+		test '${2}' do
 			${3}
 		end
 	end
 # Rails API related
 snippet setup host
-	setup { host! "${1:api}.example.com" }
+	setup { host! '${1:api}.example.com' }
 snippet protect_from_forgery
 alias forgery
 	protect_from_forgery with: :null_session
 snippet header
-	self.headers["${1:WWW-Authenticate}"] = ${2:string}
+	self.headers['${1:WWW-Authenticate}'] = ${2:string}
 snippet authenticate_with_http_basic
 	authenticate_with_http_basic do |username, password|
 		${1:User}.authenticate(username, password)
@@ -721,23 +721,23 @@ snippet encode_credentials basic
 snippet encode_credentials token
 	ActionController::HttpAuthentication::Token.encode_credentials(${1:token})
 snippet get api
-	get "${1:path}"
+	get '${1:path}'
 snippet get api format
-	get "${1:path}", {}, {"Accept" => Mime::${2:JSON}}
+	get '${1:path}', {}, {Accept: Mime::${2:JSON}}
 snippet get api authorization
-	get "${1:path}", {}, {"Authorization" => ${2:string}, "Accept" => Mime::${3:JSON}}
+	get '${1:path}', {}, {Authorization: ${2:string}, Accept: Mime::${3:JSON}}
 snippet get api language
-	get "${1:path}", {}, {"Accept-Language" => "${2:en}", "Accept" => Mime::${3:JSON}}
+	get '${1:path}', {}, {Accept-Language: '${2:en}', Accept: Mime::${3:JSON}}
 snippet post api
-	post "${1:path}",
+	post '${1:path}',
 		{ ${2:model}: { ${3:contents} } }.to_json,
-		{ "Accept" => Mime::${4:JSON}, "Content-Type" => Mime::JSON.to_s }
+		{ 'Accept' => Mime::${4:JSON}, 'Content-Type' => Mime::JSON.to_s }
 snippet patch api
-	patch "${1:path}",
+	patch '${1:path}',
 			{ ${2:model}: { ${3:contents} } }.to_json,
-			{ "Accept" => Mime::${4:JSON}, "Content-Type" => Mime::JSON.to_s }
+			{ 'Accept' => Mime::${4:JSON}, 'Content-Type' => Mime::JSON.to_s }
 snippet delete api
-	delete "${1:path}"
+	delete '${1:path}'
 # Responses Code
 snippet status 200 ok
 	:ok
@@ -783,7 +783,7 @@ snippet status 500 internal_server_error
 #############################################
 snippet assert
 alias as
-	assert ${1:test}, "${2:Failure message.}"${3}
+	assert ${1:test}, '${2:Failure message.}'${3}
 snippet assert_equal
 alias ase
 	assert_equal ${1:expected}, ${2:actual}${3}
@@ -859,13 +859,13 @@ alias asntd
 		${1}
 	end
 snippet flunk
-	flunk "${1:failure message}"
+	flunk '${1:failure message}'
 snippet skip
-	skip "${1:skip message}"
+	skip '${1:skip message}'
 # rails assertions
 snippet assert_routing
 alias ar
-	assert_routing "${1:/path/}", { controller: "${2}", action: "${3}" }
+	assert_routing '${1:/path/}', { controller: '${2}', action: '${3}' }
 
 #############################################
 # Minitest Spec
@@ -980,23 +980,23 @@ snippet benchmark bmbm
 		${1}
 	end
 snippet benchmark block
-	bm.report("${1:name}:") do
+	bm.report('${1:name}:') do
 		${2}
 	end
 snippet benchmark single line
-	bm.report("${1:name}:") { ${2} }
+	bm.report('${1:name}:') { ${2} }
 
 # Marshal.dump(.., file)
 snippet Md
-	File.open(${1:"path/to/file.dump"}, "wb") { |${2:file}| Marshal.dump(${3:obj}, $2) }${4}
+	File.open(${1:'path/to/file.dump'}, 'wb') { |${2:file}| Marshal.dump(${3:obj}, $2) }${4}
 # Mashal.load(obj)
 snippet Ml
-	File.open(${1:"path/to/file.dump"}, "rb") { |${2:file}| Marshal.load($2) }${3}
+	File.open(${1:'path/to/file.dump'}, 'rb') { |${2:file}| Marshal.load($2) }${3}
 # deep_copy(..)
 snippet deec
 	Marshal.load(Marshal.dump(${1:obj_to_copy}))${2}
 snippet Pn-
-	PStore.new(${1:"file_name.pstore"})${2}
+	PStore.new(${1:'file_name.pstore'})${2}
 snippet transaction
 	transaction(${1:true}) { ${2} }
 snippet transaction do
@@ -1005,15 +1005,15 @@ snippet transaction do
 	end
 # xmlread(..)
 snippet xml-
-	REXML::Document.new(File.read(${1:"path/to/file"}))${2}
+	REXML::Document.new(File.read(${1:'path/to/file'}))${2}
 # xpath(..) { .. }
 snippet xpa
-	elements.each(${1:"//Xpath"}) do |${2:node}|
+	elements.each(${1:'//Xpath'}) do |${2:node}|
 		${3}
 	end
 # class_from_name()
 snippet clafn
-	split("::").inject(Object) { |par, const| par.const_get(const) }
+	split('::').inject(Object) { |par, const| par.const_get(const) }
 # singleton_class()
 snippet sinc
 	class << self; self end
@@ -1022,24 +1022,24 @@ snippet namespace
 		${2}
 	end
 snippet task default
-	desc "${1:description}"
+	desc '${1:description}'
 	task ${2:name}: [:${3:dependent}] do
 		${4}
 	end
 snippet task with args
-	desc "${1:description}"
+	desc '${1:description}'
 	task ${2:name}, [:${3:arg}] do |t, args|
 		args.with_defaults($3: $4)
 		${5}
 	end
 snippet task with args and prerequisites
-	desc "${1:description}"
+	desc '${1:description}'
 	task ${2:name}, [:${3:arg}] => [:${4:prereq}] do |t, args|
 		args.with_defaults($3: $5)
 		${6}
 	end
 snippet task file
-	file "${1:output}" => ["${2:dependent}"] do |t|
+	file '${1:output}' => ['${2:dependent}'] do |t|
 		${3}
 	end
 snippet rake
@@ -1049,7 +1049,7 @@ snippet b
 	{ |${1:var}| ${2} }
 snippet begin
 	begin
-		raise "A test exception."
+		raise 'A test exception.'
 	rescue Exception => e
 		puts e.message
 		puts e.backtrace.inspect
@@ -1059,12 +1059,17 @@ snippet begin
 		# always executed
 	end
 #debugging
-snippet debugger
-alias dbg
-	require "ruby-debug"; debugger;
+snippet debugger byebug
+alias byebug
+	byebug
+snippet debugger pry-remote
+alias pry-remote
+	require 'pry-remote'
+	binding.remote_pry
 snippet debugger pry
 alias pry
-	require "pry"; binding.pry
+	require 'pry'
+	binding.pry
 
 #############################################
 # Sinatra snippets
@@ -1079,18 +1084,18 @@ snippet sinatra
 #############################################
 snippet assert_redirected_to action
 alias art
-	assert_redirected_to ${1:action}: "${2:index}"}
+	assert_redirected_to ${1:action}: '${2:index}'}
 snippet assert_redirected_to path
 alias art
 	assert_redirected_to ${1:parent}_path ${2}
 snippet assert_difference
 alias asd
-	assert_difference "${1:Model}.${2:count}", ${3:1} do
+	assert_difference '${1:Model}.${2:count}', ${3:1} do
 		${4}
 	end
 snippet assert_no_difference
 alias asnd
-	assert_no_difference "${1:Model}.${2:count}" do
+	assert_no_difference '${1:Model}.${2:count}' do
 		${3}
 	end
 snippet assert_response
@@ -1098,10 +1103,10 @@ alias asre
 	assert_response :${1:success}, @response.body${2}
 snippet assert_rjs
 alias asrj
-	assert_rjs :${1:replace}, "${2:dom id}"
+	assert_rjs :${1:replace}, '${2:dom id}'
 snippet assert_select
 alias asselect
-	assert_select "${1:path}", ${2:text}: "${3:inner_html" ${4:do}
+	assert_select '${1:path}', ${2:text}: '${3:inner_html' ${4:do}
 snippet belongs_to
 alias bt
 	belongs_to :${1:association}
@@ -1118,10 +1123,10 @@ snippet defcreate
 
 		respond_to do |format|
 			if @$1.save
-				format.html { redirect_to @$1, notice: "$2 was successfully created." }
+				format.html { redirect_to @$1, notice: '$2 was successfully created.' }
 				format.json { render json: @$1, status: :created, location: @$1 }
 			else
-				format.html { render action: "new" }
+				format.html { render action: 'new' }
 				format.json { render json: @$1.errors, status: :unprocessable_entity }
 			end
 		end
@@ -1184,10 +1189,10 @@ snippet defupdate
 
 		respond_to do |format|
 			if @$1.update_attributes(params[:$1])
-				format.html { redirect_to @$1, notice: "$2 was successfully updated." }
+				format.html { redirect_to @$1, notice: '$2 was successfully updated.' }
 				format.json { head :no_content }
 			else
-				format.html { render action: "edit" }
+				format.html { render action: 'edit' }
 				format.json { render json: @$1.errors, status: :unprocessable_entity }
 			end
 		end
@@ -1199,7 +1204,7 @@ snippet delegate to prefix
 snippet delegate to allow_nil
 	delegate :${1:methods}, to: :${2:object}, allow_nil: ${3:true}
 snippet flash
-	flash[:${1:notice}] = "${2}"
+	flash[:${1:notice}] = '${2}'
 snippet content_tag
 	content_tag :${1:div}, ${2:content}, ${3:options}
 snippet content_tag do
@@ -1207,11 +1212,11 @@ snippet content_tag do
 		${3:content}
 	end
 snippet hasabtm
-	has_and_belongs_to_many :${1:object}, join_table: "${2:table_name}", foreign_key: "${3}_id"${4}
+	has_and_belongs_to_many :${1:object}, join_table: '${2:table_name}', foreign_key: '${3}_id'${4}
 snippet hasm
 	has_many :${1:object}
 snippet hasmd
-	has_many :${1:other}s, class_name: "${2:$1}", foreign_key: "${3:$1}_id", dependent: :destroy${4}
+	has_many :${1:other}s, class_name: '${2:$1}', foreign_key: '${3:$1}_id', dependent: :destroy${4}
 snippet hasmt
 	has_many :${1:object}, through: :${2:object}
 snippet haso
@@ -1220,35 +1225,35 @@ snippet hasod
 	has_one :${1:object}, dependent: :${2:destroy}
 snippet i18 translate
 alias i18t
-	I18n.t("${1:type.key}")${2}
+	I18n.t('${1:type.key}')${2}
 snippet i18 translate shorthand
 alias t
-	t("${1:type.key}")
+	t('${1:type.key}')
 snippet i18 localize
 alias i18l
-	I18n.l("${1:type.key}")${2}
+	I18n.l('${1:type.key}')${2}
 snippet log
 	${1:Rails.logger}.${2:debug} ${3}
 snippet logd
-	logger.debug { "${1:message}" }${2}
+	logger.debug { '${1:message}' }${2}
 snippet loge
-	logger.error { "${1:message}" }${2}
+	logger.error { '${1:message}' }${2}
 snippet logf
-	logger.fatal { "${1:message}" }${2}
+	logger.fatal { '${1:message}' }${2}
 snippet logi
-	logger.info { "${1:message}" }${2}
+	logger.info { '${1:message}' }${2}
 snippet logw
-	logger.warn { "${1:message}" }${2}
+	logger.warn { '${1:message}' }${2}
 snippet mapc
-	${1:map}.${2:connect} "${3:controller/:action/:id}"
+	${1:map}.${2:connect} '${3:controller/:action/:id}'
 snippet mapca
-	${1:map}.catch_all "*${2:anything}", controller: "${3:default}", action: "${4:error}"${5}
+	${1:map}.catch_all '*${2:anything}', controller: '${3:default}', action: '${4:error}'${5}
 snippet mapr
 	${1:map}.resource :${2:resource}
 snippet maprs
 	${1:map}.resources :${2:resource}
 snippet mapwo
-	${1:map}.with_options ${2:controller}: "${3:thing}" do |$3|
+	${1:map}.with_options ${2:controller}: '${3:thing}' do |$3|
 		${4}
 	end
 snippet mbs before_save
@@ -1260,11 +1265,11 @@ snippet mcht
 snippet mrw
 	mattr_accessor :${1:attr_names}
 snippet order field
-	order("${1:field}")
+	order('${1:field}')
 snippet order 4.0 field
 	order(:${1:field})
 snippet order field desc
-	order("${1:field} DESC")
+	order('${1:field} DESC')
 snippet order 4.0 field desc
 	order(${1:field}: :desc)
 snippet params
@@ -1284,25 +1289,25 @@ snippet respond_to do
 	end
 snippet render action
 alias ra
-	render action: "${1:action}"
+	render action: '${1:action}'
 snippet render action layout
 alias ral
-	render action: "${1:action}", layout: "${2:layoutname}"
+	render action: '${1:action}', layout: '${2:layoutname}'
 snippet render file
 alias rf
-	render file: "${1:filepath}"
+	render file: '${1:filepath}'
 snippet render file full_path
 alias rfu
-	render file: "${1:filepath}", use_full_path: ${2:false}
+	render file: '${1:filepath}', use_full_path: ${2:false}
 snippet render inline
 alias ri
-	render inline: "${1:<%= "hello" %>}"
+	render inline: '${1:<%= 'hello' %>}'
 snippet render inline locals
 alias ril
-	render inline: "${1:<%= "hello" %>}", locals: { ${2::name}: "${3:value}"${4} }
+	render inline: '${1:<%= 'hello' %>}', locals: { ${2::name}: '${3:value}'${4} }
 snippet render inline type
 alias rit
-	render inline: "${1:<%= "hello" %>}", type: ${2::rxml}
+	render inline: '${1:<%= 'hello' %>}', type: ${2::rxml}
 snippet render xml
 alias rxml
 	render xml: ${1:text to render}
@@ -1311,7 +1316,7 @@ alias rjson
 	render json: ${1:text to render}
 snippet render layout
 alias rl
-	render layout: "${1:layoutname}"
+	render layout: '${1:layoutname}'
 snippet render nothing
 alias rn
 	render nothing: ${1:true}
@@ -1320,28 +1325,28 @@ alias rns
 	render nothing: ${1:true}, status: ${2:401}
 snippet render partial
 alias rp
-	render partial: "${1:item}"
+	render partial: '${1:item}'
 snippet render partial collection
 alias rpc
-	render partial: "${1:item}", collection: ${2:@$1s}
+	render partial: '${1:item}', collection: ${2:@$1s}
 snippet render partial locals
 alias rpl
-	render partial: "${1:item}", locals: { ${2:$1}: ${3:@$1} }
+	render partial: '${1:item}', locals: { ${2:$1}: ${3:@$1} }
 snippet render partial object
 alias rpo
-	render partial: "${1:item}", object: ${2:@$1}
+	render partial: '${1:item}', object: ${2:@$1}
 snippet render partial status
 alias rps
-	render partial: "${1:item}", status: ${2:500}
+	render partial: '${1:item}', status: ${2:500}
 snippet render text
 alias rt
-	render text: "${1:text to render}"
+	render text: '${1:text to render}'
 snippet render text layout
 alias rtl
-	render text: "${1:text to render}", layout: "${2:layoutname}"
+	render text: '${1:text to render}', layout: '${2:layoutname}'
 snippet render text status
 alias rts
-	render text: "${1:text to render}", status: ${2:401}
+	render text: '${1:text to render}', status: ${2:401}
 snippet render update do
 alias ru
 	render :update do |${1:page}|
@@ -1359,16 +1364,16 @@ snippet scope lambda
 snippet sha1
 	Digest::SHA1.hexdigest(${1:string})
 snippet base64
-	require "base64"
+	require 'base64'
 	Base64.encode64(${1:string})
 snippet cache fetch
-	Rails.cache.fetch([${1:self}, "${2:method}"]) { ${3:block} }
+	Rails.cache.fetch([${1:self}, '${2:method}']) { ${3:block} }
 snippet cache fetch do
-	Rails.cache.fetch([${1:self}, "${2:method}"]) do
+	Rails.cache.fetch([${1:self}, '${2:method}']) do
 		${3:block}
 	end
 snippet cache fetch expires_in
-	Rails.cache.fetch([${1:self}, "${2:method}"], expires_in: ${3:30.minutes}) do
+	Rails.cache.fetch([${1:self}, '${2:method}'], expires_in: ${3:30.minutes}) do
 		${3:block}
 	end
 snippet cache read
@@ -1443,7 +1448,7 @@ snippet format
 snippet where field:value
 	where(${1:field}: ${2:value})
 snippet where condition
-	where(${1:"conditions"}${2:, bind_var})
+	where(${1:'conditions'}${2:, bind_var})
 snippet add_flash_types
 	add_flash_types :${1:warning}
 snippet xdelete
@@ -1510,31 +1515,31 @@ snippet respond respond_to_missing?
 #   route snippets        #
 ###########################
 snippet root to
-	root to: "${1:home#index}"
+	root to: '${1:home#index}'
 snippet post to
-	post "${1:path}", to: "${2:controller}#${3:action}"
+	post '${1:path}', to: '${2:controller}#${3:action}'
 snippet get to
-	get "${1:path}", to: "${2:controller}#${3:action}"
+	get '${1:path}', to: '${2:controller}#${3:action}'
 snippet patch to
-	patch "${1:path}", to: "${2:controller}#${3:action}"
+	patch '${1:path}', to: '${2:controller}#${3:action}'
 snippet resources
 	resources :${1:model}
 snippet resources controller
-	resources :${1:model}, controller: "${2:demo/controllers}"
+	resources :${1:model}, controller: '${2:demo/controllers}'
 snippet resources only
 	resources :${1:model}, only: [:${2:methods}]
 snippet resources except
 	resources :${1:model}, except: [:${2:methods}]
 snippet resources constraints
-	resources :${1:model}, constraints: { subdomain: "${2:api}" }
+	resources :${1:model}, constraints: { subdomain: '${2:api}' }
 snippet resources constraints block
-	constraints subdomain: "${1:api}" do
+	constraints subdomain: '${1:api}' do
 		namespace :${2:v1} do
 			${3:resources} :${4:model}
 		end
 	end
 snippet resources constraints api
-	namespace :${1::v1}, constraints: { subdomain: "$1" } do
+	namespace :${1::v1}, constraints: { subdomain: '$1' } do
 		resources ${2:model}
 	end
 snippet resources with options
@@ -1615,7 +1620,7 @@ snippet tcl
 	t.integer :lock_version, :null => false, :default => 0
 	${1}
 snippet tcr
-	t.references :${1:taggable}, :polymorphic => { :default => "${2:Photo}" }
+	t.references :${1:taggable}, polymorphic: { default: '${2:Photo}' }
 	${3}
 snippet tcs
 	t.string :${1:title}
@@ -1639,28 +1644,28 @@ snippet tctss
 snippet rspec unit
 	require 'spec_helper'
 
-	describe "${1:a behaviour}" do
-		${2:pending "Not implemented"}
+	describe '${1:a behaviour}' do
+		${2:pending 'Not implemented'}
 	end
 snippet rspec feature
 	require 'spec_helper'
 
-	feature "${1:an action}" do
-		${2:pending "Not implemented"}
+	feature '${1:an action}' do
+		${2:pending 'Not implemented'}
 	end
 snippet rspec rails
 	require 'rails_helper'
 
-	RSpec.describe "${1}", type: :${2} do
+	RSpec.describe '${1}', type: :${2} do
 		${3}
 	end
 snippet describe
 alias desc
 	describe ${1:name} do
-		${2:pending "Not implemented"}
+		${2:pending 'Not implemented'}
 	end
 snippet context
-	context "${1:message}" do
+	context '${1:message}' do
 		${2}
 	end
 snippet before rspec
@@ -1686,15 +1691,15 @@ snippet subj .
 snippet spec
 	specify { subject.${1} }
 snippet shared
-	shared_examples_for ${1:"shared examples name"} do
+	shared_examples_for ${1:'shared examples name'} do
 		${2}
 	end
 snippet ibl
-	it_behaves_like ${1:"shared examples name"} do
+	it_behaves_like ${1:'shared examples name'} do
 		${2}
 	end
 snippet it
-	it "${1:spec_name}" do
+	it '${1:spec_name}' do
 		${2}
 	end
 
@@ -1907,14 +1912,14 @@ snippet expect receive with hash
 snippet expect receive with anything
 	expect(${1:obj}).to receive(:${2:method}).with(anything())
 snippet expect receive and raise
-	expect(${1:obj}).to receive(:${2:method}).and_raise("${3:an error}")
+	expect(${1:obj}).to receive(:${2:method}).and_raise('${3:an error}')
 # rspec rails
 snippet expect be_a_new
 	expect(${1:obj}).to be_a_new(${2:Object})
 snippet expect render template
-	expect(${1:response}).to render_template(${2:"new"})
+	expect(${1:response}).to render_template(${2:'new'})
 snippet expect render partial template
-	expect(${1:view}).to render_template(partial: ${2:"_form"}, locals: { ${3} } )
+	expect(${1:view}).to render_template(partial: ${2:'_form'}, locals: { ${3} } )
 snippet expect redirect_to
 	expect(${1:response}).to redirect_to(${2:path})
 
@@ -1943,11 +1948,11 @@ snippet it should rescue_from
 snippet it should respond_with
 	it { should respond_with ${1:status} }
 snippet it should rout
-	it { should route(:${1:method}, "${2:path}") }
+	it { should route(:${1:method}, '${2:path}') }
 snippet it should set_session
 	it { should set_session :${1:key} }
 snippet it should set_the_flash
-	it { should set_the_flash("${1}") }
+	it { should set_the_flash('${1}') }
 #ShouldaMatchers#ActiveModel
 snippet it should allow_mass_assignment_of
 	it { should allow_mass_assignment_of :${1} }
@@ -2080,8 +2085,8 @@ snippet eof
 #############################################
 snippet feature
 alias fea
-	feature "${1:an action}" do
-		${2:pending "Not implemented"}
+	feature '${1:an action}' do
+		${2:pending 'Not implemented'}
 	end
 snippet background
 alias bg
@@ -2090,11 +2095,11 @@ alias bg
 	end
 snippet scenario
 alias sce
-	scenario "${1:use case}" do
+	scenario '${1:use case}' do
 		${2}
 	end
 snippet scenario js:true
-	scenario "${1:use case}", js: true do
+	scenario '${1:use case}', js: true do
 		${2}
 	end
 snippet expect have_content
@@ -2109,7 +2114,7 @@ snippet expect has_xpath
 snippet expect has_css
 	expect(page).to have_css(${1})
 snippet expect checked
-	expect(find("${1:selector}").checked?).to be_true
+	expect(find('${1:selector}').checked?).to be_true
 snippet visit
 alias vi
 	visit ${1:path}
@@ -2123,31 +2128,31 @@ snippet click on
 alias clo
 	click_on ${1:id/text}
 snippet fill in
-	fill_in "${1:field}", with: ${2:value}
+	fill_in '${1:field}', with: ${2:value}
 snippet choose radio button
-	choose "${1:a radio button}"
+	choose '${1:a radio button}'
 snippet check checkbox
-	check "${1:a checkbox}"
+	check '${1:a checkbox}'
 snippet uncheck checkbox
-	uncheck "${1:a checkbox}"
+	uncheck '${1:a checkbox}'
 snippet select dropdown
-	select "${1:option}", from: "${2:field}"
+	select '${1:option}', from: '${2:field}'
 snippet unselect dropdown
-	unselect "${1:option}", from: "${2:field}"
+	unselect '${1:option}', from: '${2:field}'
 snippet attach file
-	attach_file "${1:field}", "${2:path_to_file}"
+	attach_file '${1:field}', '${2:path_to_file}'
 snippet find default
-	find("${1:selector}").${2:action}
+	find('${1:selector}').${2:action}
 snippet find click on
-	find("${1:selector}").click_on("${2:link}")
+	find('${1:selector}').click_on('${2:link}')
 snippet find field
-	find_field("${1:selector}").${2:action}
+	find_field('${1:selector}').${2:action}
 snippet find link
-	find_link("${1:text}").${2:action}
+	find_link('${1:text}').${2:action}
 snippet find button
-	find_button("${1:text}").${2:action}
+	find_button('${1:text}').${2:action}
 snippet within
-	within "${1:selector}" do
+	within '${1:selector}' do
 		${2}
 	end
 
