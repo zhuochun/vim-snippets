@@ -1906,7 +1906,7 @@ snippet it delegate_method
 # expect spies/doubles
 snippet expect have_received
 	expect(${1:instance}).to have_received(:${2:method})
-snippet expect have_received
+snippet expect have_received with
 	expect(${1:instance}).to have_received(:${2:method}).with(${3:args})
 snippet expect any_instance_of receive
 	expect_any_instance_of(${1:Object}).to receive(:${2:method})
