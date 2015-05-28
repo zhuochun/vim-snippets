@@ -1232,6 +1232,9 @@ alias t
 snippet i18 localize
 alias i18l
 	I18n.l('${1:type.key}')${2}
+snippet i18 localize shorthand
+alias l
+	l('${1:type.key}')${2}
 snippet log
 	${1:Rails.logger}.${2:debug} ${3}
 snippet logd
@@ -1668,6 +1671,13 @@ snippet context
 	context '${1:message}' do
 		${2}
 	end
+snippet it block
+alias it
+	it '${1:spec_name}' do
+		${2}
+	end
+snippet specify
+	specify { subject.${1} }
 snippet before rspec
 alias bef
 	before :${1:each} do
@@ -1679,29 +1689,23 @@ alias aft
 		${2}
 	end
 snippet let
-	let(:${1:object}) ${2}
+	let(:${1:object}) { ${2} }
 snippet let!
-	let!(:${1:object}) ${2}
-snippet subj default
+	let!(:${1:object}) { ${2} }
+snippet subject {}
+alias subj
 	subject { ${1} }
-snippet subj object
+snippet subject object
 	subject(:${1:instance}) { ${2} }
-snippet subj .
-	subject.${1:method}
-snippet spec
-	specify { subject.${1} }
-snippet shared
-	shared_examples_for ${1:'shared examples name'} do
-		${2}
+snippet shared_examples
+	shared_examples '${1:shared examples name}' do
+		it '${2:does something}' do
+			${3}
+		end
 	end
-snippet ibl
-	it_behaves_like ${1:'shared examples name'} do
-		${2}
-	end
-snippet it
-	it '${1:spec_name}' do
-		${2}
-	end
+snippet it_behaves_like
+alias ibl
+	it_behaves_like '${1:shared examples name}'
 
 ##########################
 # RSpec Expects
@@ -1758,7 +1762,7 @@ alias ecb
 # exception/error
 snippet expect raise error
 alias ere
-	expect { ${1:action} }.to raise_error${2}
+	expect { ${1:action} }.to raise_error(${2})
 # match
 snippet expect match
 alias em
@@ -1772,22 +1776,29 @@ snippet expect satisfy
 alias es
 	expect(${1:target}).to satisfy { |${2:arg}| ${3} }
 # mock and stub
+snippet allow receive.and_return
+	allow(${1:mock}).to receive(:${2:method}).and_return(${3:result})
+snippet allow receive {}
+	allow(${1:mock}).to receive(:${2:method}) { ${3:result} }
+snippet allow receive_message_chain
+	allow(${1:mock}).to receive_message_chain(:${2:method1}, :${3:method2})
+snippet allow any_instance
+	allow_any_instance_of(${1:Class}).to receive(:${2:method}) { ${3:result} }
+# instance.stub
 snippet stub
-alias st
 options word
 	stub(${1:method}: ${2:return})
 snippet stub returns
-alias str
 options word
 	stub(:${1:method}).and_return(${3:return_value})
 snippet stub chain
-alias stc
 options word
 	stub_chain(:${1:one}, :${2:two}).and_return(${3:return_value})
 snippet stub instance
 alias any_instance
 options word
 	any_instance.stub(:${1:method}).and_return(${2:return_value})
+# instance.should_receive
 snippet should_receive
 options word
 	should_receive(:${1:message}).and_return(:${2:return_value})
@@ -1827,66 +1838,76 @@ options word
 snippet should_receive any_number_of_times
 options word
 	should_receive(:${1:message}).any_number_of_times
-snippet should allow_mass_assignment_of
-	it { should allow_mass_assignment_of(${1}) }
-snippet should allow_value
-	it { should allow_value(${1}) }
-snippet should validate_inclusion_of
-	it { should validate_inclusion_of(${1}) }
-snippet should validate_exclusion_of
-	it { should validate_exclusion_of(${1}) }
-snippet should ensure_length_of
-	it { should ensure_length_of(${1}) }
-snippet should have_secure_password
-	it { should have_secure_password(${1}) }
-snippet should validate_confirmation_of
-	it { should validate_confirmation_of(${1}) }
-snippet should validate_numericality_of
-	it { should validate_numericality_of(${1}) }
-snippet should validate_presence_of
-	it { should validate_presence_of(${1}) }
-snippet should validate_uniqueness_of
-	it { should validate_uniqueness_of(${1}) }
-snippet should accept_nested_attributes_for
-	it { should accept_nested_attributes_for(${1}) }
-snippet should belong_to
-	it { should belong_to(${1}) }
-snippet should define_enum_for
-	it { should define_enum_for(${1}) }
-snippet should have_many
-	it { should have_many(${1}) }
-snippet should have_one
-	it { should have_one(${1}) }
-snippet should have_and_belong_to_many
-	it { should have_and_belong_to_many(${1}) }
-snippet should have_db_column
-	it { should have_db_column(${1}) }
-snippet should have_db_index
-	it { should have_db_index(${1}) }
-snippet should have_readonly_attribute
-	it { should have_readonly_attribute(${1}) }
-snippet should serialize
-	it { should serialize(${1}) }
-snippet should filter_param
-	it { should filter_param(${1}) }
-snippet should redirect_to
-	it { should redirect_to(${1}) }
-snippet should render_template
-	it { should render_template(${1}) }
-snippet should render_with_layout
-	it { should render_with_layout(${1}) }
-snippet should rescue_from
-	it { should rescue_from(${1}) }
-snippet should respond_with
-	it { should respond_with(${1}) }
-snippet should route
-	it { should route(${1}) }
-snippet should set_session
-	it { should set_session(${1}) }
-snippet should set_the_flash
-	it { should set_the_flash(${1}) }
-snippet should delegate_method
-	it { should delegate_method(${1}) }
+# it is expected shorthands
+snippet it match
+	it { is_expected.to match(${1}) }
+snippet it allow_mass_assignment_of
+	it { is_expected.to allow_mass_assignment_of(${1}) }
+snippet it allow_value
+	it { is_expected.to allow_value(${1}) }
+snippet it validate_inclusion_of
+	it { is_expected.to validate_inclusion_of(${1}) }
+snippet it validate_exclusion_of
+	it { is_expected.to validate_exclusion_of(${1}) }
+snippet it ensure_length_of
+	it { is_expected.to ensure_length_of(${1}) }
+snippet it have_secure_password
+	it { is_expected.to have_secure_password(${1}) }
+snippet it validate_confirmation_of
+	it { is_expected.to validate_confirmation_of(${1}) }
+snippet it validate_numericality_of
+	it { is_expected.to validate_numericality_of(${1}) }
+snippet it validate_presence_of
+	it { is_expected.to validate_presence_of(${1}) }
+snippet it validate_uniqueness_of
+	it { is_expected.to validate_uniqueness_of(${1}) }
+snippet it accept_nested_attributes_for
+	it { is_expected.to accept_nested_attributes_for(${1}) }
+snippet it belong_to
+	it { is_expected.to belong_to(${1}) }
+snippet it define_enum_for
+	it { is_expected.to define_enum_for(${1}) }
+snippet it have_many
+	it { is_expected.to have_many(${1}) }
+snippet it have_one
+	it { is_expected.to have_one(${1}) }
+snippet it have_and_belong_to_many
+	it { is_expected.to have_and_belong_to_many(${1}) }
+snippet it have_db_column
+	it { is_expected.to have_db_column(${1}) }
+snippet it have_db_index
+	it { is_expected.to have_db_index(${1}) }
+snippet it have_readonly_attribute
+	it { is_expected.to have_readonly_attribute(${1}) }
+snippet it serialize
+	it { is_expected.to serialize(${1}) }
+snippet it filter_param
+	it { is_expected.to filter_param(${1}) }
+snippet it redirect_to
+	it { is_expected.to redirect_to(${1}) }
+snippet it render_template
+	it { is_expected.to render_template(${1}) }
+snippet it render_with_layout
+	it { is_expected.to render_with_layout(${1}) }
+snippet it rescue_from
+	it { is_expected.to rescue_from(${1}) }
+snippet it respond_with
+	it { is_expected.to respond_with(${1}) }
+snippet it respond_with_content_type
+	it { is_expected.to respond_with_content_type(${1::json}) }
+snippet it route
+	it { is_expected.to route(${1}) }
+snippet it set_session
+	it { is_expected.to set_session(${1}) }
+snippet it set_the_flash
+	it { is_expected.to set_the_flash(${1}) }
+snippet it delegate_method
+	it { is_expected.to delegate_method(${1}) }
+# expect spies/doubles
+snippet expect have_received
+	expect(${1:instance}).to have_received(:${2:method})
+snippet expect have_received
+	expect(${1:instance}).to have_received(:${2:method}).with(${3:args})
 snippet expect any_instance_of receive
 	expect_any_instance_of(${1:Object}).to receive(:${2:method})
 snippet expect receive once
@@ -1919,9 +1940,13 @@ snippet expect be_a_new
 snippet expect render template
 	expect(${1:response}).to render_template(${2:'new'})
 snippet expect render partial template
-	expect(${1:view}).to render_template(partial: ${2:'_form'}, locals: { ${3} } )
+	expect(${1:response}).to render_template(partial: ${2:'_form'}, locals: { ${3} })
 snippet expect redirect_to
 	expect(${1:response}).to redirect_to(${2:path})
+snippet expect response_with
+	expect(${1:response.status}).to eq(${2:200})
+snippet expect have_http_status
+	expect(${1:response}).to have_http_status(${2:200})
 
 ##########################
 # RSpect Should
