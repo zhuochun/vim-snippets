@@ -1,0 +1,29 @@
+# snippets for https://github.com/diepm/vim-rest-console
+snippet get
+	${1:http://host}
+	GET /${2:api/end/points}
+snippet get with headers
+	${1:http://host}
+
+	Cache-Control: no-cache
+	Content-Type: application/json; charset=utf-8
+	${2:headers}
+
+	GET /${3:api/end/points}
+snippet post with headers
+alias post
+	${1:http://host}
+
+	Cache-Control: no-cache
+	Content-Type: application/json; charset=utf-8
+	${2:headers}
+
+	POST /${3:api/end/points}
+	{
+		${4:"json": "data"}
+	}
+snippet delete
+	${1:http://host}
+	DELETE /${2:api/end/points}
+snippet json output
+	# vim: let b:vrc_output_buffer_name = '__REST_OUTPUT.json'
