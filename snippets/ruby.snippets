@@ -1,20 +1,16 @@
 ########################################
-# Ruby snippets - for Rails, see below #
+# Ruby/Rails snippets
 ########################################
-
-# encoding for Ruby 1.9
 snippet enc
 	# encoding: utf-8
 	${1}
-
-# #!/usr/bin/env ruby
 snippet #!
 alias shebang
 	#!/usr/bin/env ruby
 	# encoding: utf-8
 	${1}
-
-# New Block
+snippet #! rb
+	#!/usr/bin/env ruby -wKU
 snippet =b
 	=begin rdoc
 		${1}
@@ -30,16 +26,20 @@ snippet private
 snippet yield
 alias y
 	yield
-snippet block_given
+snippet block_given?
 alias bg
 	block_given?
-snippet rb
-	#!/usr/bin/env ruby -wKU
-snippet beg
+snippet begin
+alias beg
 	begin
 		${3}
 	rescue ${1:Exception} => ${2:e}
+		puts e.message
+		puts e.backtrace.inspect
 	end
+snippet ensure
+	ensure
+		${1:always executed}
 snippet require
 alias req
 	require '${1}'${2}
@@ -50,8 +50,23 @@ snippet :
 	${1:key}: ${2:'value'}
 snippet #
 	# =>
-snippet end
-	__END__
+snippet lambda
+alias lam
+	lambda { |${1:args}| ${2} }
+snippet ->
+	->(${1:args}) { ${2} }
+snippet do
+	do |${1:v}|
+		${2}
+	end
+snippet do empty
+alias doo
+	do
+		${1}
+	end
+# block
+snippet b
+	{ |${1:var}| ${2} }
 snippet case
 	case ${1:object}
 	when ${2:condition}
@@ -60,15 +75,12 @@ snippet case
 snippet when
 	when ${1:condition}
 		${2}
-snippet def
-	def ${1:method_name}
-		${2}
-	end
 snippet if
 	if ${1:condition}
 		${2}
 	end
-snippet ife
+snippet if else
+alias ife
 	if ${1:condition}
 		${2}
 	else
@@ -95,31 +107,27 @@ snippet until
 	until ${1:condition}
 		${2}
 	end
+# memo
 snippet memo basic
 	@${1:variable} ||= ${2:method}
-snippet memo false or nil
+snippet memo unless defined?
 	@${1:variable} = ${2:method} unless defined?(@$1)
+snippet memo if defined?
+	return @${1:variable} if defined?(@$1)
+	${2}
 snippet memo hash
 	@${1:variable} ||= {}
 	@$1[args] ||= ${2:method}(*args)
-snippet class basic
+# class
+snippet class
 alias cla
 	class ${1:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`}
 		${2}
 	end
-snippet class initialize
-alias cli
-	class ${1:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`}
-		def initialize(${2:args})
-			${3}
-		end
-	end
 snippet class SubClass
 alias cls
 	class ${1:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`} < ${2:ParentClass}
-		def initialize(${3:args})
-			${4}
-		end
+		${3}
 	end
 snippet class Struct
 	${1:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`} = Struct.new(:${2:attr_names}) do
@@ -144,10 +152,11 @@ snippet class DelegateClass
 			${5}
 		end
 	end
-snippet class Rails Model
+snippet class Rails 3 Model
 	class ${1:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`}
 		include ActiveModel::Conversion
 		include ActiveModel::Validations
+
 		extend  ActiveModel::Naming
 
 		attr_accessor :${1:attributes}
@@ -162,7 +171,7 @@ snippet class Rails Model
 			false
 		end
 	end
-snippet class Rails 4.0 Model
+snippet class Rails 4 Model
 alias clr
 	class ${1:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`}
 		include ActiveModel::Model
@@ -179,42 +188,43 @@ snippet class RuntimeError
 	class ${1:NewExtented}Error < RuntimeError; end
 snippet struct
 	Struct.new(:${1:attr_name})
-snippet module basic
+# module
+snippet module
 alias mod
 	module ${1:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`}
 		${2}
 	end
-snippet module module_function
+snippet module Concern ClassMethods
 	module ${1:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`}
-		module_function
+		def self.included(base)
+			base.extend ClassMethods
+			base.class_eval do
+				${2:scope :disabled -> { where(disabled: true) }}
+			end
+		end
 
-		${2}
-	end
-snippet module ClassMethods
-	module ${1:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`}
 		module ClassMethods
-			${2}
+			${3}
 		end
 
-		module InstanceMethods
-
-		end
-
-		def self.included(receiver)
-			receiver.extend ClassMethods
-			receiver.send :include, InstanceMethods
+		def ${4:an_instance_method}
+			${5:code}
 		end
 	end
-snippet module ActiveSupport::Concern
+snippet module Concern ActiveSupport
 	module ${1:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`}
 		extend ActiveSupport::Concern
 
 		included do
-			${1:validates :example, presence: true}
+			${2:validates :example, presence: true}
 		end
 
-		def ${2:sample_method}
-			${3:code}
+		module ClassMethods
+			${3}
+		end
+
+		def ${4:an_instance_method}
+			${5:code}
 		end
 	end
 # attr_reader
@@ -232,35 +242,42 @@ snippet atta
 	attr_accessible :${1:attr_names}
 snippet accepts_nested_attributes_for
 	accepts_nested_attributes_for :${1:association}
-snippet const
+snippet const_get
 	Object.const_get(${1:name}.capitalize)
 snippet enum
 	enum ${1:name}: [:${2:option_1}, :${3:other_options}]
-# ivc == instance variable cache
-snippet ivc
-	@${1:variable_name} ||= ${2:chached_value}
 # include
 snippet include
-	include ${1:ActiveModel::}${2:Validations}
+alias inc
+	include ${1:ActiveModel::Validations}
 snippet extend
-	extend ${1:ActiveSupport::}${2:Memoizable}
+alias ext
+	extend ${1:ActiveSupport::Memoizable}
 # include Enumerable
-snippet enumerable
+snippet include enumerable
+alias enumerable
 	include Enumerable
 
 	def each(&block)
 		${1}
 	end
 # include Comparable
-snippet comparable
+snippet include comparable
+alias comparable
 	include Comparable
 
 	def <=>(other)
 		${1}
 	end
 # extend Forwardable
-snippet Forw-
+snippet extend Forwardable
+alias Forwardable
 	extend Forwardable
+# def
+snippet def
+	def ${1:method_name}
+		${2}
+	end
 # def self
 snippet def self.method
 alias defs
@@ -271,17 +288,23 @@ snippet def self.[]
 	def self.[](${1:attr})
 		${2}
 	end
-# def initialize
 snippet def init
 alias defi init
 	def initialize(${1:args})
 		${2}
 	end
-# def method_missing
 snippet def method_missing
-	def method_missing(meth, *args, &blk)
-		${1}
+alias method_missing
+	def method_missing(method_name, *args, &block)
+		@${1:instance}.send(method_name, *args, &block)
+		super
 	end
+snippet def respond_to_missing?
+alias respond_to_missing?
+	def respond_to_missing?(method_name, *args, &block)
+		@${1:instance}.respond_to?(method_name, *args, &block)
+	end
+# delegator
 snippet def delegator
 	def_delegator :${1:@del_obj}, :${2:del_meth}, :${3:new_name}
 snippet def delegators
@@ -307,11 +330,12 @@ snippet alias method
 	alias_method :${1:new_name}, :${2:old_name}
 snippet alias attribute
 	alias_attribute :${1:new_name}, :${2:old_name}
-snippet __ file
-alias __f
+# __
+snippet __e
+	__END__
+snippet __f
 	__FILE__
-snippet __ line
-alias __l
+snippet __l
 	__LINE__
 snippet app
 	if __FILE__ == $PROGRAM_NAME
@@ -327,22 +351,29 @@ snippet usau
 	unless ARGV.${1}
 		abort 'Usage: #{$PROGRAM_NAME} ${2:ARGS_GO_HERE}'${3}
 	end
-snippet array
-	Array.new(${1:10}) { |${2:i}| ${3} }
-snippet hash
-	Hash.new { |${1:hash}, ${2:key}| $1[$2] = ${3} }
+# unix_filter {}
+snippet unif
+	ARGF.each_line${1} do |${2:line}|
+		${3}
+	end
+# File/Dir
 snippet file foreach
 	File.foreach(${1:'path/to/file'}) { |${2:line}| ${3} }
 snippet file read
 	File.read(${1:'path/to/file'})${2}
 snippet file dirname
-alias dir
 	File.dirname(${1:__FILE__})
+snippet file path from here
+	File.join(File.dirname(__FILE__), '${1:path}')
 snippet Dir glob
 	Dir.glob(${1:'dir/glob/*'}) { |${2:file}| ${3} }
 snippet Dir ['..']
 	Dir[${1:'glob/**/*.rb'}]${2}
-snippet deli
+snippet array
+	Array.new(${1:10}) { |${2:i}| ${3} }
+snippet hash
+	Hash.new { |${1:hash}, ${2:key}| $1[$2] = ${3} }
+snippet delete_if
 options word
 	delete_if { |${1:e}| ${2} }
 snippet fill
@@ -355,22 +386,31 @@ options word
 snippet zip
 options word
 	zip(${1:enums}) { |${2:row}| ${3} }
-# downto(0) { |n| .. }
+snippet tap
+options word
+	tap { |${1:obj}| ${2} }
+snippet times
+options word
+	times { |${1:n}| ${2} }
 snippet downto
 options word
 	downto(${1:0}) { |${2:n}| ${3} }
 snippet step
 options word
 	step(${1:2}) { |${2:n}| ${3} }
-snippet times
-options word
-	times { |${1:n}| ${2} }
 snippet upto
 options word
 	upto(${1:1.0/0.0}) { |${2:n}| ${3} }
 snippet loop
+alias lo
 options word
 	loop { ${1} }
+snippet loop do
+alias lod
+options word
+	loop do
+		${1}
+	end
 snippet each
 alias ea
 options word
@@ -486,12 +526,12 @@ options word
 	reduce(${1:init}) do |${2:mem}, ${3:var}|
 		${4}
 	end
+snippet map
+options word
+	map { |${1:e}| ${2} }
 snippet map method
 options word
 	map(&:${1:id})
-snippet map block
-options word
-	map { |${1:e}| ${2} }
 snippet map do block
 options word
 	map do |${1:e}|
@@ -553,11 +593,6 @@ options word
 	find_all do |${1:e}|
 		${2}
 	end
-snippet fino
-options word
-	find_or_initialize_by_name(${1:attributes}) do |${1:e}|
-		${2}
-	end
 snippet find_or_initialize_by
 options word
 	find_or_initialize_by(${1:attribute}: ${2:value})
@@ -584,10 +619,10 @@ options word
 snippet min
 options word
 	min { |a, b| ${1} }
-snippet par
+snippet partition
 options word
 	partition { |${1:e}| ${2} }
-snippet pard
+snippet partition do
 options word
 	partition do |${1:e}|
 		${2}
@@ -601,34 +636,13 @@ options word
 		${2}
 	end
 snippet select
+alias filter
 options word
 	select { |${1:e}| ${2} }
 snippet select do
 options word
 	select do |${1:e}|
 		${2}
-	end
-snippet lambda
-alias lam
-	lambda { |${1:args}| ${2} }
-snippet do empty
-	do
-		${1}
-	end
-snippet do default
-alias do
-	do |${1:v}|
-		${2}
-	end
-snippet open
-	open(${1:'path/or/url/or/pipe'}, '${2:w}') { |${3:io}| ${4} }
-# path_from_here()
-snippet file path from here
-	File.join(File.dirname(__FILE__), '${1:path}')
-# unix_filter {}
-snippet unif
-	ARGF.each_line${1} do |${2:line}|
-		${3}
 	end
 # option_parse {}
 snippet optp
@@ -643,22 +657,45 @@ snippet opt
 			'${4:Option description.}') do |${5:opt}|
 		${6}
 	end
+# Marshal
+snippet Marshal dump
+	File.open(${1:'path/to/file.dump'}, 'wb') { |${2:file}| Marshal.dump(${3:obj}, $2) }${4}
+snippet Marshal load
+	File.open(${1:'path/to/file.dump'}, 'rb') { |${2:file}| Marshal.load($2) }${3}
+snippet Marshal deep copy
+	Marshal.load(Marshal.dump(${1:obj_to_copy}))${2}
+# xmlread(..)
+snippet xml-
+	REXML::Document.new(File.read(${1:'path/to/file'}))${2}
+# xpath(..) { .. }
+snippet xpa
+	elements.each(${1:'//Xpath'}) do |${2:node}|
+		${3}
+	end
+# class_from_name()
+snippet clafn
+	split('::').inject(Object) { |par, const| par.const_get(const) }
+# singleton_class()
+snippet sinc
+	class << self; self end
+# open io
+snippet open
+	open(${1:'path/or/url/or/pipe'}, '${2:w}') { |${3:io}| ${4} }
+
 
 #############################################
 # MiniTest
 #############################################
 snippet minitest
-	gem 'minitest'
 	require 'minitest/autorun'
-	${1}
+	require './${1:class.rb}'
 
 	class ${2:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`} < Minitest::Test
 		${3}
 	end
 snippet minitest spec
-	gem 'minitest'
 	require 'minitest/autorun'
-	${1}
+	require './${1:class.rb}'
 
 	describe ${2:object} do
 		${3}
@@ -666,10 +703,6 @@ snippet minitest spec
 # Test Methods
 snippet test rails
 	test '${1:something}' do
-		${2}
-	end
-snippet test def
-	def test_${1:case_name}
 		${2}
 	end
 
@@ -738,7 +771,10 @@ snippet patch api
 			{ 'Accept' => Mime::${4:JSON}, 'Content-Type' => Mime::JSON.to_s }
 snippet delete api
 	delete '${1:path}'
-# Responses Code
+
+#############################################
+# Response status
+#############################################
 snippet status 200 ok
 	:ok
 snippet status 201 created
@@ -858,14 +894,31 @@ alias asntd
 	assert_nothing_thrown do
 		${1}
 	end
+# rails assertions
+snippet assert_routing
+	assert_routing '${1:/path/}', { controller: '${2}', action: '${3}' }
+snippet assert_redirected_to action
+	assert_redirected_to ${1:action}: '${2:index}'}
+snippet assert_redirected_to path
+	assert_redirected_to ${1:parent}_path ${2}
+snippet assert_difference
+	assert_difference '${1:Model}.${2:count}', ${3:1} do
+		${4}
+	end
+snippet assert_no_difference
+	assert_no_difference '${1:Model}.${2:count}' do
+		${3}
+	end
+snippet assert_response
+	assert_response :${1:success}, @response.body${2}
+snippet assert_rjs
+	assert_rjs :${1:replace}, '${2:dom id}'
+snippet assert_select
+	assert_select '${1:path}', ${2:text}: '${3:inner_html' ${4:do}
 snippet flunk
 	flunk '${1:failure message}'
 snippet skip
 	skip '${1:skip message}'
-# rails assertions
-snippet assert_routing
-alias ar
-	assert_routing '${1:/path/}', { controller: '${2}', action: '${3}' }
 
 #############################################
 # Minitest Spec
@@ -981,10 +1034,10 @@ snippet benchmark_bmbm
 		x.report('${1:name}:') { ${2:code} }
 	end
 snippet benchmark_report
-alias report
+alias xre
 	x.report('${1:name}:') { ${2:code} }
-snippet benchmark_report block
-alias report_block
+snippet benchmark_report do
+alias xred
 	x.report('${1:name}:') do
 		${2:code}
 	end
@@ -1007,44 +1060,29 @@ alias ips
 		x.compare!
 	end
 
-# Marshal.dump(.., file)
-snippet Md
-	File.open(${1:'path/to/file.dump'}, 'wb') { |${2:file}| Marshal.dump(${3:obj}, $2) }${4}
-# Mashal.load(obj)
-snippet Ml
-	File.open(${1:'path/to/file.dump'}, 'rb') { |${2:file}| Marshal.load($2) }${3}
-# deep_copy(..)
-snippet deec
-	Marshal.load(Marshal.dump(${1:obj_to_copy}))${2}
-snippet Pn-
-	PStore.new(${1:'file_name.pstore'})${2}
-snippet transaction
-	transaction(${1:true}) { ${2} }
-snippet transaction do
-	transaction do
-		${1}
-	end
-# xmlread(..)
-snippet xml-
-	REXML::Document.new(File.read(${1:'path/to/file'}))${2}
-# xpath(..) { .. }
-snippet xpa
-	elements.each(${1:'//Xpath'}) do |${2:node}|
-		${3}
-	end
-# class_from_name()
-snippet clafn
-	split('::').inject(Object) { |par, const| par.const_get(const) }
-# singleton_class()
-snippet sinc
-	class << self; self end
-snippet namespace
+#############################################
+# debugging
+#############################################
+snippet debugger byebug
+alias bye
+	byebug
+snippet debugger pry-remote
+alias pry-remote
+	${1:require 'pry-remote'; }binding.remote_pry${0}
+snippet debugger pry
+alias pry
+	${1:require 'pry'; }binding.pry${0}
+
+#############################################
+# rake
+#############################################
+snippet namespace rake_task
 	namespace :${1:`vim_snippets#Filename()`} do
 		${2}
 	end
 snippet task default
 	desc '${1:description}'
-	task ${2:name}: [:${3:dependent}] do
+	task ${2:name}: [:${3:environment}] do
 		${4}
 	end
 snippet task with args
@@ -1064,33 +1102,7 @@ snippet task file
 		${3}
 	end
 snippet rake
-	Rake::Task[:${1:task_name}].${2:invoke}
-# block
-snippet b
-	{ |${1:var}| ${2} }
-snippet begin
-	begin
-		raise 'A test exception.'
-	rescue Exception => e
-		puts e.message
-		puts e.backtrace.inspect
-	else
-		# other exception
-	ensure
-		# always executed
-	end
-#debugging
-snippet debugger byebug
-alias byebug
-	byebug
-snippet debugger pry-remote
-alias pry-remote
-	require 'pry-remote'
-	binding.remote_pry
-snippet debugger pry
-alias pry
-	require 'pry'
-	binding.pry
+	Rake::Task['${1:task_name}'].${2:execute}
 
 #############################################
 # Sinatra snippets
@@ -1101,137 +1113,13 @@ snippet sinatra
 	${1}
 
 #############################################
-# Rails snippets
+# Rails model
 #############################################
-snippet assert_redirected_to action
-alias art
-	assert_redirected_to ${1:action}: '${2:index}'}
-snippet assert_redirected_to path
-alias art
-	assert_redirected_to ${1:parent}_path ${2}
-snippet assert_difference
-alias asd
-	assert_difference '${1:Model}.${2:count}', ${3:1} do
-		${4}
-	end
-snippet assert_no_difference
-alias asnd
-	assert_no_difference '${1:Model}.${2:count}' do
-		${3}
-	end
-snippet assert_response
-alias asre
-	assert_response :${1:success}, @response.body${2}
-snippet assert_rjs
-alias asrj
-	assert_rjs :${1:replace}, '${2:dom id}'
-snippet assert_select
-alias asselect
-	assert_select '${1:path}', ${2:text}: '${3:inner_html' ${4:do}
 snippet belongs_to
 alias bt
 	belongs_to :${1:association}
-snippet belongs_to (polymorphic)
-alias btp
+snippet belongs_to polymorphic
 	belongs_to :${1:association}, polymorphic: true${2}
-snippet crw
-	cattr_accessor :${1:attr_names}
-snippet defcreate
-	# POST /$1
-	# POST /$1.json
-	def create
-		@${1:model_class_name} = ${2:ModelClassName}.new(params[:$1])
-
-		respond_to do |format|
-			if @$1.save
-				format.html { redirect_to @$1, notice: '$2 was successfully created.' }
-				format.json { render json: @$1, status: :created, location: @$1 }
-			else
-				format.html { render action: 'new' }
-				format.json { render json: @$1.errors, status: :unprocessable_entity }
-			end
-		end
-	end${3}
-snippet defdestroy
-	# DELETE /$1/1
-	# DELETE /$1/1.json
-	def destroy
-		@${1:model_class_name} = ${2:ModelClassName}.find(params[:id])
-		@$1.destroy
-
-		respond_to do |format|
-			format.html { redirect_to $1s_url }
-			format.json  { head :no_content }
-		end
-	end${3}
-snippet defedit
-	# GET /$1/1/edit
-	def edit
-		@${1:model_class_name} = ${2:ModelClassName}.find(params[:id])
-	end${3}
-snippet defindex
-	# GET /$1
-	# GET /$1.json
-	def index
-		@${1:model_class_name} = ${2:ModelClassName}.all
-
-		respond_to do |format|
-			format.html # index.html.erb
-			format.json { render json: @$1s }
-		end
-	end${3}
-snippet defnew
-	# GET /$1/new
-	# GET /$1/new.json
-	def new
-		@${1:model_class_name} = ${2:ModelClassName}.new
-
-		respond_to do |format|
-			format.html # new.html.erb
-			format.json { render json: @$1 }
-		end
-	end${3}
-snippet defshow
-	# GET /$1/1
-	# GET /$1/1.json
-	def show
-		@${1:model_class_name} = ${2:ModelClassName}.find(params[:id])
-
-		respond_to do |format|
-			format.html # show.html.erb
-			format.json { render json: @$1 }
-		end
-	end${3}
-snippet defupdate
-	# PUT /$1/1
-	# PUT /$1/1.json
-	def update
-		@${1:model_class_name} = ${2:ModelClassName}.find(params[:id])
-
-		respond_to do |format|
-			if @$1.update_attributes(params[:$1])
-				format.html { redirect_to @$1, notice: '$2 was successfully updated.' }
-				format.json { head :no_content }
-			else
-				format.html { render action: 'edit' }
-				format.json { render json: @$1.errors, status: :unprocessable_entity }
-			end
-		end
-	end${3}
-snippet delegate to
-	delegate :${1:methods}, to: :${2:object}
-snippet delegate to prefix
-	delegate :${1:methods}, to: :${2:object}, prefix: ${3:true}
-snippet delegate to allow_nil
-	delegate :${1:methods}, to: :${2:object}, allow_nil: ${3:true}
-snippet flash
-	flash[:${1:notice}] = '${2}'
-snippet content_tag
-	content_tag :${1:div}, ${2:content}, ${3:options}
-snippet content_tag do
-	content_tag :${1:div}, ${2:options} do
-		${3:content}
-	end
 snippet hasabtm
 	has_and_belongs_to_many :${1:object}, join_table: '${2:table_name}', foreign_key: '${3}_id'${4}
 snippet hasm
@@ -1244,13 +1132,220 @@ snippet haso
 	has_one :${1:object}
 snippet hasod
 	has_one :${1:object}, dependent: :${2:destroy}
-snippet i18 translate
+snippet delegate to
+	delegate :${1:methods}, to: :${2:object}
+snippet delegate to prefix
+	delegate :${1:methods}, to: :${2:object}, prefix: ${3:true}
+snippet delegate to allow_nil
+	delegate :${1:methods}, to: :${2:object}, allow_nil: ${3:true}
+# before, around, after
+snippet before validation
+	before_validation :${1:method}
+snippet after validation
+	after_validation :${1:method}
+snippet before save
+	before_save :${1:method}
+snippet after save
+	after_save :${1:method}
+snippet before create
+	before_create :${1:method}
+snippet around create
+	around_create :${1:method}
+snippet after create
+	after_create :${1:method}
+snippet before update
+	before_update :${1:method}
+snippet around update
+	around_update :${1:method}
+snippet after update
+	after_update :${1:method}
+snippet before destroy
+	before_destroy :${1:method}
+snippet after destroy
+	after_destroy :${1:method}
+snippet around destroy
+	around_destroy :${1:method}
+# scope
+snippet scope default
+alias defscope
+	default_scope -> { ${1:scope} }
+snippet scope ->
+	scope :${1:name}, -> { ${2:scope} }
+snippet scope lambda
+	scope :${1:name}, lambda do |${2:value}|
+		${3:scope}
+	end
+# validations
+snippet validator
+	class ${1:What}Validator < ActiveRecord::${2:Each}Validator
+		def validate_each(record, attribute, value)
+			${3}
+		end
+	end
+snippet validate
+	validate :${1:method}
+snippet validates
+	validates :${1:attribute}, ${2:validators}
+snippet validates acceptance
+alias valac
+	validates :${1:terms}, acceptance: true
+snippet validates confirmation
+alias valc
+	validates :${1:attribute}, confirmation: true
+snippet validates exclusion
+alias vale
+	validates :${1:attribute}, exclusion: { in: ${2:%w( mov avi )} }
+snippet validates format
+alias valf
+	validates :${1:attribute}, format: { with: /${2:regex}/ }
+snippet validates inclusion
+alias vali
+	validates :${1:attribute}, inclusion: { in: %w(${2: mov avi }) }
+snippet validates length
+alias vall
+	validates :${1:attribute}, length: { in: ${2:3}..${3:20} }
+snippet validates numericality
+alias valn
+	validates :${1:attribute}, numericality: ${1:true}
+snippet validates presence
+alias valp
+	validates :${1:attribute}, presence: true
+snippet validates uniqueness
+alias valu
+	validates :${1:attribute}, uniqueness: true
+snippet validates_associated
+alias valas
+	validates_associated :${1:attribute}
+snippet validates_with
+alias valw
+	validates_with ${1:Some}Validator
+# queries
+snippet where field:value
+	where(${1:field}: ${2:value})
+snippet where condition
+	where(${1:'conditions'}${2:, bind_var})
+snippet order desc
+options word
+	order('${1:field} DESC')
+snippet order field desc
+options word
+	order(${1:field}: :desc${2})
+
+#############################################
+# Rails controller
+#############################################
+snippet defindex
+	# GET /$1
+	# GET /$1.json
+	def index
+		@${1:model_class_name} = ${2:ModelClassName}.all
+
+		respond_to do |format|
+			format.html # index.html.erb
+			format.json { render json: @$1s }
+		end
+	end
+snippet defnew
+	# GET /$1/new
+	# GET /$1/new.json
+	def new
+		@${1:model_class_name} = ${2:ModelClassName}.new
+
+		respond_to do |format|
+			format.html # new.html.erb
+			format.json { render json: @$1 }
+		end
+	end
+snippet defcreate
+	# POST /$1
+	# POST /$1.json
+	def create
+		@${1:model_class_name} = ${2:ModelClassName}.new(params[:$1])${0}
+
+		respond_to do |format|
+			if @$1.save
+				format.html { redirect_to @$1, notice: '$2 was successfully created.' }
+				format.json { render json: @$1, status: :created, location: @$1 }
+			else
+				format.html { render action: 'new' }
+				format.json { render json: @$1.errors, status: :unprocessable_entity }
+			end
+		end
+	end
+snippet defshow
+	# GET /$1/1
+	# GET /$1/1.json
+	def show
+		@${1:model_class_name} = ${2:ModelClassName}.find(params[:id])${0}
+
+		respond_to do |format|
+			format.html # show.html.erb
+			format.json { render json: @$1 }
+		end
+	end
+snippet defedit
+	# GET /$1/1/edit
+	def edit
+		@${1:model_class_name} = ${2:ModelClassName}.find(params[:id])${0}
+	end
+snippet defupdate
+	# PUT /$1/1
+	# PUT /$1/1.json
+	def update
+		@${1:model_class_name} = ${2:ModelClassName}.find(params[:id])${0}
+
+		respond_to do |format|
+			if @$1.update_attributes(params[:$1])
+				format.html { redirect_to @$1, notice: '$2 was successfully updated.' }
+				format.json { head :no_content }
+			else
+				format.html { render action: 'edit' }
+				format.json { render json: @$1.errors, status: :unprocessable_entity }
+			end
+		end
+	end
+snippet defdestroy
+	# DELETE /$1/1
+	# DELETE /$1/1.json
+	def destroy
+		@${1:model_class_name} = ${2:ModelClassName}.find(params[:id])${0}
+		@$1.destroy
+
+		respond_to do |format|
+			format.html { redirect_to $1s_url }
+			format.json  { head :no_content }
+		end
+	end
+snippet flash
+	flash[:${1:notice}] = '${2}'
+snippet add_flash_types
+	add_flash_types :${1:warning}
+snippet content_tag
+	content_tag :${1:div}, ${2:content}, ${3:options}
+snippet content_tag do
+	content_tag :${1:div}, ${2:options} do
+		${3:content}
+	end
+snippet params
+	params[:${1:id}]${2}
+snippet params require
+	params.require(:${1:model}).permit(:${2:fields})
+snippet params def
+	def ${1:model}_params
+		params.require(:$1).permit(:${2:fields})
+	end
+snippet sha1
+	Digest::SHA1.hexdigest(${1:string})
+snippet base64
+	Base64.encode64(${1:string})
+# i18n
+snippet i18n translate
 alias i18t
 	I18n.t('${1:type.key}')${2}
 snippet i18 translate shorthand
 alias t
 	t('${1:type.key}')
-snippet i18 localize
+snippet i18n localize
 alias i18l
 	I18n.l('${1:type.key}')${2}
 snippet i18 localize shorthand
@@ -1258,6 +1353,7 @@ alias l
 	l('${1:type.key}')${2}
 snippet log
 	${1:Rails.logger}.${2:debug} ${3}
+# Logger
 snippet logd
 	logger.debug { '${1:message}' }${2}
 snippet loge
@@ -1268,6 +1364,7 @@ snippet logi
 	logger.info { '${1:message}' }${2}
 snippet logw
 	logger.warn { '${1:message}' }${2}
+# Map
 snippet mapc
 	${1:map}.${2:connect} '${3:controller/:action/:id}'
 snippet mapca
@@ -1280,30 +1377,7 @@ snippet mapwo
 	${1:map}.with_options ${2:controller}: '${3:thing}' do |$3|
 		${4}
 	end
-snippet mbs before_save
-	before_save :${1:method}
-snippet mcht
-	change_table :${1:table_name} do |t|
-		${2}
-	end
-snippet mrw
-	mattr_accessor :${1:attr_names}
-snippet order field
-	order('${1:field}')
-snippet order 4.0 field
-	order(:${1:field})
-snippet order field desc
-	order('${1:field} DESC')
-snippet order 4.0 field desc
-	order(${1:field}: :desc)
-snippet params
-	params[:${1:id}]${2}
-snippet params strong
-	params.require(:${1:model}).permit(:${2:fields})
-snippet params def
-	def ${1:model}_params
-		params.require(:$1).permit(:${2:fields})
-	end
+# respond_to
 snippet respond_to
 	respond_to :${1:json}
 snippet respond_to do
@@ -1311,6 +1385,9 @@ snippet respond_to do
 		format.${1:html} { ${2} }
 		format.${3:json} { render json: ${4:json_data}, status: :ok }
 	end
+snippet format
+	format.${1:js|xml|html} { ${2} }
+# render
 snippet render action
 alias ra
 	render action: '${1:action}'
@@ -1376,20 +1453,7 @@ alias ru
 	render :update do |${1:page}|
 		$1.${2}
 	end
-snippet scope default
-alias defscope
-	default_scope -> { ${1:scope} }
-snippet scope ->
-	scope :${1:name}, -> { ${2:scope} }
-snippet scope lambda
-	scope :${1:name}, lambda do |${2:value}|
-		${3:scope}
-	end
-snippet sha1
-	Digest::SHA1.hexdigest(${1:string})
-snippet base64
-	require 'base64'
-	Base64.encode64(${1:string})
+# cache
 snippet cache fetch
 	Rails.cache.fetch([${1:self}, '${2:method}']) { ${3:block} }
 snippet cache fetch do
@@ -1424,57 +1488,7 @@ snippet sweeper
 			expire_page
 		end
 	end
-snippet validator
-	class ${1:What}Validator < ActiveRecord::${2:Each}Validator
-		def validate_each(record, attribute, value)
-			${3}
-		end
-	end
-snippet validate
-	validate :${1:method}
-snippet validates
-	validates :${1:attribute}, ${2:validators}
-snippet validates acceptance
-alias valac
-	validates :${1:terms}, acceptance: true
-snippet validates confirmation
-alias valc
-	validates :${1:attribute}, confirmation: true
-snippet validates exclusion
-alias vale
-	validates :${1:attribute}, exclusion: { in: ${2:%w( mov avi )} }
-snippet validates format
-alias valf
-	validates :${1:attribute}, format: { with: /${2:regex}/ }
-snippet validates inclusion
-alias vali
-	validates :${1:attribute}, inclusion: { in: %w(${2: mov avi }) }
-snippet validates length
-alias vall
-	validates :${1:attribute}, length: { in: ${2:3}..${3:20} }
-snippet validates numericality
-alias valn
-	validates :${1:attribute}, numericality: ${1:true}
-snippet validates presence
-alias valp
-	validates :${1:attribute}, presence: true
-snippet validates uniqueness
-alias valu
-	validates :${1:attribute}, uniqueness: true
-snippet validates_associated
-alias valas
-	validates_associated :${1:attribute}
-snippet validates_with
-alias valw
-	validates_with ${1:Some}Validator
-snippet format
-	format.${1:js|xml|html} { ${2} }
-snippet where field:value
-	where(${1:field}: ${2:value})
-snippet where condition
-	where(${1:'conditions'}${2:, bind_var})
-snippet add_flash_types
-	add_flash_types :${1:warning}
+# xhr
 snippet xdelete
 	xhr :delete, :${1:destroy}, id: ${2:1}${3}
 snippet xget
@@ -1483,39 +1497,13 @@ snippet xpost
 	xhr :post, :${1:create}, ${2:object}: { ${3} }
 snippet xput
 	xhr :put, :${1:update}, id: ${2:1}, ${3:object}: { ${4} }${5}
-# before, around, after
-snippet before validation
-	before_validation ${1}
-snippet after validation
-	after_validation ${1}
-snippet before save
-	before_save ${1}
-snippet after save
-	after_save ${1}
-snippet before create
-	before_create ${1}
-snippet around create
-	around_create ${1}
-snippet after create
-	after_create ${1}
-snippet before update
-	before_update ${1}
-snippet around update
-	around_update ${1}
-snippet after update
-	after_update ${1}
-snippet before destroy
-	before_destroy ${1}
-snippet after destroy
-	after_destroy ${1}
-snippet around destroy
-	around_destroy ${1}
 # filter
 snippet before skip filter
 	skip_before_filter :${1:method}
 snippet before filter
 	before_filter :${1:method}
 snippet before action
+alias befa
 	before_action :${1:method}
 snippet only
 	only: [${1:methods}]
@@ -1524,15 +1512,6 @@ snippet except
 snippet to_param
 	def to_param
 		"#{id}-#{${1:name}.parameterize}"
-	end
-snippet method missing
-	def method_missing(method_name, *args, &block)
-		@${1:instance}.send(method_name, *args, &block)
-		super
-	end
-snippet respond respond_to_missing?
-	def respond_to_missing?(method_name, *args, &block)
-		@${1:instance}.respond_to?(method_name, *args, &block)
 	end
 
 ###########################
@@ -1562,15 +1541,19 @@ snippet resources constraints block
 			${3:resources} :${4:model}
 		end
 	end
-snippet resources constraints api
-	namespace :${1::v1}, constraints: { subdomain: '$1' } do
-		resources ${2:model}
+snippet namespace rails_route
+	namespace :${1:module} do
+		resources :${2:model}
 	end
-snippet resources with options
+snippet namespace rails_route constraints
+	namespace :${1::v1}, constraints: { subdomain: '$1' } do
+		resources :${2:model}
+	end
+snippet with_options only
 	with_options only: [:${1:index}] do |list|
 		list.${2:resources} :${3:model}
 	end
-snippet concern
+snippet concern rails_route
 	concern :${1:concernable} do |options|
 		resources :${2:model}, options
 	end
@@ -1578,23 +1561,21 @@ snippet concern
 ###########################
 #   migrations snippets   #
 ###########################
-snippet mac
-	add_column :${1:table_name}, :${2:column_name}, :${3:data_type}
-snippet mai
-	add_index :${1:table_name}, :${2:column_name}
-snippet mrc
-	remove_column :${1:table_name}, :${2:column_name}
-snippet mrnc
-	rename_column :${1:table_name}, :${2:old_column_name}, :${3:new_column_name}
-snippet mcc
-	change_column :${1:table}, :${2:column}, :${3:type}
-snippet mnc
-	t.${1:string} :${2:title}${3:, null: false}${4}
-snippet mct
-	create_table :${1:table_name} do |t|
+snippet create_table
+	change_table :${1:table_name} do |t|
 		${2}
 	end
-snippet migration class .. < ActiveRecord::Migration .. def up .. def down .. end
+snippet add_column
+	add_column :${1:table_name}, :${2:column_name}, :${3:data_type}
+snippet add_index
+	add_index :${1:table_name}, :${2:column_name}
+snippet remove_column
+	remove_column :${1:table_name}, :${2:column_name}
+snippet rename_column
+	rename_column :${1:table_name}, :${2:old_column_name}, :${3:new_column_name}
+snippet change_column
+	change_column :${1:table}, :${2:column}, :${3:type}
+snippet migration up_down
 	class ${1:class_name} < ActiveRecord::Migration
 		def up
 			${2}
@@ -1603,7 +1584,7 @@ snippet migration class .. < ActiveRecord::Migration .. def up .. def down .. en
 		def down
 		end
 	end
-snippet migration class .. < ActiveRecord::Migration .. def change .. end
+snippet migration change
 	class ${1:class_name} < ActiveRecord::Migration
 		def change
 			${2}
@@ -1613,57 +1594,41 @@ snippet trc
 	t.remove :${1:column}
 snippet tre
 	t.rename :${1:old_column_name}, :${2:new_column_name}
-	${3}
 snippet tref
 	t.references :${1:model}
-snippet tcb
-	t.boolean :${1:title}
-	${2}
-snippet tcbi
-	t.binary :${1:title}, :limit => ${2:2}.megabytes
-	${3}
-snippet tcd
-	t.decimal :${1:title}, :precision => ${2:10}, :scale => ${3:2}
-	${4}
-snippet tcda
-	t.date :${1:title}
-	${2}
-snippet tcdt
-	t.datetime :${1:title}
-	${2}
-snippet tcf
-	t.float :${1:title}
-	${2}
-snippet tch
-	t.change :${1:name}, :${2:string}, :${3:limit} => ${4:80}
-	${5}
-snippet tci
-	t.integer :${1:title}
-	${2}
-snippet tcl
-	t.integer :lock_version, :null => false, :default => 0
-	${1}
-snippet tcr
+snippet tref polymorphic
 	t.references :${1:taggable}, polymorphic: { default: '${2:Photo}' }
-	${3}
-snippet tcs
-	t.string :${1:title}
-	${2}
-snippet tct
-	t.text :${1:title}
-	${2}
-snippet tcti
+snippet tstr
+	t.string :${1:title}${2:, null: false}
+snippet tboo
+	t.boolean :${1:title}
+snippet tbin
+	t.binary :${1:title}, :limit => ${2:2}.megabytes
+snippet tdec
+	t.decimal :${1:title}, :precision => ${2:10}, :scale => ${3:2}
+snippet tdate
+	t.date :${1:title}
+snippet ttime
 	t.time :${1:title}
-	${2}
-snippet tcts
+snippet tdatt
+	t.datetime :${1:title}
+snippet tflo
+	t.float :${1:title}
+snippet tint
+	t.integer :${1:title}
+snippet tint lock_version
+	t.integer :lock_version, :null => false, :default => 0
+snippet ttext
+	t.text :${1:title}
+snippet ttimestamp
 	t.timestamp :${1:title}
-	${2}
-snippet tctss
+snippet ttimestamps
 	t.timestamps
-	${1}
+snippet tchange
+	t.change :${1:name}, :${2:string}, :${3:limit} => ${4:80}
 
 ##########################
-#     Rspec snippets     #
+# Rspec snippets
 ##########################
 snippet rspec unit
 	require 'spec_helper'
@@ -1677,11 +1642,9 @@ snippet rspec feature
 	feature '${1:an action}' do
 		${2:pending 'Not implemented'}
 	end
-snippet rspec rails
-	require 'rails_helper'
-
-	RSpec.describe '${1}', type: :${2} do
-		${3}
+snippet describe rspec
+	RSpec.describe ${1:name} do
+		${2:pending 'Not implemented'}
 	end
 snippet describe
 alias desc
@@ -1689,22 +1652,26 @@ alias desc
 		${2:pending 'Not implemented'}
 	end
 snippet context
+alias cont
 	context '${1:message}' do
 		${2}
 	end
-snippet it block
-alias it
+snippet it
 	it '${1:spec_name}' do
 		${2}
 	end
 snippet specify
 	specify { subject.${1} }
-snippet before rspec
+snippet before do
 alias bef
+	before do
+		${1}
+	end
+snippet before each
 	before :${1:each} do
 		${2}
 	end
-snippet after rspec
+snippet after each
 alias aft
 	after :${1:each} do
 		${2}
@@ -1751,9 +1718,9 @@ snippet expect_not_equal
 	expect(${1:target}).not_to equal(${2})
 # be
 snippet expect_be
-	expect(${1:target}).to be ${2}
+	expect(${1:target}).to be(${2})
 snippet expect_not_be
-	expect(${1:target}).not_to be ${2}
+	expect(${1:target}).not_to be(${2})
 snippet expect_be_true
 alias ebt
 	expect(${1:target}).to be_true
@@ -1773,12 +1740,18 @@ snippet expect_exist
 	expect(${1:target}).to exist
 # range change
 snippet expect_change_from_to
-	expect { ${1:action} }.to change { ${2:target} }.from(${3:0}).to(${4:1})
+	expect do
+		${1:action}
+	end.to change(${2:target}).from(${3:0}).to(${4:1})
 snippet expect_change_by
-	expect { ${1:action} }.to change { ${2:target} }.by(${3:1})
+	expect do
+		${1:action}
+	end.to change(${2:target}).by(${3:1})
 # exception/error
 snippet expect_raise_error
-	expect { ${1:action} }.to raise_error(${2})
+	expect do
+		${1:action}
+	end.to raise_error(${2})
 # match
 snippet expect_match
 alias em
@@ -1789,37 +1762,6 @@ snippet expect_response_to
 # satisfy
 snippet expect_satisfy
 	expect(${1:target}).to satisfy { |${2:arg}| ${3} }
-# expect spies/doubles
-snippet expect_have_received
-	expect(${1:instance}).to have_received(:${2:method})
-snippet expect_have_received_with
-	expect(${1:instance}).to have_received(:${2:method}).with(${3:args})
-snippet expect_any_instance_of_receive
-	expect_any_instance_of(${1:Object}).to receive(:${2:method})
-snippet expect_receive_once
-	expect(${1:obj}).to receive(:${2:method}).once
-snippet expect_receive_twice
-	expect(${1:obj}).to receive(:${2:method}).twice
-snippet expect_receive_times
-	expect(${1:obj}).to receive(:${2:method}).exactly(${3:3}).times
-snippet expect_receive_at_least_times
-	expect(${1:obj}).to receive(:${2:method}).at_least(${3:3}).times
-snippet expect_receive_at_most_times
-	expect(${1:obj}).to receive(:${2:method}).at_most(${3:3}).times
-snippet expect_receive_any_number_of_times
-	expect(${1:obj}).to receive(:${2:method}).any_number_of_times
-snippet expect_receive_with
-	expect(${1:obj}).to receive(:${2:method}).with(${3:args})
-snippet expect_receive_with_regex
-	expect(${1:obj}).to receive(:${2:method}).with(/${3:regex}/)
-snippet expect_receive_with_instance_of
-	expect(${1:obj}).to receive(:${2:method}).with(an_instance_of(${3:Object}))
-snippet expect_receive_with_hash
-	expect(${1:obj}).to receive(:${2:method}).with(hash_including(${3:key: val}))
-snippet expect_receive_with_anything
-	expect(${1:obj}).to receive(:${2:method}).with(anything())
-snippet expect_receive_and_raise
-	expect(${1:obj}).to receive(:${2:method}).and_raise('${3:an error}')
 # rspec rails
 snippet expect_be_a_new
 	expect(${1:obj}).to be_a_new(${2:Object})
@@ -1856,46 +1798,37 @@ snippet stub instance
 alias any_instance
 options word
 	any_instance.stub(:${1:method}).and_return(${2:return_value})
-# instance.should_receive
-snippet should_receive
-options word
-	should_receive(:${1:message}).and_return(:${2:return_value})
-snippet should_receive args
-options word
-	should_receive(:${1:message}).with(${2:args})
-snippet should_receive anything
-options word
-	should_receive(:${1:message}).with(anything())
-snippet should_receive once
-options word
-	should_receive(:${1:message}).once
-snippet should_receive twice
-options word
-	should_receive(:${1:message}).twice
-snippet should_receive exactly times
-options word
-	should_receive(:${1:message}).exactly(${2:n}).times
-snippet should_receive at_least once
-options word
-	should_receive(:${1:message}).at_least(:once)
-snippet should_receive at_least twice
-options word
-	should_receive(:${1:message}).at_least(:twice)
-snippet should_receive at_least times
-options word
-	should_receive(:${1:message}).at_least(${2:n}).times
-snippet should_receive at_most once
-options word
-	should_receive(:${1:message}).at_most(:once)
-snippet should_receive at_most twice
-options word
-	should_receive(:${1:message}).at_most(:twice)
-snippet should_receive at_most times
-options word
-	should_receive(:${1:message}).at_most(${2:n}).times
-snippet should_receive any_number_of_times
-options word
-	should_receive(:${1:message}).any_number_of_times
+# expect spies/doubles
+snippet expect_have_received
+	expect(${1:instance}).to have_received(:${2:method})
+snippet expect_have_received_with
+	expect(${1:instance}).to have_received(:${2:method}).with(${3:args})
+snippet expect_any_instance_of_receive
+	expect_any_instance_of(${1:Object}).to receive(:${2:method})
+snippet expect_receive_once
+	expect(${1:obj}).to receive(:${2:method}).once
+snippet expect_receive_twice
+	expect(${1:obj}).to receive(:${2:method}).twice
+snippet expect_receive_times
+	expect(${1:obj}).to receive(:${2:method}).exactly(${3:3}).times
+snippet expect_receive_at_least_times
+	expect(${1:obj}).to receive(:${2:method}).at_least(${3:3}).times
+snippet expect_receive_at_most_times
+	expect(${1:obj}).to receive(:${2:method}).at_most(${3:3}).times
+snippet expect_receive_any_number_of_times
+	expect(${1:obj}).to receive(:${2:method}).any_number_of_times
+snippet expect_receive_with
+	expect(${1:obj}).to receive(:${2:method}).with(${3:args})
+snippet expect_receive_with_regex
+	expect(${1:obj}).to receive(:${2:method}).with(/${3:regex}/)
+snippet expect_receive_with_instance_of
+	expect(${1:obj}).to receive(:${2:method}).with(an_instance_of(${3:Object}))
+snippet expect_receive_with_hash
+	expect(${1:obj}).to receive(:${2:method}).with(hash_including(${3:key: val}))
+snippet expect_receive_with_anything
+	expect(${1:obj}).to receive(:${2:method}).with(anything())
+snippet expect_receive_and_raise
+	expect(${1:obj}).to receive(:${2:method}).and_raise('${3:an error}')
 # it is expected shorthands
 snippet it_match
 	it { is_expected.to match(${1}) }
@@ -1962,89 +1895,6 @@ snippet it_set_the_flash
 snippet it_delegate_method
 	it { is_expected.to delegate_method(${1}) }
 
-##########################
-# RSpect Should
-##########################
-snippet its method should
-	its(:${1:method}) { should ${2} }
-snippet it should
-alias itsh
-	it { should ${1} }
-snippet it should_not
-alias itsn
-	it { should_not ${1} }
-#ShouldaMatchers#ActionController
-snippet it should filter_param
-	it { should filter_param :${1:key} }
-snippet it should redirect_to
-	it { should redirect_to ${1:url} }
-snippet it should render_template
-	it { should render_template ${1} }
-snippet it should render_with_layout
-	it { should render_with_layout ${1} }
-snippet it should rescue_from
-	it { should rescue_from ${1:exception} }
-snippet it should respond_with
-	it { should respond_with ${1:status} }
-snippet it should rout
-	it { should route(:${1:method}, '${2:path}') }
-snippet it should set_session
-	it { should set_session :${1:key} }
-snippet it should set_the_flash
-	it { should set_the_flash('${1}') }
-#ShouldaMatchers#ActiveModel
-snippet it should allow_mass_assignment_of
-	it { should allow_mass_assignment_of :${1} }
-snippet it should allow_value
-	it { should allow_value(${1}).for :${2} }
-snippet it should ensure_exclusion_of
-	it { should ensure_exclusion_of :${1} }
-snippet it should ensure_inclusion_of
-	it { should ensure_inclusion_of :${1} }
-snippet it should ensure_length_of
-	it { should ensure_length_of(:${1}).is_at_least(${2}).is_at_most(${3}) }
-snippet it should validate_acceptance_of
-	it { should validate_acceptance_of :${1} }
-snippet it should validate_confirmation_of
-	it { should validate_confirmation_of :${1} }
-snippet it should validate_numericality_of
-	it { should validate_numericality_of :${1} }
-snippet it should validate_presence_of
-	it { should validate_presence_of :${1} }
-snippet it should validate_uniqueness_of
-	it { should validate_uniqueness_of :${1} }
-#ShouldaMatchers#ActiveRecord
-snippet it should accept_nested_attributes_for
-	it { should accept_nested_attributes_for :${1} }
-snippet it should belong_to
-	it { should belong_to :${1} }
-snippet it should belong_to counter
-	it { should belong_to(:${1}).counter_cache ${2:true} }
-snippet it should have_and_belong_to_many
-	it { should have_and_belong_to_many :${1} }
-snippet it should be_valid
-	it { should be_valid }${1}
-snippet it should have_db_column
-	it { should have_db_column :${1} }
-snippet it should have_db_index
-	it { should have_db_index :${1} }
-snippet it should have_many
-	it { should have_many :${1} }
-snippet it should have_many through
-	it { should have_many(:${1}).through :${2} }
-snippet it should have_one
-	it { should have_one :${1} }
-snippet it should have_readonly_attribute
-	it { should have_readonly_attribute :${1} }
-snippet it should serialize
-	it { should serialize :${1} }
-snippet it should respond_to
-	it { should respond_to :${1} }
-snippet it should respond_t
-	it { should respond_to(:${1}).with(${2}).arguments }
-snippet super_call
-	${1:super_class}.instance_method(:${2:method}).bind(self).call
-
 #############################################
 # TomDoc
 #############################################
@@ -2103,6 +1953,7 @@ snippet json except
 
 # Here Document
 snippet heredoc
+alias <<-
 	<<-${1:EOS}
 		${2}
 	$1
