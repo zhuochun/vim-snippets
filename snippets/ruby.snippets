@@ -23,6 +23,20 @@ snippet private
 	private
 
 	${1}
+snippet %q
+	%q{${1:single quoted string}}
+snippet %Q
+	%Q{${1:double quoted string}}
+snippet %w
+	%w{${1:array of strings}}
+snippet %W
+	%W{${1:array of strings}}
+snippet %r
+	%r{${1:regular expression}}
+snippet %s
+	%s{${1:a symbol}}
+snippet %i
+	%i{${1:array of symbols}}
 snippet yield
 alias y
 	yield
@@ -152,12 +166,12 @@ snippet class DelegateClass
 			${5}
 		end
 	end
-snippet class Rails 3 Model
+snippet class Rails 3 ActiveModel
 	class ${1:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`}
+		extend ActiveModel::Naming
+
 		include ActiveModel::Conversion
 		include ActiveModel::Validations
-
-		extend  ActiveModel::Naming
 
 		attr_accessor :${1:attributes}
 
@@ -171,7 +185,7 @@ snippet class Rails 3 Model
 			false
 		end
 	end
-snippet class Rails 4 Model
+snippet class Rails 4 ActiveModel
 alias clr
 	class ${1:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`}
 		include ActiveModel::Model
@@ -328,8 +342,6 @@ snippet instance_eval
 	end
 snippet alias method
 	alias_method :${1:new_name}, :${2:old_name}
-snippet alias attribute
-	alias_attribute :${1:new_name}, :${2:old_name}
 # __
 snippet __e
 	__END__
@@ -337,6 +349,7 @@ snippet __f
 	__FILE__
 snippet __l
 	__LINE__
+# do something only if the code is being implicitly run, not required
 snippet app
 	if __FILE__ == $PROGRAM_NAME
 		${1}
@@ -681,7 +694,23 @@ snippet sinc
 # open io
 snippet open
 	open(${1:'path/or/url/or/pipe'}, '${2:w}') { |${3:io}| ${4} }
-
+# raise ruby exceptions
+snippet raise ArgumentError
+	raise ArgumentError${0}
+snippet raise IOError
+	raise IOError${0}
+snippet raise IndexError
+	raise IndexError${0}
+snippet raise NameError
+	raise NameError${0}
+snippet raise NoMethodError
+	raise NoMethodError${0}
+snippet raise RangeError
+	raise RangeError${0}
+snippet raise RuntimeError
+	raise RuntimeError${0}
+snippet raise ZeroDivisionError
+	raise ZeroDivisionError${0}
 
 #############################################
 # MiniTest
@@ -1076,6 +1105,17 @@ alias pry
 #############################################
 # rake
 #############################################
+snippet gem
+	source 'https://rubygems.org'
+
+	ruby '${1:2.2.2}'
+
+	${2:gem 'rspec', '~> 3.2.0'}
+	${0}
+
+#############################################
+# rake
+#############################################
 snippet namespace rake_task
 	namespace :${1:`vim_snippets#Filename()`} do
 		${2}
@@ -1132,12 +1172,6 @@ snippet haso
 	has_one :${1:object}
 snippet hasod
 	has_one :${1:object}, dependent: :${2:destroy}
-snippet delegate to
-	delegate :${1:methods}, to: :${2:object}
-snippet delegate to prefix
-	delegate :${1:methods}, to: :${2:object}, prefix: ${3:true}
-snippet delegate to allow_nil
-	delegate :${1:methods}, to: :${2:object}, allow_nil: ${3:true}
 # before, around, after
 snippet before validation
 	before_validation :${1:method}
@@ -1166,20 +1200,23 @@ snippet after destroy
 snippet around destroy
 	around_destroy :${1:method}
 # scope
-snippet scope default
-alias defscope
+snippet default_scope
+alias defsco
 	default_scope -> { ${1:scope} }
 snippet scope ->
+alias sco
 	scope :${1:name}, -> { ${2:scope} }
 snippet scope lambda
 	scope :${1:name}, lambda do |${2:value}|
 		${3:scope}
 	end
 # validations
-snippet validator
-	class ${1:What}Validator < ActiveRecord::${2:Each}Validator
+snippet class Validator
+	class ${1:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`} < ActiveRecord::${2:Each}Validator
 		def validate_each(record, attribute, value)
-			${3}
+			if ${3:failed}
+				record.errors[attribute] << (options[:message] || '${4:must have an error message}')
+			end
 		end
 	end
 snippet validate
@@ -1220,16 +1257,59 @@ snippet validates_with
 alias valw
 	validates_with ${1:Some}Validator
 # queries
-snippet where field:value
+snippet where
+options word
 	where(${1:field}: ${2:value})
 snippet where condition
-	where(${1:'conditions'}${2:, bind_var})
+options word
+	where('${1:condition = ?}', ${2:bind_var})
+snippet order
+options word
+	order(${1:field}: :${2:desc})
 snippet order desc
 options word
-	order('${1:field} DESC')
-snippet order field desc
+	order('${1:field} ${2:DESC}')
+snippet join merge
 options word
-	order(${1:field}: :desc${2})
+	joins(:${1:models}).merge(${2:Model.scope})
+snippet includes
+options word
+	includes(:${1:models})
+snippet find_each
+options word
+	find_each(batch_size: ${1:5000}).do |${2:obj}}
+		${3}
+	end
+snippet find_or_initialize_by
+options word
+	find_or_initialize_by(${1:field}: ${2:value})
+snippet find_by_sql
+	find_by_sql <<-SQL
+		${1:SQL}
+	SQL
+snippet persisted?
+	@${1:model}.persisted?${0}
+snippet new_record?
+	@${1:model}.new_record?${0}
+# transaction
+snippet transaction
+	ActiveRecord::Base.transaction do
+		${1:TARGET}
+	end
+snippet transaction model
+	${1:@model}.class.transaction do
+		${2:operation}
+	end
+# ActiveRecord exceptions
+snippet raise RecordInvalid
+	raise ActiveRecord::RecordInvalid${0}
+snippet raise RecordNotFound
+	raise ActiveRecord::RecordNotFound${0}
+snippet raise Rollback
+	raise ActiveRecord::Rollback${0}
+# serialize Hash to text object
+snippet serialize
+	serialize :${1:preferences}, Hash
 
 #############################################
 # Rails controller
@@ -1354,6 +1434,9 @@ alias l
 snippet log
 	${1:Rails.logger}.${2:debug} ${3}
 # Logger
+snippet logger
+	logger = Logger.new(STDOUT)
+	logger.level = Logger::INFO
 snippet logd
 	logger.debug { '${1:message}' }${2}
 snippet loge
@@ -1387,6 +1470,9 @@ snippet respond_to do
 	end
 snippet format
 	format.${1:js|xml|html} { ${2} }
+# active_model_serializers
+snippet format json
+	format.json { render json: @${1:model}, serializer: ${2:Serializer}, status: ${3:status} }
 # render
 snippet render action
 alias ra
@@ -1453,16 +1539,41 @@ alias ru
 	render :update do |${1:page}|
 		$1.${2}
 	end
-# cache
+# xhr
+snippet xdelete
+	xhr :delete, :${1:destroy}, id: ${2:1}${3}
+snippet xget
+	xhr :get, :${1:show}, id: ${2:1}${3}
+snippet xpost
+	xhr :post, :${1:create}, ${2:object}: { ${3} }
+snippet xput
+	xhr :put, :${1:update}, id: ${2:1}, ${3:object}: { ${4} }${5}
+# filter
+snippet before skip filter
+	skip_before_filter :${1:method}
+snippet before filter
+	before_filter :${1:method}
+snippet before action
+alias befa
+	before_action :${1:method}
+snippet only
+	only: [${1:methods}]
+snippet except
+	except: [${1:methods}]
+
+#############################################
+# Rails cache
+#############################################
 snippet cache fetch
-	Rails.cache.fetch([${1:self}, '${2:method}']) { ${3:block} }
+	Rails.cache.fetch(${1:cache_key}) { ${2:block} }
 snippet cache fetch do
-	Rails.cache.fetch([${1:self}, '${2:method}']) do
-		${3:block}
+alias caf
+	Rails.cache.fetch(${1:cache_key}) do
+		${2:TARGET}
 	end
 snippet cache fetch expires_in
-	Rails.cache.fetch([${1:self}, '${2:method}'], expires_in: ${3:30.minutes}) do
-		${3:block}
+	Rails.cache.fetch(${1:cache_key}, expires_in: ${2:30.minutes}, race_condition_ttl: ${3:5.seconds}) do
+		${4:TARGET}
 	end
 snippet cache read
 	Rails.cache.read(${1:key})
@@ -1488,35 +1599,35 @@ snippet sweeper
 			expire_page
 		end
 	end
-# xhr
-snippet xdelete
-	xhr :delete, :${1:destroy}, id: ${2:1}${3}
-snippet xget
-	xhr :get, :${1:show}, id: ${2:1}${3}
-snippet xpost
-	xhr :post, :${1:create}, ${2:object}: { ${3} }
-snippet xput
-	xhr :put, :${1:update}, id: ${2:1}, ${3:object}: { ${4} }${5}
-# filter
-snippet before skip filter
-	skip_before_filter :${1:method}
-snippet before filter
-	before_filter :${1:method}
-snippet before action
-alias befa
-	before_action :${1:method}
-snippet only
-	only: [${1:methods}]
-snippet except
-	except: [${1:methods}]
+
+#############################################
+# ActiveSupport
+#############################################
 snippet to_param
 	def to_param
 		"#{id}-#{${1:name}.parameterize}"
 	end
+snippet with_options
+	with_options only: [:${1:index}] do |list|
+		list.${2:resources} :${3:model}
+	end
+snippet alias_method_chain
+	def ${1:method}_with_${2:feature}(${3:args})
+		${0:code}
+	end
+	alias_method_chain :$1, :$2
+snippet alias_attribute
+	alias_attribute :${1:new_name}, :${2:old_name}
+snippet delegate
+	delegate :${1:methods}, to: :${2:object}
+snippet delegate with prefix
+	delegate :${1:methods}, to: :${2:object}, prefix: ${3:true}
+snippet delegate and allow_nil
+	delegate :${1:methods}, to: :${2:object}, allow_nil: ${3:true}
 
-###########################
-#   route snippets        #
-###########################
+#############################################
+# Rails Route
+#############################################
 snippet root to
 	root to: '${1:home#index}'
 snippet post to
@@ -1549,18 +1660,14 @@ snippet namespace rails_route constraints
 	namespace :${1::v1}, constraints: { subdomain: '$1' } do
 		resources :${2:model}
 	end
-snippet with_options only
-	with_options only: [:${1:index}] do |list|
-		list.${2:resources} :${3:model}
-	end
 snippet concern rails_route
 	concern :${1:concernable} do |options|
 		resources :${2:model}, options
 	end
 
-###########################
-#   migrations snippets   #
-###########################
+#############################################
+# Rails Migrations
+#############################################
 snippet create_table
 	change_table :${1:table_name} do |t|
 		${2}
@@ -1957,7 +2064,7 @@ alias <<-
 	<<-${1:EOS}
 		${2}
 	$1
-snippet heredoc strip
+snippet strip_heredoc
 	<<-${1:END}.strip_heredoc
 		${2}
 	$1

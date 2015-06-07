@@ -214,9 +214,13 @@ alias l
 options word
 	<%=l '${1:type.key}' %>
 # cache helpers
-snippet cache fragment
-	<% cache ${1:key} do %>
+snippet cache
+	<% cache(${1:cache_key}) do %>
 		${2:TARGET}
+	<% end %>
+snippet cache_if
+	<% cache_if(${1:condition}, ${2:cache_key}) do %>
+		${3:TARGET}
 	<% end %>
 # function helpers
 snippet pluralize
