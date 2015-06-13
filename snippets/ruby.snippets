@@ -43,44 +43,54 @@ alias y
 snippet block_given?
 alias bg
 	block_given?
+snippet stdin
+alias gets
+	$stdin.gets.chomp
 snippet begin
 alias beg
 	begin
-		${3}
+		${3:TARGET}
 	rescue ${1:Exception} => ${2:e}
-		puts e.message
-		puts e.backtrace.inspect
+		${0:puts e.message}
 	end
+snippet rescue
+	rescue ${1:Exception} => ${2:e}
+		${0:puts e.message}
 snippet ensure
 	ensure
 		${1:always executed}
 snippet require
 alias req
-	require '${1}'${2}
+	require '${1}'${0}
 snippet require_relative
 alias reqr
-	require_relative '${1}'${2}
+	require_relative '${1}'${0}
+snippet require_absolute
+alias reqa
+	require File.expand_path('../${1}', __FILE__)${0}
+snippet load_path
+	$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), *%w[${1:lib}]))${0}
 snippet :
 	${1:key}: ${2:'value'}
 snippet #
 	# =>
 snippet lambda
 alias lam
-	lambda { |${1:args}| ${2} }
+	lambda { |${1:args}| ${2} }${0}
 snippet ->
-	->(${1:args}) { ${2} }
-snippet do
-	do |${1:v}|
-		${2}
-	end
-snippet do empty
-alias doo
+	->(${1:args}) { ${2} }${0}
+# block
+snippet b
+	{ |${1:var}| ${2} }${0}
+snippet d
 	do
 		${1}
 	end
-# block
-snippet b
-	{ |${1:var}| ${2} }
+snippet do
+	do |${1:var}|
+		${2}
+	end
+# switches
 snippet case
 	case ${1:object}
 	when ${2:condition}
@@ -93,18 +103,18 @@ snippet if
 	if ${1:condition}
 		${2}
 	end
-snippet if else
-alias ife
+snippet ife
 	if ${1:condition}
 		${2}
 	else
 		${3}
 	end
-snippet elseif
-alias eif el
+snippet elif
+alias eif el elseif
 	elsif ${1:condition}
 		${2}
 snippet unless
+alias un
 	unless ${1:condition}
 		${2}
 	end
@@ -120,6 +130,14 @@ snippet for
 snippet until
 	until ${1:condition}
 		${2}
+	end
+snippet loop
+alias lo
+	loop { ${1} }
+snippet loop do
+alias lod
+	loop do
+		${1}
 	end
 # memo
 snippet memo basic
@@ -298,21 +316,20 @@ alias defs
 	def self.${1:class_method_name}
 		${2}
 	end
-snippet def self.[]
-	def self.[](${1:attr})
-		${2}
-	end
+# def initialize
 snippet def init
 alias defi init
 	def initialize(${1:args})
 		${2}
 	end
+# def method_missing
 snippet def method_missing
 alias method_missing
 	def method_missing(method_name, *args, &block)
 		@${1:instance}.send(method_name, *args, &block)
 		super
 	end
+# def respond_to
 snippet def respond_to_missing?
 alias respond_to_missing?
 	def respond_to_missing?(method_name, *args, &block)
@@ -366,14 +383,16 @@ snippet usau
 	end
 # unix_filter {}
 snippet unif
-	ARGF.each_line${1} do |${2:line}|
+	ARGF.each_line(${1}) do |${2:line}|
 		${3}
 	end
 # File/Dir
 snippet file foreach
-	File.foreach(${1:'path/to/file'}) { |${2:line}| ${3} }
+	File.foreach(${1:'path/to/file'}) do |${2:line}|
+		${3}
+	end
 snippet file read
-	File.read(${1:'path/to/file'})${2}
+	File.read(${1:'path/to/file'})
 snippet file dirname
 	File.dirname(${1:__FILE__})
 snippet file path from here
@@ -382,10 +401,14 @@ snippet Dir glob
 	Dir.glob(${1:'dir/glob/*'}) { |${2:file}| ${3} }
 snippet Dir ['..']
 	Dir[${1:'glob/**/*.rb'}]${2}
+# Array/Hash
 snippet array
 	Array.new(${1:10}) { |${2:i}| ${3} }
 snippet hash
 	Hash.new { |${1:hash}, ${2:key}| $1[$2] = ${3} }
+snippet set
+	require 'set'
+# methods
 snippet delete_if
 options word
 	delete_if { |${1:e}| ${2} }
@@ -414,16 +437,6 @@ options word
 snippet upto
 options word
 	upto(${1:1.0/0.0}) { |${2:n}| ${3} }
-snippet loop
-alias lo
-options word
-	loop { ${1} }
-snippet loop do
-alias lod
-options word
-	loop do
-		${1}
-	end
 snippet each
 alias ea
 options word
@@ -689,28 +702,32 @@ snippet xpa
 snippet clafn
 	split('::').inject(Object) { |par, const| par.const_get(const) }
 # singleton_class()
-snippet sinc
+snippet singleton_class
 	class << self; self end
 # open io
 snippet open
 	open(${1:'path/or/url/or/pipe'}, '${2:w}') { |${3:io}| ${4} }
-# raise ruby exceptions
-snippet raise ArgumentError
-	raise ArgumentError${0}
-snippet raise IOError
-	raise IOError${0}
-snippet raise IndexError
-	raise IndexError${0}
-snippet raise NameError
-	raise NameError${0}
-snippet raise NoMethodError
-	raise NoMethodError${0}
-snippet raise RangeError
-	raise RangeError${0}
-snippet raise RuntimeError
-	raise RuntimeError${0}
-snippet raise ZeroDivisionError
-	raise ZeroDivisionError${0}
+# common ruby exceptions
+snippet err ArgumentError
+	ArgumentError
+snippet err IndexError
+	IndexError
+snippet err KeyError
+	KeyError
+snippet err IOError
+	IOError
+snippet err NameError
+	NameError
+snippet err NoMethodError
+	NoMethodError
+snippet err RangeError
+	RangeError
+snippet err TypeError
+	TypeError
+snippet err RuntimeError
+	RuntimeError
+snippet err ZeroDivisionError
+	ZeroDivisionError
 
 #############################################
 # MiniTest
@@ -754,9 +771,12 @@ snippet testcase
 			${3}
 		end
 	end
+
+#############################################
 # Rails API related
+#############################################
 snippet setup host
-	setup { host! '${1:api}.example.com' }
+	setup { host! '${1:api.example.com}' }
 snippet protect_from_forgery
 alias forgery
 	protect_from_forgery with: :null_session
@@ -784,12 +804,12 @@ snippet encode_credentials token
 	ActionController::HttpAuthentication::Token.encode_credentials(${1:token})
 snippet get api
 	get '${1:path}'
-snippet get api format
-	get '${1:path}', {}, {Accept: Mime::${2:JSON}}
+snippet get api accept
+	get '${1:path}', {}, { 'Accept' => Mime::${2:JSON} }${0}
 snippet get api authorization
-	get '${1:path}', {}, {Authorization: ${2:string}, Accept: Mime::${3:JSON}}
-snippet get api language
-	get '${1:path}', {}, {Accept-Language: '${2:en}', Accept: Mime::${3:JSON}}
+	get '${1:path}', {}, { 'Authorization' => ${2:string}, 'Accept': Mime::${3:JSON} }${0}
+snippet get api accept-language
+	get '${1:path}', {}, { 'Accept-Language': '${2:en}', 'Accept': Mime::${3:JSON} }${0}
 snippet post api
 	post '${1:path}',
 		{ ${2:model}: { ${3:contents} } }.to_json,
@@ -800,6 +820,19 @@ snippet patch api
 			{ 'Accept' => Mime::${4:JSON}, 'Content-Type' => Mime::JSON.to_s }
 snippet delete api
 	delete '${1:path}'
+
+#############################################
+# Response
+#############################################
+snippet response status
+alias ress
+	response.status
+snippet response content_type
+alias resc
+	response.content_type
+snippet response body
+alias resb
+	response.body
 
 #############################################
 # Response status
@@ -1103,7 +1136,7 @@ alias pry
 	${1:require 'pry'; }binding.pry${0}
 
 #############################################
-# rake
+# bundler
 #############################################
 snippet gem
 	source 'https://rubygems.org'
