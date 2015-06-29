@@ -132,10 +132,8 @@ snippet until
 		${2}
 	end
 snippet loop
-alias lo
 	loop { ${1} }
 snippet loop do
-alias lod
 	loop do
 		${1}
 	end
@@ -323,22 +321,43 @@ alias defi init
 		${2}
 	end
 # def method_missing
-snippet def method_missing
-alias method_missing
+# adopted form SimpleDelegator
+# https://github.com/ruby/ruby/blob/3f2d575f8c2f9b503afe733010041a55fd8baf37/lib/delegate.rb#L77
+snippet method_missing
 	def method_missing(method_name, *args, &block)
-		@${1:instance}.send(method_name, *args, &block)
-		super
+		if ${1:@instance}.respond_to?(method_name)
+			$1.send(method_name, *args, &block)
+		else
+			super(method_name, *args, &block)
+		end
 	end
-# def respond_to
-snippet def respond_to_missing?
-alias respond_to_missing?
-	def respond_to_missing?(method_name, *args, &block)
-		@${1:instance}.respond_to?(method_name, *args, &block)
+
+	def respond_to_missing?(method_name, include_private)
+		respond_to = $1.respond_to?(method_name, include_private)
+
+		if respond_to && include_private && !$1.respond_to?(method_name, false)
+			warn "#{caller(3)[0]}: does not forward private method \##{m}"
+			return false
+		end
+
+		respond_to
+	end
+# def respond_to_missing
+snippet respond_to_missing?
+	def respond_to_missing?(method_name, include_private)
+		respond_to = $1.respond_to?(method_name, include_private)
+
+		if respond_to && include_private && !$1.respond_to?(method_name, false)
+			warn "#{caller(3)[0]}: does not forward private method \##{m}"
+			return false
+		end
+
+		respond_to
 	end
 # delegator
-snippet def delegator
+snippet def_delegator
 	def_delegator :${1:@del_obj}, :${2:del_meth}, :${3:new_name}
-snippet def delegators
+snippet def_delegators
 	def_delegators :${1:@del_obj}, :${2:del_methods}
 snippet define_method
 	define_method '${1:method_name}' do
@@ -619,12 +638,6 @@ options word
 	find_all do |${1:e}|
 		${2}
 	end
-snippet find_or_initialize_by
-options word
-	find_or_initialize_by(${1:attribute}: ${2:value})
-snippet find_or_create_by
-options word
-	find_or_create_by(${1:attribute}: ${2:value})
 snippet grep
 options word
 	grep(${1:/pattern/}) { |${2:match}| ${3} }
@@ -1316,6 +1329,9 @@ options word
 snippet find_or_initialize_by
 options word
 	find_or_initialize_by(${1:field}: ${2:value})
+snippet find_or_create_by
+options word
+	find_or_create_by(${1:attribute}: ${2:value})
 snippet find_by_sql
 	find_by_sql <<-SQL
 		${1:SQL}
@@ -1464,21 +1480,21 @@ alias i18l
 snippet i18 localize shorthand
 alias l
 	l('${1:type.key}')${2}
-snippet log
-	${1:Rails.logger}.${2:debug} ${3}
 # Logger
 snippet logger
 	logger = Logger.new(STDOUT)
 	logger.level = Logger::INFO
-snippet logd
+snippet log
+	logger.${2:debug} ${3}
+snippet lod
 	logger.debug { '${1:message}' }${2}
-snippet loge
+snippet loe
 	logger.error { '${1:message}' }${2}
-snippet logf
+snippet lof
 	logger.fatal { '${1:message}' }${2}
-snippet logi
+snippet loi
 	logger.info { '${1:message}' }${2}
-snippet logw
+snippet low
 	logger.warn { '${1:message}' }${2}
 # Map
 snippet mapc
@@ -1782,17 +1798,15 @@ snippet rspec feature
 	feature '${1:an action}' do
 		${2:pending 'Not implemented'}
 	end
-snippet describe rspec
+snippet desc rspec
 	RSpec.describe ${1:name} do
 		${2:pending 'Not implemented'}
 	end
-snippet describe
-alias desc
+snippet desc
 	describe ${1:name} do
 		${2:pending 'Not implemented'}
 	end
-snippet context
-alias cont
+snippet cont
 	context '${1:message}' do
 		${2}
 	end
@@ -1802,17 +1816,17 @@ snippet it
 	end
 snippet specify
 	specify { subject.${1} }
-snippet before do
-alias bef
+snippet bef
+	before { ${1} }
+snippet bef do
 	before do
 		${1}
 	end
-snippet before each
+snippet bef each
 	before :${1:each} do
 		${2}
 	end
-snippet after each
-alias aft
+snippet aft each
 	after :${1:each} do
 		${2}
 	end
@@ -1820,10 +1834,9 @@ snippet let
 	let(:${1:object}) { ${2} }
 snippet let!
 	let!(:${1:object}) { ${2} }
-snippet subject {}
-alias subj
+snippet subj
 	subject { ${1} }
-snippet subject object
+snippet subj name
 	subject(:${1:instance}) { ${2} }
 snippet shared_examples
 	shared_examples '${1:shared examples name}' do
@@ -1838,93 +1851,92 @@ alias ibl
 ##########################
 # RSpec Expects
 ##########################
-snippet expect_general
-alias ex
-	expect(${1:target}).to ${2}
 # equal
-snippet expect_eq
-alias ee
+snippet expect_to_eq
+alias exptoeq
 	expect(${1:target}).to eq(${2})
-snippet expect_not_eq
-alias ene
-	expect(${1:target}).not_to eq(${2})
-snippet expect_eql
+snippet expect_to_not_eq
+	expect(${1:target}).to_not eq(${2})
+snippet expect_to_eql
 	expect(${1:target}).to eql(${2})
-snippet expect_not_eql
-	expect(${1:target}).not_to eql(${2})
-snippet expect_equal
+snippet expect_to_not_eql
+	expect(${1:target}).to_not eql(${2})
+snippet expect_to_equal
 	expect(${1:target}).to equal(${2})
-snippet expect_not_equal
-	expect(${1:target}).not_to equal(${2})
+snippet expect_to_not_equal
+	expect(${1:target}).to_not equal(${2})
 # be
-snippet expect_be
+snippet expect_to_be
+alias exptobe exp
 	expect(${1:target}).to be(${2})
-snippet expect_not_be
-	expect(${1:target}).not_to be(${2})
-snippet expect_be_true
+snippet expect_to_not_be
+	expect(${1:target}).to_not be(${2})
+snippet expect_to_be_true
 alias ebt
 	expect(${1:target}).to be_true
-snippet expect_be_false
+snippet expect_to_be_false
 alias ebf
 	expect(${1:target}).to be_false
-snippet expect_be_nil
+snippet expect_to_be_nil
 	expect(${1:target}).to be_nil
-snippet expect_be_within
+snippet expect_to_be_within
 	expect(${1:target}).to be_within(${2:0.1}).of(${3:1.9})
-snippet expect_be_a
+snippet expect_to_be_a
 	expect(${1:target}).to be_a(${2:type})
-snippet expect_be_instance
+snippet expect_to_be_an_instance
 	expect(${1:target}).to be_an_instance_of(${2:type})
 # exists
-snippet expect_exist
+snippet expect_to_exist
 	expect(${1:target}).to exist
 # range change
-snippet expect_change_from_to
+snippet expect_to_change_from_to
 	expect do
 		${1:action}
 	end.to change(${2:target}).from(${3:0}).to(${4:1})
-snippet expect_change_by
+snippet expect_to_change_by
 	expect do
 		${1:action}
 	end.to change(${2:target}).by(${3:1})
 # exception/error
-snippet expect_raise_error
+snippet expect_to_raise_error
 	expect do
 		${1:action}
 	end.to raise_error(${2})
 # match
-snippet expect_match
-alias em
+snippet expect_to_match
 	expect(${1:target}).to match(${2})
+snippet expect_to_match_array
+	expect(${1:target}).to match_array(${2})
 # response to
-snippet expect_response_to
+snippet expect_to_response_to
 	expect(${1:target}).to respond_to(:${2:method})
 # satisfy
-snippet expect_satisfy
+snippet expect_to_satisfy
 	expect(${1:target}).to satisfy { |${2:arg}| ${3} }
 # rspec rails
-snippet expect_be_a_new
+snippet expect_to_be_a_new
 	expect(${1:obj}).to be_a_new(${2:Object})
-snippet expect_render_template
+snippet expect_to_render_template
 	expect(${1:response}).to render_template(${2:'new'})
-snippet expect_render_partial_template
+snippet expect_to_render_partial_template
 	expect(${1:response}).to render_template(partial: ${2:'_form'}, locals: { ${3} })
-snippet expect_redirect_to
+snippet expect_to_redirect_to
 	expect(${1:response}).to redirect_to(${2:path})
-snippet expect_response_with
+snippet expect_to_response_with
 	expect(${1:response.status}).to eq(${2:200})
-snippet expect_have_http_status
+snippet expect_to_have_http_status
 	expect(${1:response}).to have_http_status(${2:200})
 # mock and stub
-snippet allow receive.and_return
+snippet allow_to_receive_and_return
+alias alltorec
 	allow(${1:mock}).to receive(:${2:method}).and_return(${3:result})
-snippet allow receive {}
+snippet allow_to_receive_and_return {}
 	allow(${1:mock}).to receive(:${2:method}) { ${3:result} }
-snippet allow receive_message_chain
+snippet allow_to_receive_message_chain
 	allow(${1:mock}).to receive_message_chain(:${2:method1}, :${3:method2})
-snippet allow any_instance
+snippet allow_any_instance_to_receive
 	allow_any_instance_of(${1:Class}).to receive(:${2:method}) { ${3:result} }
-# instance.stub
+# instance.stub (Deprecated)
 snippet stub
 options word
 	stub(${1:method}: ${2:return})
@@ -1935,104 +1947,106 @@ snippet stub chain
 options word
 	stub_chain(:${1:one}, :${2:two}).and_return(${3:return_value})
 snippet stub instance
-alias any_instance
 options word
 	any_instance.stub(:${1:method}).and_return(${2:return_value})
 # expect spies/doubles
-snippet expect_have_received
+snippet expect_to_have_received
 	expect(${1:instance}).to have_received(:${2:method})
-snippet expect_have_received_with
+snippet expect_to_have_received_with
 	expect(${1:instance}).to have_received(:${2:method}).with(${3:args})
-snippet expect_any_instance_of_receive
+snippet expect_to_any_instance_of_receive
 	expect_any_instance_of(${1:Object}).to receive(:${2:method})
-snippet expect_receive_once
+snippet expect_to_receive_once
 	expect(${1:obj}).to receive(:${2:method}).once
-snippet expect_receive_twice
+snippet expect_to_receive_twice
 	expect(${1:obj}).to receive(:${2:method}).twice
-snippet expect_receive_times
+snippet expect_to_receive_times
 	expect(${1:obj}).to receive(:${2:method}).exactly(${3:3}).times
-snippet expect_receive_at_least_times
+snippet expect_to_receive_at_least_times
 	expect(${1:obj}).to receive(:${2:method}).at_least(${3:3}).times
-snippet expect_receive_at_most_times
+snippet expect_to_receive_at_most_times
 	expect(${1:obj}).to receive(:${2:method}).at_most(${3:3}).times
-snippet expect_receive_any_number_of_times
+snippet expect_to_receive_any_number_of_times
 	expect(${1:obj}).to receive(:${2:method}).any_number_of_times
-snippet expect_receive_with
+snippet expect_to_receive_with
+alias exptorec
 	expect(${1:obj}).to receive(:${2:method}).with(${3:args})
-snippet expect_receive_with_regex
+snippet expect_to_receive_with_regex
 	expect(${1:obj}).to receive(:${2:method}).with(/${3:regex}/)
-snippet expect_receive_with_instance_of
+snippet expect_to_receive_with_an_instance_of
 	expect(${1:obj}).to receive(:${2:method}).with(an_instance_of(${3:Object}))
-snippet expect_receive_with_hash
+snippet expect_to_receive_with_hash
 	expect(${1:obj}).to receive(:${2:method}).with(hash_including(${3:key: val}))
-snippet expect_receive_with_anything
+snippet expect_to_receive_with_anything
 	expect(${1:obj}).to receive(:${2:method}).with(anything())
-snippet expect_receive_and_raise
+snippet expect_to_receive_and_raise
 	expect(${1:obj}).to receive(:${2:method}).and_raise('${3:an error}')
 # it is expected shorthands
-snippet it_match
+snippet it_expect_to_respond_to
+	it { is_expected.to respond_to(:${1}) }
+snippet it_expect_to_match
 	it { is_expected.to match(${1}) }
-snippet it_allow_mass_assignment_of
+snippet it_expect_to_allow_mass_assignment_of
 	it { is_expected.to allow_mass_assignment_of(${1}) }
-snippet it_allow_value
+snippet it_expect_to_allow_value
 	it { is_expected.to allow_value(${1}) }
-snippet it_validate_inclusion_of
+snippet it_expect_to_validate_inclusion_of
 	it { is_expected.to validate_inclusion_of(${1}) }
-snippet it_validate_exclusion_of
+snippet it_expect_to_validate_exclusion_of
 	it { is_expected.to validate_exclusion_of(${1}) }
-snippet it_ensure_length_of
+snippet it_expect_to_ensure_length_of
 	it { is_expected.to ensure_length_of(${1}) }
-snippet it_have_secure_password
+snippet it_expect_to_have_secure_password
 	it { is_expected.to have_secure_password(${1}) }
-snippet it_validate_confirmation_of
+snippet it_expect_to_validate_confirmation_of
 	it { is_expected.to validate_confirmation_of(${1}) }
-snippet it_validate_numericality_of
+snippet it_expect_to_validate_numericality_of
 	it { is_expected.to validate_numericality_of(${1}) }
-snippet it_validate_presence_of
+snippet it_expect_to_validate_presence_of
 	it { is_expected.to validate_presence_of(${1}) }
-snippet it_validate_uniqueness_of
+snippet it_expect_to_validate_uniqueness_of
 	it { is_expected.to validate_uniqueness_of(${1}) }
-snippet it_accept_nested_attributes_for
+snippet it_expect_to_accept_nested_attributes_for
 	it { is_expected.to accept_nested_attributes_for(${1}) }
-snippet it_belong_to
+snippet it_expect_to_belong_to
 	it { is_expected.to belong_to(${1}) }
-snippet it_define_enum_for
+snippet it_expect_to_define_enum_for
 	it { is_expected.to define_enum_for(${1}) }
-snippet it_have_many
+snippet it_expect_to_have_many
 	it { is_expected.to have_many(${1}) }
-snippet it_have_one
+snippet it_expect_to_have_one
 	it { is_expected.to have_one(${1}) }
-snippet it_have_and_belong_to_many
+snippet it_expect_to_have_and_belong_to_many
 	it { is_expected.to have_and_belong_to_many(${1}) }
-snippet it_have_db_column
+snippet it_expect_to_have_db_column
 	it { is_expected.to have_db_column(${1}) }
-snippet it_have_db_index
+snippet it_expect_to_have_db_index
 	it { is_expected.to have_db_index(${1}) }
-snippet it_have_readonly_attribute
+snippet it_expect_to_have_readonly_attribute
 	it { is_expected.to have_readonly_attribute(${1}) }
-snippet it_serialize
+snippet it_expect_to_serialize
 	it { is_expected.to serialize(${1}) }
-snippet it_filter_param
+snippet it_expect_to_filter_param
 	it { is_expected.to filter_param(${1}) }
-snippet it_redirect_to
+snippet it_expect_to_redirect_to
 	it { is_expected.to redirect_to(${1}) }
-snippet it_render_template
+snippet it_expect_to_render_template
 	it { is_expected.to render_template(${1}) }
-snippet it_render_with_layout
+snippet it_expect_to_render_with_layout
 	it { is_expected.to render_with_layout(${1}) }
-snippet it_rescue_from
+snippet it_expect_to_rescue_from
 	it { is_expected.to rescue_from(${1}) }
-snippet it_respond_with
+snippet it_expect_to_respond_with
 	it { is_expected.to respond_with(${1}) }
-snippet it_respond_with_content_type
+snippet it_expect_to_respond_with_content_type
 	it { is_expected.to respond_with_content_type(${1::json}) }
-snippet it_route
+snippet it_expect_to_route
 	it { is_expected.to route(${1}) }
-snippet it_set_session
+snippet it_expect_to_set_session
 	it { is_expected.to set_session(${1}) }
-snippet it_set_the_flash
+snippet it_expect_to_set_flash
 	it { is_expected.to set_the_flash(${1}) }
-snippet it_delegate_method
+snippet it_expect_to_delegate_method
 	it { is_expected.to delegate_method(${1}) }
 
 #############################################
@@ -2132,18 +2146,18 @@ snippet scenario js:true
 	scenario '${1:use case}', js: true do
 		${2}
 	end
-snippet expect_have_content
+snippet expect_to_have_content
 alias hc
 	expect(page).to have_content(${1})
-snippet expect_current_path
+snippet expect_to_current_path
 	expect(current_path).to eq(${1})
-snippet expect_has_selector
+snippet expect_to_has_selector
 	expect(page).to have_selector(${1})
-snippet expect_has_xpath
+snippet expect_to_has_xpath
 	expect(page).to have_xpath(${1})
-snippet expect_has_css
+snippet expect_to_has_css
 	expect(page).to have_css(${1})
-snippet expect_checked
+snippet expect_to_checked
 	expect(find('${1:selector}').checked?).to be_true
 snippet visit
 alias vi
