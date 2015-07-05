@@ -787,7 +787,40 @@ snippet testcase
 
 #############################################
 # Rails API related
+# https://labs.kollegorna.se/blog/2015/04/build-an-api-now/
 #############################################
+snippet api controller
+	class API::${1:V1}::BaseController < ApplicationController
+		protect_from_forgery with: :null_session
+
+		before_action :destroy_session
+		before_action :authenticate_user!
+
+		protected
+
+		def authenticate_user!
+			token, options = ActionController::HttpAuthentication::Token.token_and_options(request)
+
+			user_email = options.blank?? nil : options[:email]
+			user = user_email && User.find_by(email: user_email)
+
+			if user && ActiveSupport::SecurityUtils.secure_compare(user.authentication_token, token)
+				@current_user = user
+			else
+				return unauthenticated!
+			end
+		end
+
+		def destroy_session
+			request.session_options[:skip] = true
+		end
+	end
+snippet api route
+	namespace :api do
+		namespace :${1:v1} do
+			${0}
+		end
+	end
 snippet setup host
 	setup { host! '${1:api.example.com}' }
 snippet protect_from_forgery
@@ -1138,15 +1171,15 @@ alias ips
 #############################################
 # debugging
 #############################################
-snippet debugger byebug
-alias bye
+snippet byebug
+options head
 	byebug
-snippet debugger pry-remote
-alias pry-remote
-	${1:require 'pry-remote'; }binding.remote_pry${0}
-snippet debugger pry
-alias pry
-	${1:require 'pry'; }binding.pry${0}
+snippet pry-remote
+options head
+	binding.remote_pry
+snippet pry
+options head
+	binding.pry
 
 #############################################
 # bundler
@@ -1605,6 +1638,8 @@ snippet before filter
 snippet before action
 alias befa
 	before_action :${1:method}
+snippet rescue_from
+	rescue_from ${1:ActiveRecord::RecordNotFound}, with: :${2:method}
 snippet only
 	only: [${1:methods}]
 snippet except
@@ -1901,7 +1936,7 @@ snippet expect_to_change_by
 snippet expect_to_raise_error
 	expect do
 		${1:action}
-	end.to raise_error(${2})
+	end.to raise_error(${2:SystemExit})
 # match
 snippet expect_to_match
 	expect(${1:target}).to match(${2})
@@ -1912,7 +1947,21 @@ snippet expect_to_response_to
 	expect(${1:target}).to respond_to(:${2:method})
 # satisfy
 snippet expect_to_satisfy
-	expect(${1:target}).to satisfy { |${2:arg}| ${3} }
+	expect(${1:target}).to satisfy { |${2:obj}| ${3} }
+# output
+snippet expect_to_output
+	expect do
+		${1:target}
+	end.to output('${2:message}').to_stdout
+# yield control
+snippet expect_to_yield
+	expect do |block|
+		${1:target(&block)}
+	end.to yield_control
+snippet expect_to_yield_exactly_times
+	expect do |block|
+		${1:target(&block)}
+	end.to yield_control.exactly(${2:2}).times
 # rspec rails
 snippet expect_to_be_a_new
 	expect(${1:obj}).to be_a_new(${2:Object})
@@ -1928,7 +1977,6 @@ snippet expect_to_have_http_status
 	expect(${1:response}).to have_http_status(${2:200})
 # mock and stub
 snippet allow_to_receive_and_return
-alias alltorec
 	allow(${1:mock}).to receive(:${2:method}).and_return(${3:result})
 snippet allow_to_receive_and_return {}
 	allow(${1:mock}).to receive(:${2:method}) { ${3:result} }
@@ -1951,16 +1999,16 @@ options word
 	any_instance.stub(:${1:method}).and_return(${2:return_value})
 # expect spies/doubles
 snippet expect_to_have_received
-	expect(${1:instance}).to have_received(:${2:method})
+	expect(${1:obj}).to have_received(:${2:method})
 snippet expect_to_have_received_with
-	expect(${1:instance}).to have_received(:${2:method}).with(${3:args})
+	expect(${1:obj}).to have_received(:${2:method}).with(${3:args})
 snippet expect_to_any_instance_of_receive
 	expect_any_instance_of(${1:Object}).to receive(:${2:method})
 snippet expect_to_receive_once
 	expect(${1:obj}).to receive(:${2:method}).once
 snippet expect_to_receive_twice
 	expect(${1:obj}).to receive(:${2:method}).twice
-snippet expect_to_receive_times
+snippet expect_to_receive_exactly_times
 	expect(${1:obj}).to receive(:${2:method}).exactly(${3:3}).times
 snippet expect_to_receive_at_least_times
 	expect(${1:obj}).to receive(:${2:method}).at_least(${3:3}).times
@@ -1969,8 +2017,9 @@ snippet expect_to_receive_at_most_times
 snippet expect_to_receive_any_number_of_times
 	expect(${1:obj}).to receive(:${2:method}).any_number_of_times
 snippet expect_to_receive_with
-alias exptorec
 	expect(${1:obj}).to receive(:${2:method}).with(${3:args})
+snippet expect_to_receive_with_and_return
+	expect(${1:obj}).to receive(:${2:method}).with(${3:args}).and_return(${4:result})
 snippet expect_to_receive_with_regex
 	expect(${1:obj}).to receive(:${2:method}).with(/${3:regex}/)
 snippet expect_to_receive_with_an_instance_of
