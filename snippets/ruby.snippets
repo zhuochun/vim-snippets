@@ -1129,43 +1129,67 @@ options word
 # Benchmark
 #############################################
 snippet benchmark_measure
-alias bmm
+options head
 	puts Benchmark.measure do
 		${1:code}
 	end
 snippet benchmark_bm
+alias bm
+options head
+	require 'benchmark'
+
+	times = ${1:50}_000.times
 	Benchmark.bm do |x|
-		x.report('${1:name}:') { ${2:code} }
+		x.report('${2:name}:') do
+			times.each do
+				${3:code}
+			end
+		end
 	end
 snippet benchmark_bmbm
+alias bmbm
+options head
+	require 'benchmark'
+
+	times = ${1:50}_000.times
 	Benchmark.bmbm do |x|
-		x.report('${1:name}:') { ${2:code} }
+		x.report('${2:name}:') do
+			times.each do
+				${3:code}
+			end
+		end
 	end
-snippet benchmark_report
-alias xre
-	x.report('${1:name}:') { ${2:code} }
 snippet benchmark_report do
-alias xred
+alias xre
+options head
 	x.report('${1:name}:') do
 		${2:code}
 	end
+snippet benchmark_report
+options head
+	x.report('${1:name}:') { ${2:code} }
 
 #############################################
 # benchmark-ips
 #############################################
 snippet benchmark_ips
-alias ips
+alias bmips
+options head
 	require 'benchmark/ips'
 
 	Benchmark.ips do |x|
-		# Configure the number of seconds used during
-		# the warmup phase (default $1) and calculation phase (default $2)
-		x.config(warmup: ${1:2}, time: ${2:5})
+		x.config(time: ${1:3}.seconds, warmup: ${2:1}.seconds)
 
-		x.report('${3:name}:') { ${4:code} }
+		x.report('${3:name}:') do
+			${4:code}
+		end
 
-		# Compare the iterations per second of the various reports!
 		x.compare!
+	end
+snippet benchmark_report time
+options head
+	x.report('${1:name}:') do |time|
+		${2:code}
 	end
 
 #############################################
