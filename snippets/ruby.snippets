@@ -9,7 +9,7 @@ alias shebang
 	#!/usr/bin/env ruby
 	# encoding: utf-8
 	${1}
-snippet #! rb
+snippet #! -wKU
 	#!/usr/bin/env ruby -wKU
 snippet =b
 	=begin rdoc
@@ -37,12 +37,6 @@ snippet %s
 	%s{${1:a symbol}}
 snippet %i
 	%i{${1:array of symbols}}
-snippet yield
-alias y
-	yield
-snippet block_given?
-alias bg
-	block_given?
 snippet stdin
 alias gets
 	$stdin.gets.chomp
@@ -75,9 +69,9 @@ snippet :
 snippet #
 	# =>
 snippet lambda
-alias lam
 	lambda { |${1:args}| ${2} }${0}
 snippet ->
+alias lam
 	->(${1:args}) { ${2} }${0}
 # block
 snippet b
@@ -90,6 +84,12 @@ snippet do
 	do |${1:var}|
 		${2}
 	end
+snippet yield
+alias y
+	yield
+snippet block_given?
+alias bg
+	block_given?
 # switches
 snippet case
 	case ${1:object}
@@ -456,6 +456,7 @@ options word
 snippet upto
 options word
 	upto(${1:1.0/0.0}) { |${2:n}| ${3} }
+# Enumerable
 snippet each
 alias ea
 options word
@@ -539,36 +540,22 @@ options word
 	each_with_index do |${1:e}, ${2:i}|
 		${3}
 	end
-snippet eawo
+snippet each_with_object
+alias eawo
 options word
-	each_with_object(${1:init}) { |${2:e}, ${3:var}| ${4} }
-snippet eawod
+	each_with_object(${1:obj}) { |${2:e}, ${3:memo}| ${4} }
+snippet each_with_object do
+alias eawod
 options word
-	each_with_object(${1:init}) do |${2:e}, ${3:var}|
+	each_with_object(${1:obj}) do |${2:e}, ${3:memo}|
 		${4}
-	end
-snippet reve
-options word
-	reverse_each { |${1:e}| ${2} }
-snippet reved
-options word
-	reverse_each do |${1:e}|
-		${2}
 	end
 snippet inject
 options word
-	inject(${1:init}) { |${2:mem}, ${3:var}| ${4} }
+	inject(${1:init}) { |${2:memo}, ${3:var}| ${4} }
 snippet inject do
 options word
-	inject(${1:init}) do |${2:mem}, ${3:var}|
-		${4}
-	end
-snippet reduce
-options word
-	reduce(${1:init}) { |${2:mem}, ${3:var}| ${4} }
-snippet reduce do
-options word
-	reduce(${1:init}) do |${2:mem}, ${3:var}|
+	inject(${1:init}) do |${2:memo}, ${3:var}|
 		${4}
 	end
 snippet map
@@ -577,7 +564,7 @@ options word
 snippet map method
 options word
 	map(&:${1:id})
-snippet map do block
+snippet map do
 options word
 	map do |${1:e}|
 		${2}
@@ -585,15 +572,6 @@ options word
 snippet mapwi-
 options word
 	enum_with_index.map { |${1:e}, ${2:i}| ${3} }
-snippet sort
-options word
-	sort { |a, b| ${1} }
-snippet sort_by
-options word
-	sort_by { |${1:e}| ${2} }
-snippet ran
-options word
-	sort_by { rand }
 snippet all
 options word
 	all? { |${1:e}| ${2} }
@@ -619,6 +597,9 @@ options word
 	detect do |${1:e}|
 		${2}
 	end
+snippet drop_while
+options word
+	drop_while { |${1:e}| ${2} }
 snippet fetch
 options word
 	fetch(${1:name}) { |${2:key}| ${3} }
@@ -638,9 +619,20 @@ options word
 	find_all do |${1:e}|
 		${2}
 	end
+snippet find_index
+options word
+	find_index { |${1:e}| ${2} }
+snippet find_index do
+options word
+	find_index do |${1:e}|
+		${2}
+	end
 snippet grep
 options word
 	grep(${1:/pattern/}) { |${2:match}| ${3} }
+snippet group_by
+options word
+	group_by { |${1:e}| ${2} }
 snippet sub
 options word
 	${1:g}sub(${2:/pattern/}) { |${3:match}| ${4} }
@@ -658,6 +650,9 @@ options word
 snippet min
 options word
 	min { |a, b| ${1} }
+snippet minmax
+options word
+	minmax { |a, b| ${1} }
 snippet partition
 options word
 	partition { |${1:e}| ${2} }
@@ -666,12 +661,30 @@ options word
 	partition do |${1:e}|
 		${2}
 	end
+snippet reduce
+options word
+	reduce(${1:init}) { |${2:memo}, ${3:var}| ${4} }
+snippet reduce do
+options word
+	reduce(${1:init}) do |${2:memo}, ${3:var}|
+		${4}
+	end
 snippet reject
 options word
 	reject { |${1:e}| ${2} }
 snippet reject do
 options word
 	reject do |${1:e}|
+		${2}
+	end
+snippet reverse_each
+alias reve
+options word
+	reverse_each { |${1:e}| ${2} }
+snippet reverse_each do
+alias reved
+options word
+	reverse_each do |${1:e}|
 		${2}
 	end
 snippet select
@@ -683,6 +696,18 @@ options word
 	select do |${1:e}|
 		${2}
 	end
+snippet sort
+options word
+	sort { |a, b| ${1} }
+snippet sort_by
+options word
+	sort_by { |${1:e}| ${2} }
+snippet sort_by rand
+options word
+	sort_by { rand }
+snippet take_while
+options word
+	take_while { |${1:e}| ${2} }
 # option_parse {}
 snippet optp
 	require 'optparse'
@@ -1215,6 +1240,10 @@ snippet gem
 
 	${2:gem 'rspec', '~> 3.2.0'}
 	${0}
+snippet group
+	group :${2:development} do
+		${1:TARGET}
+	end
 
 #############################################
 # rake
