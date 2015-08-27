@@ -948,6 +948,16 @@ snippet status 500 internal_server_error
 	:internal_server_error
 
 #############################################
+# ActiveSupport
+#############################################
+snippet deprecate warn
+	ActiveSupport::Deprecation.warn("${1:message}")
+snippet deprecate method
+	ActiveSupport::Deprecation.deprecated_method_warning(${1:method_name}, ${2:message = nil})
+snippet deprecate methods
+	ActiveSupport::Deprecation.deprecate_methods(${1:target_module}, ${2:*method_names})
+
+#############################################
 # Assertions
 #############################################
 snippet assert
@@ -1248,11 +1258,11 @@ snippet group
 #############################################
 # rake
 #############################################
-snippet namespace rake_task
+snippet namespace rake
 	namespace :${1:`vim_snippets#Filename()`} do
 		${2}
 	end
-snippet task default
+snippet task
 	desc '${1:description}'
 	task ${2:name}: [:${3:environment}] do
 		${4}
@@ -1260,20 +1270,20 @@ snippet task default
 snippet task with args
 	desc '${1:description}'
 	task ${2:name}, [:${3:arg}] do |t, args|
-		args.with_defaults($3: $4)
+		args.with_defaults($3: ${4})
 		${5}
 	end
-snippet task with args and prerequisites
+snippet task with prerequisite args
 	desc '${1:description}'
 	task ${2:name}, [:${3:arg}] => [:${4:prereq}] do |t, args|
-		args.with_defaults($3: $5)
+		args.with_defaults($3: ${5})
 		${6}
 	end
 snippet task file
 	file '${1:output}' => ['${2:dependent}'] do |t|
 		${3}
 	end
-snippet rake
+snippet rake execute
 	Rake::Task['${1:task_name}'].${2:execute}
 
 #############################################
@@ -1894,7 +1904,8 @@ snippet desc
 	describe ${1:name} do
 		${2:pending 'Not implemented'}
 	end
-snippet cont
+snippet context
+alias cont
 	context '${1:message}' do
 		${2}
 	end
@@ -1941,7 +1952,7 @@ alias ibl
 ##########################
 # equal
 snippet expect_to_eq
-alias exptoeq
+alias expteq
 	expect(${1:target}).to eq(${2})
 snippet expect_to_not_eq
 	expect(${1:target}).to_not eq(${2})
@@ -1955,7 +1966,7 @@ snippet expect_to_not_equal
 	expect(${1:target}).to_not equal(${2})
 # be
 snippet expect_to_be
-alias exptobe exp
+alias exptbe
 	expect(${1:target}).to be(${2})
 snippet expect_to_not_be
 	expect(${1:target}).to_not be(${2})
@@ -1966,35 +1977,47 @@ snippet expect_to_be_false
 alias ebf
 	expect(${1:target}).to be_false
 snippet expect_to_be_nil
+alias ebn
 	expect(${1:target}).to be_nil
 snippet expect_to_be_within
 	expect(${1:target}).to be_within(${2:0.1}).of(${3:1.9})
 snippet expect_to_be_a
 	expect(${1:target}).to be_a(${2:type})
-snippet expect_to_be_an_instance
+snippet expect_to_be_instance_of
 	expect(${1:target}).to be_an_instance_of(${2:type})
+# arrays
+snippet expect_to_include
+	expect(${1:target}).to include(${2:itemA, itemB})
+snippet expect_to_match_array
+	expect(${1:target}).to match_array(${2:[]})
+snippet expect_to_contain_exactly
+	expect(${1:target}).to contain_exactly(${2:itemA, itemB})
 # exists
 snippet expect_to_exist
 	expect(${1:target}).to exist
 # range change
-snippet expect_to_change_from_to
-	expect do
-		${1:action}
-	end.to change(${2:target}).from(${3:0}).to(${4:1})
+snippet expect_to_change
+	expect { ${1:action} }.to change{ ${2:behaviour} }
 snippet expect_to_change_by
 	expect do
 		${1:action}
-	end.to change(${2:target}).by(${3:1})
+	end.to change{ ${2:target.behaviour} }.by(${3:1})
+snippet expect_to_change_from_to
+	expect do
+		${1:action}
+	end.to change{ ${2:target.behaviour} }.from(${3:old_state}).to(${4:new_state})
 # exception/error
 snippet expect_to_raise_error
 	expect do
 		${1:action}
 	end.to raise_error(${2:SystemExit})
+snippet expect_to_raise_exception
+	expect do
+		${1:action}
+	end.to raise_exception(${2:SystemExit})
 # match
 snippet expect_to_match
 	expect(${1:target}).to match(${2})
-snippet expect_to_match_array
-	expect(${1:target}).to match_array(${2})
 # response to
 snippet expect_to_response_to
 	expect(${1:target}).to respond_to(:${2:method})

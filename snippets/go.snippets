@@ -210,16 +210,10 @@ snippet sw
 	}
 snippet sp
 	fmt.Sprintf("%${1:s}", ${2:var})${3}
-# true
-snippet t
-	true
-# variable declaration
-snippet v
-	var ${1:t} ${2:string}
-# goroutine named function
-snippet g
+# go
+snippet go
 	go ${1:funcName}(${2})
-# goroutine anonymous function 
+# goroutine anonymous function
 snippet ga
 	go func(${1} ${2:type}) {
 		${3:/* code */}
