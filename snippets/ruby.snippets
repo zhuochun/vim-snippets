@@ -952,7 +952,7 @@ snippet status 500 internal_server_error
 #############################################
 snippet deprecate warn
 	ActiveSupport::Deprecation.warn("${1:message}")
-snippet deprecate method
+snippet deprecate method_warning
 	ActiveSupport::Deprecation.deprecated_method_warning(${1:method_name}, ${2:message = nil})
 snippet deprecate methods
 	ActiveSupport::Deprecation.deprecate_methods(${1:target_module}, ${2:*method_names})
@@ -1896,21 +1896,28 @@ snippet rspec feature
 	feature '${1:an action}' do
 		${2:pending 'Not implemented'}
 	end
-snippet desc rspec
-	RSpec.describe ${1:name} do
-		${2:pending 'Not implemented'}
-	end
 snippet desc
 	describe ${1:name} do
 		${2:pending 'Not implemented'}
 	end
-snippet context
-alias cont
-	context '${1:message}' do
+snippet desc rspec
+	RSpec.describe ${1:name} do
+		${2:pending 'Not implemented'}
+	end
+snippet desc instance method
+	describe '#${1:instance_method}' do
+		${2:pending 'Not implemented'}
+	end
+snippet desc class method
+	describe '.${1:class_method}' do
+		${2:pending 'Not implemented'}
+	end
+snippet cont
+	context '${1:when something happened}' do
 		${2}
 	end
 snippet it
-	it '${1:spec_name}' do
+	it '${1:does something}' do
 		${2}
 	end
 snippet specify
@@ -1937,22 +1944,24 @@ snippet subj
 	subject { ${1} }
 snippet subj name
 	subject(:${1:instance}) { ${2} }
+# shared examples
 snippet shared_examples
-	shared_examples '${1:shared examples name}' do
-		it '${2:does something}' do
-			${3}
-		end
+	shared_examples '${1:shared example name}' do
+		${2:pending 'Not implemented'}
+	end
+snippet shared_examples args
+	shared_examples '${1:shared example name}' do |${2:args}|
+		${3:pending 'Not implemented'}
 	end
 snippet it_behaves_like
-alias ibl
-	it_behaves_like '${1:shared examples name}'
+	it_behaves_like '${1:shared example name}'
 
 ##########################
 # RSpec Expects
 ##########################
 # equal
 snippet expect_to_eq
-alias expteq
+alias ete
 	expect(${1:target}).to eq(${2})
 snippet expect_to_not_eq
 	expect(${1:target}).to_not eq(${2})
@@ -1966,18 +1975,15 @@ snippet expect_to_not_equal
 	expect(${1:target}).to_not equal(${2})
 # be
 snippet expect_to_be
-alias exptbe
+alias etb
 	expect(${1:target}).to be(${2})
 snippet expect_to_not_be
 	expect(${1:target}).to_not be(${2})
 snippet expect_to_be_true
-alias ebt
 	expect(${1:target}).to be_true
 snippet expect_to_be_false
-alias ebf
 	expect(${1:target}).to be_false
 snippet expect_to_be_nil
-alias ebn
 	expect(${1:target}).to be_nil
 snippet expect_to_be_within
 	expect(${1:target}).to be_within(${2:0.1}).of(${3:1.9})
@@ -2054,6 +2060,8 @@ snippet expect_to_have_http_status
 # mock and stub
 snippet allow_to_receive_and_return
 	allow(${1:mock}).to receive(:${2:method}).and_return(${3:result})
+snippet allow_to_receive_with_and_return
+	allow(${1:mock}).to receive(:${2:method}).with(${3:args}).and_return(${4:result})
 snippet allow_to_receive_and_return {}
 	allow(${1:mock}).to receive(:${2:method}) { ${3:result} }
 snippet allow_to_receive_message_chain
@@ -2078,7 +2086,7 @@ snippet expect_to_have_received
 	expect(${1:obj}).to have_received(:${2:method})
 snippet expect_to_have_received_with
 	expect(${1:obj}).to have_received(:${2:method}).with(${3:args})
-snippet expect_to_any_instance_of_receive
+snippet expect_any_instance_of_receive
 	expect_any_instance_of(${1:Object}).to receive(:${2:method})
 snippet expect_to_receive_once
 	expect(${1:obj}).to receive(:${2:method}).once
@@ -2107,71 +2115,73 @@ snippet expect_to_receive_with_anything
 snippet expect_to_receive_and_raise
 	expect(${1:obj}).to receive(:${2:method}).and_raise('${3:an error}')
 # it is expected shorthands
-snippet it_expect_to_respond_to
+snippet itis_expected_to
+	it { is_expected.to ${1} }
+snippet itis_expect_to_respond_to
 	it { is_expected.to respond_to(:${1}) }
-snippet it_expect_to_match
+snippet itis_expect_to_match
 	it { is_expected.to match(${1}) }
-snippet it_expect_to_allow_mass_assignment_of
+snippet itis_expect_to_allow_mass_assignment_of
 	it { is_expected.to allow_mass_assignment_of(${1}) }
-snippet it_expect_to_allow_value
-	it { is_expected.to allow_value(${1}) }
-snippet it_expect_to_validate_inclusion_of
-	it { is_expected.to validate_inclusion_of(${1}) }
-snippet it_expect_to_validate_exclusion_of
-	it { is_expected.to validate_exclusion_of(${1}) }
-snippet it_expect_to_ensure_length_of
-	it { is_expected.to ensure_length_of(${1}) }
-snippet it_expect_to_have_secure_password
-	it { is_expected.to have_secure_password(${1}) }
-snippet it_expect_to_validate_confirmation_of
-	it { is_expected.to validate_confirmation_of(${1}) }
-snippet it_expect_to_validate_numericality_of
-	it { is_expected.to validate_numericality_of(${1}) }
-snippet it_expect_to_validate_presence_of
-	it { is_expected.to validate_presence_of(${1}) }
-snippet it_expect_to_validate_uniqueness_of
-	it { is_expected.to validate_uniqueness_of(${1}) }
-snippet it_expect_to_accept_nested_attributes_for
+snippet itis_expect_to_accept_nested_attributes_for
 	it { is_expected.to accept_nested_attributes_for(${1}) }
-snippet it_expect_to_belong_to
-	it { is_expected.to belong_to(${1}) }
-snippet it_expect_to_define_enum_for
+snippet itis_expect_to_allow_value
+	it { is_expected.to allow_value(${1}) }
+snippet itis_expect_to_define_enum_for
 	it { is_expected.to define_enum_for(${1}) }
-snippet it_expect_to_have_many
+snippet itis_expect_to_ensure_length_of
+	it { is_expected.to ensure_length_of(${1}) }
+snippet itis_expect_to_have_secure_password
+	it { is_expected.to have_secure_password(${1}) }
+snippet itis_expect_to_validate_inclusion_of
+	it { is_expected.to validate_inclusion_of(${1}) }
+snippet itis_expect_to_validate_exclusion_of
+	it { is_expected.to validate_exclusion_of(${1}) }
+snippet itis_expect_to_validate_confirmation_of
+	it { is_expected.to validate_confirmation_of(${1}) }
+snippet itis_expect_to_validate_numericality_of
+	it { is_expected.to validate_numericality_of(${1}) }
+snippet itis_expect_to_validate_presence_of
+	it { is_expected.to validate_presence_of(${1}) }
+snippet itis_expect_to_validate_uniqueness_of
+	it { is_expected.to validate_uniqueness_of(${1}) }
+snippet itis_expect_to_belong_to
+	it { is_expected.to belong_to(${1}) }
+snippet itis_expect_to_have_many
 	it { is_expected.to have_many(${1}) }
-snippet it_expect_to_have_one
+snippet itis_expect_to_have_one
 	it { is_expected.to have_one(${1}) }
-snippet it_expect_to_have_and_belong_to_many
+snippet itis_expect_to_have_and_belong_to_many
 	it { is_expected.to have_and_belong_to_many(${1}) }
-snippet it_expect_to_have_db_column
+snippet itis_expect_to_have_db_column
 	it { is_expected.to have_db_column(${1}) }
-snippet it_expect_to_have_db_index
+snippet itis_expect_to_have_db_index
 	it { is_expected.to have_db_index(${1}) }
-snippet it_expect_to_have_readonly_attribute
+snippet itis_expect_to_have_readonly_attribute
 	it { is_expected.to have_readonly_attribute(${1}) }
-snippet it_expect_to_serialize
+snippet itis_expect_to_serialize
 	it { is_expected.to serialize(${1}) }
-snippet it_expect_to_filter_param
+snippet itis_expect_to_filter_param
 	it { is_expected.to filter_param(${1}) }
-snippet it_expect_to_redirect_to
+snippet itis_expect_to_redirect_to
 	it { is_expected.to redirect_to(${1}) }
-snippet it_expect_to_render_template
+snippet itis_expect_to_render_template
 	it { is_expected.to render_template(${1}) }
-snippet it_expect_to_render_with_layout
+snippet itis_expect_to_render_with_layout
 	it { is_expected.to render_with_layout(${1}) }
-snippet it_expect_to_rescue_from
+snippet itis_expect_to_rescue_from
 	it { is_expected.to rescue_from(${1}) }
-snippet it_expect_to_respond_with
+snippet itis_expect_to_respond_with
 	it { is_expected.to respond_with(${1}) }
-snippet it_expect_to_respond_with_content_type
+snippet itis_expect_to_respond_with_content_type
 	it { is_expected.to respond_with_content_type(${1::json}) }
-snippet it_expect_to_route
+snippet itis_expect_to_route
 	it { is_expected.to route(${1}) }
-snippet it_expect_to_set_session
+snippet itis_expect_to_set_session
 	it { is_expected.to set_session(${1}) }
-snippet it_expect_to_set_flash
+snippet itis_expect_to_set_flash
 	it { is_expected.to set_the_flash(${1}) }
-snippet it_expect_to_delegate_method
+snippet itis_expect_to_delegate_method
 	it { is_expected.to delegate_method(${1}) }
 
 #############################################
@@ -2236,15 +2246,15 @@ alias <<-
 	<<-${1:EOS}
 		${2}
 	$1
-snippet strip_heredoc
+snippet heredoc strip
 	<<-${1:END}.strip_heredoc
 		${2}
 	$1
-snippet sql
+snippet heredoc sql
 	<<-SQL
 		${1}
 	SQL
-snippet eof
+snippet heredoc eof
 	<<-EOF
 		${1}
 	EOF
@@ -2328,6 +2338,8 @@ snippet within
 #############################################
 # FactoryGirl
 #############################################
+snippet fg
+	FactoryGirl.${1:build_stub}(:${2:model})
 snippet factory define
 alias fgd
 	FactoryGirl.define do
@@ -2357,12 +2369,11 @@ snippet factory has_many
 			create_list(:$2, evaluator.$2s_count, $1: $1)
 		end
 	end
+snippet attributes for
+	attributes_for(:${1:name})
 snippet sequence
 alias seq
 	sequence(:${1:field}) { |i| ${2:value} }
-snippet attributes for
-alias atf
-	attributes_for(:${1:name})
 snippet association
 alias ass
 	association :${1:attr}, factory: :${2:model}
@@ -2377,6 +2388,18 @@ snippet create_list
 	create_list(:${1:of_model}, ${2:count}, ${3:to_model}: $3)
 snippet build_list
 	build_list(:${1:of_model}, ${2:count}, ${3:to_model}: $3)
+
+#############################################
+# timecop gem
+#############################################
+snippet time freeze do
+	Timecop.freeze(${1:Time.now}) do
+		${2:code}
+	end
+snippet time freeze
+	Timecop.freeze(${1:Time.now})
+snippet time return
+	Timecop.return
 
 #############################################
 # cancan gem
