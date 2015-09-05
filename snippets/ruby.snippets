@@ -11,6 +11,8 @@ alias shebang
 	${1}
 snippet #! -wKU
 	#!/usr/bin/env ruby -wKU
+snippet env
+	ENV.fetch('#{1:ENV_VARIABLE}') { ${2:default} }
 snippet =b
 	=begin rdoc
 		${1}
@@ -23,6 +25,8 @@ snippet private
 	private
 
 	${1}
+snippet private_class_method
+	private_class_method :${1:method}
 snippet %q
 	%q{${1:single quoted string}}
 snippet %Q
@@ -414,7 +418,7 @@ snippet file read
 	File.read(${1:'path/to/file'})
 snippet file dirname
 	File.dirname(${1:__FILE__})
-snippet file path from here
+snippet file path
 	File.join(File.dirname(__FILE__), '${1:path}')
 snippet Dir glob
 	Dir.glob(${1:'dir/glob/*'}) { |${2:file}| ${3} }
@@ -721,6 +725,11 @@ snippet opt
 			'${4:Option description.}') do |${5:opt}|
 		${6}
 	end
+# CSV
+snippet csv foreach
+	CSV.foreach(${1:file}, headers: true) do |row|
+		${2:process row}
+	end
 # Marshal
 snippet Marshal dump
 	File.open(${1:'path/to/file.dump'}, 'wb') { |${2:file}| Marshal.dump(${3:obj}, $2) }${4}
@@ -961,79 +970,57 @@ snippet deprecate methods
 # Assertions
 #############################################
 snippet assert
-alias as
+alias ass
 	assert ${1:test}, '${2:Failure message.}'${3}
 snippet assert_equal
-alias ase
 	assert_equal ${1:expected}, ${2:actual}${3}
 snippet assert_not_equal
-alias asne
 	assert_not_equal ${1:unexpected}, ${2:actual}${3}
 snippet assert_in_delta
-alias asid
 	assert_in_delta ${1:expected_float}, ${2:actual_float}, ${3:2 ** -20}${4}
 snippet assert_instance_of
-alias asio
 	assert_instance_of ${1:ExpectedClass}, ${2:actual_instance}${3}
 snippet assert_kind_of
-alias asko
 	assert_kind_of ${1:ExpectedKind}, ${2:actual_instance}${3}
 snippet assert_nil
-alias asn
 	assert_nil ${1:instance}${2}
 snippet assert_not_nil
-alias asnn
 	assert_not_nil ${1:instance}${2}
 snippet assert_match
-alias asm
 	assert_match /${1:expected_pattern}/, ${2:actual_string}${3}
 snippet assert_no_match
-alias asnm
 	assert_no_match /${1:unexpected_pattern}/, ${2:actual_string}${3}
 snippet assert_operator
-alias aso
 	assert_operator ${1:left}, :${2:operator}, ${3:right}${4}
 snippet assert_raise
-alias asr
 	assert_raise ${1:Exception} { ${2} }
-snippet assert_raise do..end
-alias asrd
+snippet assert_raise do
 	assert_raise ${1:Exception} do
 		${2}
 	end
 snippet assert_nothing_raised
-alias asnr
 	assert_nothing_raised ${1:Exception} { ${2} }
-snippet assert_nothing_raised do..end
-alias asnrd
+snippet assert_nothing_raised do
 	assert_nothing_raised ${1:Exception} do
 		${2}
 	end
 snippet assert_respond_to
-alias asrt
 	assert_respond_to ${1:object}, :${2:method}${3}
 snippet assert_same
-alias assame
 	assert_same ${1:expected}, ${2:actual}${3}
 snippet assert_not_same
-alias asns
 	assert_not_same ${1:unexpected}, ${2:actual}${3}
 snippet assert_send
-alias assend
 	assert_send [${1:object}, :${2:message}, ${3:args}]${4}
 snippet assert_throws
-alias ast
 	assert_throws :${1:expected} { ${2} }
-snippet assert_throws do..end
-alias astd
+snippet assert_throws do
 	assert_throws :${1:expected} do
 		${2}
 	end
 snippet assert_nothing_thrown
-alias asnt
 	assert_nothing_thrown { ${1} }
-snippet assert_nothing_thrown do..end
-alias asntd
+snippet assert_nothing_thrown do
 	assert_nothing_thrown do
 		${1}
 	end
@@ -1298,22 +1285,26 @@ snippet sinatra
 # Rails model
 #############################################
 snippet belongs_to
-alias bt
 	belongs_to :${1:association}
 snippet belongs_to polymorphic
 	belongs_to :${1:association}, polymorphic: true${2}
-snippet hasabtm
-	has_and_belongs_to_many :${1:object}, join_table: '${2:table_name}', foreign_key: '${3}_id'${4}
-snippet hasm
+snippet has_and_belongs_to_many
+	has_and_belongs_to_many :${1:associations}
+snippet has_and_belongs_to_many join_table
+	has_and_belongs_to_many :${1:associations}, join_table: '${2:table_name}', foreign_key: '${3}_id'${4}
+snippet has_many
 	has_many :${1:object}
-snippet hasmd
+snippet has_many class_name
 	has_many :${1:other}s, class_name: '${2:$1}', foreign_key: '${3:$1}_id', dependent: :destroy${4}
-snippet hasmt
+snippet has_many through
 	has_many :${1:object}, through: :${2:object}
-snippet haso
+snippet has_one
 	has_one :${1:object}
-snippet hasod
+snippet has_one dependent
 	has_one :${1:object}, dependent: :${2:destroy}
+# serialize text field
+snippet serialize
+	serialize :${1:preferences}, ${2:Hash}
 # before, around, after
 snippet before validation
 	before_validation :${1:method}
@@ -1452,9 +1443,6 @@ snippet raise RecordNotFound
 	raise ActiveRecord::RecordNotFound${0}
 snippet raise Rollback
 	raise ActiveRecord::Rollback${0}
-# serialize Hash to text object
-snippet serialize
-	serialize :${1:preferences}, Hash
 
 #############################################
 # Rails controller
@@ -1583,15 +1571,17 @@ snippet logger
 snippet log
 	logger.${2:debug} ${3}
 snippet lod
-	logger.debug { '${1:message}' }${2}
+	logger.debug { '${1:message}' }
 snippet loe
-	logger.error { '${1:message}' }${2}
+	logger.error { '${1:message}' }
 snippet lof
-	logger.fatal { '${1:message}' }${2}
+	logger.fatal { '${1:message}' }
 snippet loi
-	logger.info { '${1:message}' }${2}
+	logger.info { '${1:message}' }
 snippet low
-	logger.warn { '${1:message}' }${2}
+	logger.warn { '${1:message}' }
+snippet rails log
+	Rails.logger.info { '${1:message}' }
 # Map
 snippet mapc
 	${1:map}.${2:connect} '${3:controller/:action/:id}'
@@ -1699,8 +1689,9 @@ snippet before skip filter
 snippet before filter
 	before_filter :${1:method}
 snippet before action
-alias befa
 	before_action :${1:method}
+snippet after action
+	after_action :${1:method}
 snippet rescue_from
 	rescue_from ${1:ActiveRecord::RecordNotFound}, with: :${2:method}
 snippet only
@@ -1896,7 +1887,8 @@ snippet rspec feature
 	feature '${1:an action}' do
 		${2:pending 'Not implemented'}
 	end
-snippet desc
+snippet describe
+alias desc
 	describe ${1:name} do
 		${2:pending 'Not implemented'}
 	end
@@ -1912,7 +1904,8 @@ snippet desc class method
 	describe '.${1:class_method}' do
 		${2:pending 'Not implemented'}
 	end
-snippet cont
+snippet context
+alias cont
 	context '${1:when something happened}' do
 		${2}
 	end
@@ -1924,15 +1917,15 @@ snippet specify
 	specify { subject.${1} }
 snippet bef
 	before { ${1} }
-snippet bef do
+snippet befd
 	before do
 		${1}
 	end
-snippet bef each
+snippet before each
 	before :${1:each} do
 		${2}
 	end
-snippet aft each
+snippet after each
 	after :${1:each} do
 		${2}
 	end
@@ -1960,113 +1953,111 @@ snippet it_behaves_like
 # RSpec Expects
 ##########################
 # equal
-snippet expect_to_eq
-alias ete
+snippet expto_eq
 	expect(${1:target}).to eq(${2})
-snippet expect_to_not_eq
+snippet expto_not_eq
 	expect(${1:target}).to_not eq(${2})
-snippet expect_to_eql
+snippet expto_eql
 	expect(${1:target}).to eql(${2})
-snippet expect_to_not_eql
+snippet expto_not_eql
 	expect(${1:target}).to_not eql(${2})
-snippet expect_to_equal
+snippet expto_equal
 	expect(${1:target}).to equal(${2})
-snippet expect_to_not_equal
+snippet expto_not_equal
 	expect(${1:target}).to_not equal(${2})
 # be
-snippet expect_to_be
-alias etb
+snippet expto_be
 	expect(${1:target}).to be(${2})
-snippet expect_to_not_be
+snippet expto_not_be
 	expect(${1:target}).to_not be(${2})
-snippet expect_to_be_true
+snippet expto_be_true
 	expect(${1:target}).to be_true
-snippet expect_to_be_false
+snippet expto_be_false
 	expect(${1:target}).to be_false
-snippet expect_to_be_nil
+snippet expto_be_nil
 	expect(${1:target}).to be_nil
-snippet expect_to_be_within
+snippet expto_be_within
 	expect(${1:target}).to be_within(${2:0.1}).of(${3:1.9})
-snippet expect_to_be_a
+snippet expto_be_a
 	expect(${1:target}).to be_a(${2:type})
-snippet expect_to_be_instance_of
+snippet expto_be_instance_of
 	expect(${1:target}).to be_an_instance_of(${2:type})
 # arrays
-snippet expect_to_include
+snippet expto_include
 	expect(${1:target}).to include(${2:itemA, itemB})
-snippet expect_to_match_array
+snippet expto_match_array
 	expect(${1:target}).to match_array(${2:[]})
-snippet expect_to_contain_exactly
+snippet expto_contain_exactly
 	expect(${1:target}).to contain_exactly(${2:itemA, itemB})
 # exists
-snippet expect_to_exist
+snippet expto_exist
 	expect(${1:target}).to exist
 # range change
-snippet expect_to_change
+snippet expto_change
 	expect { ${1:action} }.to change{ ${2:behaviour} }
-snippet expect_to_change_by
+snippet expto_change_by
 	expect do
 		${1:action}
 	end.to change{ ${2:target.behaviour} }.by(${3:1})
-snippet expect_to_change_from_to
+snippet expto_change_from_to
 	expect do
 		${1:action}
 	end.to change{ ${2:target.behaviour} }.from(${3:old_state}).to(${4:new_state})
 # exception/error
-snippet expect_to_raise_error
+snippet expto_raise_error
 	expect do
 		${1:action}
 	end.to raise_error(${2:SystemExit})
-snippet expect_to_raise_exception
+snippet expto_raise_exception
 	expect do
 		${1:action}
 	end.to raise_exception(${2:SystemExit})
 # match
-snippet expect_to_match
+snippet expto_match
 	expect(${1:target}).to match(${2})
 # response to
-snippet expect_to_response_to
+snippet expto_response_to
 	expect(${1:target}).to respond_to(:${2:method})
 # satisfy
-snippet expect_to_satisfy
+snippet expto_satisfy
 	expect(${1:target}).to satisfy { |${2:obj}| ${3} }
 # output
-snippet expect_to_output
+snippet expto_output
 	expect do
 		${1:target}
 	end.to output('${2:message}').to_stdout
 # yield control
-snippet expect_to_yield
+snippet expto_yield
 	expect do |block|
 		${1:target(&block)}
 	end.to yield_control
-snippet expect_to_yield_exactly_times
+snippet expto_yield_exactly_times
 	expect do |block|
 		${1:target(&block)}
 	end.to yield_control.exactly(${2:2}).times
 # rspec rails
-snippet expect_to_be_a_new
+snippet expto_be_a_new
 	expect(${1:obj}).to be_a_new(${2:Object})
-snippet expect_to_render_template
+snippet expto_render_template
 	expect(${1:response}).to render_template(${2:'new'})
-snippet expect_to_render_partial_template
+snippet expto_render_partial_template
 	expect(${1:response}).to render_template(partial: ${2:'_form'}, locals: { ${3} })
-snippet expect_to_redirect_to
+snippet expto_redirect_to
 	expect(${1:response}).to redirect_to(${2:path})
-snippet expect_to_response_with
+snippet expto_response_with
 	expect(${1:response.status}).to eq(${2:200})
-snippet expect_to_have_http_status
+snippet expto_have_http_status
 	expect(${1:response}).to have_http_status(${2:200})
 # mock and stub
-snippet allow_to_receive_and_return
+snippet all_to_receive_and_return
 	allow(${1:mock}).to receive(:${2:method}).and_return(${3:result})
-snippet allow_to_receive_with_and_return
+snippet all_to_receive_with_and_return
 	allow(${1:mock}).to receive(:${2:method}).with(${3:args}).and_return(${4:result})
-snippet allow_to_receive_and_return {}
+snippet all_to_receive_and_return block
 	allow(${1:mock}).to receive(:${2:method}) { ${3:result} }
-snippet allow_to_receive_message_chain
+snippet all_to_receive_message_chain
 	allow(${1:mock}).to receive_message_chain(:${2:method1}, :${3:method2})
-snippet allow_any_instance_to_receive
+snippet all_any_instance_to_receive
 	allow_any_instance_of(${1:Class}).to receive(:${2:method}) { ${3:result} }
 # instance.stub (Deprecated)
 snippet stub
@@ -2082,106 +2073,104 @@ snippet stub instance
 options word
 	any_instance.stub(:${1:method}).and_return(${2:return_value})
 # expect spies/doubles
-snippet expect_to_have_received
+snippet expto_have_received
 	expect(${1:obj}).to have_received(:${2:method})
-snippet expect_to_have_received_with
+snippet expto_have_received_with
 	expect(${1:obj}).to have_received(:${2:method}).with(${3:args})
-snippet expect_any_instance_of_receive
+snippet exp_any_instance_of_receive
 	expect_any_instance_of(${1:Object}).to receive(:${2:method})
-snippet expect_to_receive_once
+snippet expto_receive_once
 	expect(${1:obj}).to receive(:${2:method}).once
-snippet expect_to_receive_twice
+snippet expto_receive_twice
 	expect(${1:obj}).to receive(:${2:method}).twice
-snippet expect_to_receive_exactly_times
+snippet expto_receive_exactly_times
 	expect(${1:obj}).to receive(:${2:method}).exactly(${3:3}).times
-snippet expect_to_receive_at_least_times
+snippet expto_receive_at_least_times
 	expect(${1:obj}).to receive(:${2:method}).at_least(${3:3}).times
-snippet expect_to_receive_at_most_times
+snippet expto_receive_at_most_times
 	expect(${1:obj}).to receive(:${2:method}).at_most(${3:3}).times
-snippet expect_to_receive_any_number_of_times
+snippet expto_receive_any_number_of_times
 	expect(${1:obj}).to receive(:${2:method}).any_number_of_times
-snippet expect_to_receive_with
+snippet expto_receive_with
 	expect(${1:obj}).to receive(:${2:method}).with(${3:args})
-snippet expect_to_receive_with_and_return
+snippet expto_receive_with_and_return
 	expect(${1:obj}).to receive(:${2:method}).with(${3:args}).and_return(${4:result})
-snippet expect_to_receive_with_regex
-	expect(${1:obj}).to receive(:${2:method}).with(/${3:regex}/)
-snippet expect_to_receive_with_an_instance_of
+snippet expto_receive_with_an_instance_of
 	expect(${1:obj}).to receive(:${2:method}).with(an_instance_of(${3:Object}))
-snippet expect_to_receive_with_hash
+snippet expto_receive_with_hash
 	expect(${1:obj}).to receive(:${2:method}).with(hash_including(${3:key: val}))
-snippet expect_to_receive_with_anything
+snippet expto_receive_with_anything
 	expect(${1:obj}).to receive(:${2:method}).with(anything())
-snippet expect_to_receive_and_raise
+snippet expto_receive_and_raise
 	expect(${1:obj}).to receive(:${2:method}).and_raise('${3:an error}')
 # it is expected shorthands
-snippet itis_expected_to
+snippet itisexpto
 	it { is_expected.to ${1} }
-snippet itis_expect_to_respond_to
+snippet itisexpto_respond_to
 	it { is_expected.to respond_to(:${1}) }
-snippet itis_expect_to_match
+snippet itisexpto_match
 	it { is_expected.to match(${1}) }
-snippet itis_expect_to_allow_mass_assignment_of
+snippet itisexpto_allow_mass_assignment_of
 	it { is_expected.to allow_mass_assignment_of(${1}) }
-snippet itis_expect_to_accept_nested_attributes_for
+snippet itisexpto_accept_nested_attributes_for
 	it { is_expected.to accept_nested_attributes_for(${1}) }
-snippet itis_expect_to_allow_value
+snippet itisexpto_allow_value
 	it { is_expected.to allow_value(${1}) }
-snippet itis_expect_to_define_enum_for
+snippet itisexpto_define_enum_for
 	it { is_expected.to define_enum_for(${1}) }
-snippet itis_expect_to_ensure_length_of
+snippet itisexpto_ensure_length_of
 	it { is_expected.to ensure_length_of(${1}) }
-snippet itis_expect_to_have_secure_password
+snippet itisexpto_have_secure_password
 	it { is_expected.to have_secure_password(${1}) }
-snippet itis_expect_to_validate_inclusion_of
+snippet itisexpto_validate_inclusion_of
 	it { is_expected.to validate_inclusion_of(${1}) }
-snippet itis_expect_to_validate_exclusion_of
+snippet itisexpto_validate_exclusion_of
 	it { is_expected.to validate_exclusion_of(${1}) }
-snippet itis_expect_to_validate_confirmation_of
+snippet itisexpto_validate_confirmation_of
 	it { is_expected.to validate_confirmation_of(${1}) }
-snippet itis_expect_to_validate_numericality_of
+snippet itisexpto_validate_numericality_of
 	it { is_expected.to validate_numericality_of(${1}) }
-snippet itis_expect_to_validate_presence_of
+snippet itisexpto_validate_presence_of
 	it { is_expected.to validate_presence_of(${1}) }
-snippet itis_expect_to_validate_uniqueness_of
+snippet itisexpto_validate_uniqueness_of
 	it { is_expected.to validate_uniqueness_of(${1}) }
-snippet itis_expect_to_belong_to
+snippet itisexpto_belong_to
 	it { is_expected.to belong_to(${1}) }
-snippet itis_expect_to_have_many
+snippet itisexpto_have_many
 	it { is_expected.to have_many(${1}) }
-snippet itis_expect_to_have_one
+snippet itisexpto_have_one
 	it { is_expected.to have_one(${1}) }
-snippet itis_expect_to_have_and_belong_to_many
+snippet itisexpto_have_and_belong_to_many
 	it { is_expected.to have_and_belong_to_many(${1}) }
-snippet itis_expect_to_have_db_column
+snippet itisexpto_have_db_column
 	it { is_expected.to have_db_column(${1}) }
-snippet itis_expect_to_have_db_index
+snippet itisexpto_have_db_index
 	it { is_expected.to have_db_index(${1}) }
-snippet itis_expect_to_have_readonly_attribute
+snippet itisexpto_have_readonly_attribute
 	it { is_expected.to have_readonly_attribute(${1}) }
-snippet itis_expect_to_serialize
+snippet itisexpto_serialize
 	it { is_expected.to serialize(${1}) }
-snippet itis_expect_to_filter_param
+snippet itisexpto_filter_param
 	it { is_expected.to filter_param(${1}) }
-snippet itis_expect_to_redirect_to
+snippet itisexpto_redirect_to
 	it { is_expected.to redirect_to(${1}) }
-snippet itis_expect_to_render_template
+snippet itisexpto_render_template
 	it { is_expected.to render_template(${1}) }
-snippet itis_expect_to_render_with_layout
+snippet itisexpto_render_with_layout
 	it { is_expected.to render_with_layout(${1}) }
-snippet itis_expect_to_rescue_from
+snippet itisexpto_rescue_from
 	it { is_expected.to rescue_from(${1}) }
-snippet itis_expect_to_respond_with
+snippet itisexpto_respond_with
 	it { is_expected.to respond_with(${1}) }
-snippet itis_expect_to_respond_with_content_type
+snippet itisexpto_respond_with_content_type
 	it { is_expected.to respond_with_content_type(${1::json}) }
-snippet itis_expect_to_route
+snippet itisexpto_route
 	it { is_expected.to route(${1}) }
-snippet itis_expect_to_set_session
+snippet itisexpto_set_session
 	it { is_expected.to set_session(${1}) }
-snippet itis_expect_to_set_flash
+snippet itisexpto_set_flash
 	it { is_expected.to set_the_flash(${1}) }
-snippet itis_expect_to_delegate_method
+snippet itisexpto_delegate_method
 	it { is_expected.to delegate_method(${1}) }
 
 #############################################
@@ -2213,25 +2202,19 @@ snippet docr returns
 	Returns ${1}
 
 # regex
-snippet regex named group
-alias ng
-	(?<${1:name}>${2:regex})
-snippet regex across line
-alias rgx %r
+snippet rgx
 	%r{
 		${1}
 	}x
-snippet regex positive lookahead
-alias pla
+snippet named group
+	(?<${1:name}>${2:regex})
+snippet positive lookahead
 	(?=${1})
-snippet regex negative lookahead
-alias nla
+snippet negative lookahead
 	(?!${1})
-snippet regex positive lookbehind
-alias plb
+snippet positive lookbehind
 	(?<=${1})
-snippet regex negative lookbehind
-alias nlb
+snippet negative lookbehind
 	(?<!${1})
 
 # to_json
@@ -2242,7 +2225,7 @@ snippet json except
 
 # Here Document
 snippet heredoc
-alias <<-
+alias <<
 	<<-${1:EOS}
 		${2}
 	$1
@@ -2268,7 +2251,7 @@ alias fea
 		${2:pending 'Not implemented'}
 	end
 snippet background
-alias bg
+alias bac
 	background do
 		${1}
 	end
@@ -2281,32 +2264,27 @@ snippet scenario js:true
 	scenario '${1:use case}', js: true do
 		${2}
 	end
-snippet expect_to_have_content
-alias hc
+snippet expto_have_content
 	expect(page).to have_content(${1})
-snippet expect_to_current_path
+snippet expto_current_path_eq
 	expect(current_path).to eq(${1})
-snippet expect_to_has_selector
+snippet expto_have_selector
 	expect(page).to have_selector(${1})
-snippet expect_to_has_xpath
+snippet expto_have_xpath
 	expect(page).to have_xpath(${1})
-snippet expect_to_has_css
+snippet expto_have_css
 	expect(page).to have_css(${1})
-snippet expect_to_checked
-	expect(find('${1:selector}').checked?).to be_true
+snippet expto_checkbox_checked
+	expect(find('${1:.checkbox}').checked?).to be_true
 snippet visit
-alias vi
 	visit ${1:path}
-snippet click link
-alias cll
+snippet click_link
 	click_link ${1:id/text}
-snippet click button
-alias clb
+snippet click_button
 	click_button ${1:id/text}
-snippet click on
-alias clo
+snippet click_on
 	click_on ${1:id/text}
-snippet fill in
+snippet fill_in
 	fill_in '${1:field}', with: ${2:value}
 snippet choose radio button
 	choose '${1:a radio button}'
