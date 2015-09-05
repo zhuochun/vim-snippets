@@ -197,7 +197,6 @@ snippet it
 	it "${1:should do something}", ->
 		${2}
 snippet it async
-alias ita
 	it "${1:should do something}", (done) ->
 		${2:done()}
 snippet before
@@ -214,34 +213,24 @@ snippet afterEach
 		${2}
 # Chai - Assert
 snippet chai require assert
-alias cha
 	assert = require("chai").assert${1:,}
 snippet assert
-alias as
 	assert(${1:expression})
 snippet assert equal
-alias ae
 	assert.equal(${1:actual}, ${2:expected})
 snippet assert not equal
-alias ane
 	assert.notEqual(${1:actual}, ${2:expected})
 snippet assert strict equal
-alias ase
 	assert.strictEqual(${1:actual}, ${2:expected})
 snippet assert not strict equal
-alias anse
 	assert.notStrictEqual(${1:actual}, ${2:expected})
 snippet assert deep equal
-alias ade
 	assert.deepEqual(${1:actual}, ${2:expected})
 snippet assert not deep equal
-alias ande
 	assert.notDeepEqual(${1:actual}, ${2:expected})
 snippet assert isTrue
-alias at
 	assert.isTrue(${1:value})
 snippet assert isFalse
-alias af
 	assert.isFalse(${1:value})
 snippet assert isNull
 	assert.isNull(${1:value})
@@ -267,97 +256,89 @@ snippet assert lengthOf
 	assert.lengthOf(${1:object}, ${2:length})
 # Chai - Expect
 snippet chai require expect
-alias che
 	expect = require("chai").expect${1:,}
-snippet expect general
-alias ex
+snippet expto
 	expect(${1:expression}).to.${2:equal}(${3})
-snippet expect equal
-alias ee
+snippet expto equal
 	expect(${1:expression}).to.equal(${2})
-snippet expect not equal
-alias ene
+snippet expto not equal
 	expect(${1:expression}).to.not.equal(${2})
-snippet expect deep equal
-alias ede
+snippet expto deep equal
 	expect(${1:expression}).to.deep.equal(${2})
-snippet expect eql
-alias eeql
+snippet expto eql
 	expect(${1:expression}).to.eql(${2})
-snippet expect be a
+snippet expto be a
 	expect(${1:expression}).to.be.a("${2:string}")
-snippet expect be instanceof
+snippet expto be instanceof
 	expect(${1:expression}).to.be.instanceof("${2:string}")
-snippet expect be true
-alias ebt
+snippet expto be true
 	expect(${1:expression}).to.be.true
-snippet expect be false
-alias ebf
+snippet expto be false
 	expect(${1:expression}).to.be.false
-snippet expect be null
+snippet expto be null
 	expect(${1:expression}).to.be.null
-snippet expect be defined
+snippet expto be defined
 	expect(${1:expression}).to.be.defined
-snippet expect be undefined
+snippet expto be undefined
 	expect(${1:expression}).to.be.undefined
-snippet expect be empty
+snippet expto be empty
 	expect(${1:expression}).to.be.empty
-snippet expect be above
+snippet expto be above
 	expect(${1:expression}).to.be.above(${2})
-snippet expect be below
+snippet expto be below
 	expect(${1:expression}).to.be.below(${2})
-snippet expect be within
+snippet expto be within
 	expect(${1:expression}).to.be.within(${2})
-snippet expect exist
+snippet expto exist
 	expect(${1:expression}).to.exist
-snippet expect include
+snippet expto include
 	expect(${1:expression}).to.include(${2})
-snippet expect contain
+snippet expto contain
 	expect(${1:expression}).to.contain(${2})
-snippet expect match
+snippet expto match
 alias em
 	expect(${1:expression}).to.match(/${2}/)
-snippet expect throw
+snippet expto throw
 	expect(${1:expression}).to.throw(${2})
-snippet expect satisfy
+snippet expto satisfy
 	expect(${1:expression}).to.satisfy (${2:args}) ->
 		${3}
 # jasmine
-snippet expect jasmine toBe
+snippet exp toBe
 	expect(${1:expression}).toBe(${2:true})
-snippet expect jasmine toNotBe
+snippet exp toNotBe
 	expect(${1:expression}).toNotBe(${2:true})
-snippet expect jasmine toEqual
+snippet exp toEqual
 	expect(${1:expression}).toEqual(${2:value})
-snippet expect jasmine toNotEqual
+snippet exp toNotEqual
 	expect(${1:expression}).toNotEqual(${2:value})
-snippet expect jasmine toMatch
+snippet exp toMatch
 	expect(${1:expression}).toMatch(${2:regex})
-snippet expect jasmine toNotMatch
+snippet exp toNotMatch
 	expect(${1:expression}).toNotMatch(${2:regex})
-snippet expect jasmine toBeDefined
+snippet exp toBeDefined
 	expect(${1:expression}).toBeDefined()
-snippet expect jasmine toBeUndefined
+snippet exp toBeUndefined
 	expect(${1:expression}).toBeUndefined()
-snippet expect jasmine toBeNull
+snippet exp toBeNull
 	expect(${1:expression}).toBeNull()
-snippet expect jasmine toBeTruthy
+snippet exp toBeTruthy
 	expect(${1:expression}).toBeTruthy()
-snippet expect jasmine toBeFalsy
+snippet exp toBeFalsy
 	expect(${1:expression}).toBeFalsy()
-snippet expect jasmine toContain
+snippet exp toContain
 	expect(${1:expression}).toContain(${2:string})
-snippet expect jasmine toNotContain
+snippet exp toNotContain
 	expect(${1:expression}).toNotContain(${2:string})
-snippet expect jasmine toBeLessThan
+snippet exp toBeLessThan
 	expect(${1:expression}).toBeLessThan(${2:number})
-snippet expect jasmine toBeGreaterThan
+snippet exp toBeGreaterThan
 	expect(${1:expression}).toBeGreaterThan(${2:number})
-snippet expect jasmine toBeNaN
+snippet exp toBeNaN
 	expect(${1:expression}).toBeNaN()
-snippet expect jasmine toBeCloseTo
+snippet exp toBeCloseTo
 	expect(${1:expression}).toBeCloseTo(${2:precision})
-snippet expect jasmine toThrow
+snippet exp toThrow
 	expect(${1:expression}).toThrow()
 # angular
 snippet angular
