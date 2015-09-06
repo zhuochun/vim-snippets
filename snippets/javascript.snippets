@@ -33,17 +33,17 @@ snippet fun
 	}
 # Anonymous Function
 snippet f
-	function (${1}) {
+	function(${1}) {
 		${3}
 	}${2:;}
 # Immediate function
 snippet (f
-	(function (${1}) {
+	(function(${1}) {
 		${3}
 	}(${2}));
 # Object Method
 snippet :f
-	${1:method_name}: function (${2:attribute}) {
+	${1:method_name}: function(${2:attribute}) {
 		${4}
 	}${3:,}
 # if
@@ -59,7 +59,7 @@ snippet ife
 		${3}
 	}
 # tertiary conditional
-snippet ter
+snippet ?
 	${1:/* condition */} ? ${2:a} : ${3:b}
 # switch
 snippet switch
@@ -98,7 +98,7 @@ snippet forin
 		${3:$2[$1]}
 	}
 # while (...) {...}
-snippet wh
+snippet while
 	while (${1:/* condition */}) {
 		${2}
 	}
@@ -115,8 +115,7 @@ snippet do
 		${2}
 	} while (${1:/* condition */});
 # setTimeout function
-snippet timeout
-alias to
+snippet setTimeout
 	setTimeout(function () {${3}}, ${1:10});
 # Get Elements
 snippet get tagname
@@ -128,10 +127,10 @@ options word
 	getElementBy${1:Id}("${2}")${3}
 # Console
 snippet console.log
-alias cl clg
+alias consl
 	console.log(${1});
 snippet console.error
-alias ce cerr
+alias conse
 	console.error(${1});
 snippet console assert
 	console.assert(${1});
@@ -144,6 +143,14 @@ snippet console.timeStamp
 # return
 snippet ret
 	return ${1:result}
+# apply
+snippet apply
+options word
+	apply(${1:null}, ${2:array_of_args});
+# call
+snippet call
+options word
+	call(${1:null}, ${2:arg_1}, ${3: arg_2})
 # hasOwnProperty
 snippet has
 options word
@@ -167,7 +174,7 @@ snippet jsons
 	JSON.stringify(${1:object});
 # self-defining function
 snippet sdf
-	var ${1:function_name} = function (${2:argument}) {
+	var ${1:function_name} = function(${2:argument}) {
 		${3}
 
 		$1 = function ($2) {
@@ -175,8 +182,8 @@ snippet sdf
 		};
 	};
 # singleton
-snippet sing
-	function ${1:Singleton} (${2:argument}) {
+snippet singleton
+	function ${1:Singleton}(${2:argument}) {
 		// the cached instance
 		var instance;
 

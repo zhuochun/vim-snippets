@@ -1,0 +1,126 @@
+# ES6 Snippets
+# https://babeljs.io/docs/learn-es2015/
+# https://github.com/lukehoban/es6features
+# https://hacks.mozilla.org/category/es6-in-depth
+
+# Classes
+snippet class
+alias cla
+	class ${1:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`}
+		${0}
+	end
+snippet class extends
+alias clae
+	class ${1:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`} extends ${2:Parent}
+		${0}
+	end
+snippet constructor
+alias const
+	constructor(${1:args}) {
+		${0}
+	}
+snippet fn
+	${1:functionName}(${2:args}) {
+		${0}
+	}
+snippet get
+	get ${1:functionName}(${2:args}) {
+		${0}
+	}
+snippet set
+	set ${1:functionName}(${2:args}) {
+		${0}
+	}
+snippet static
+	static ${1:functionName}(${2:args}) {
+		${0}
+	}
+
+# Template string
+snippet $
+	${${1:val}}
+
+# Object literals
+snippet method
+	${1:method}(${2:args}) {
+		${0}
+	},
+
+# Iterators
+snippet forof
+	for (let ${1:elem} of ${2:iterator}) {
+		${0}
+	}
+snippet forof index
+	for (let [${1:idx}, ${2:elem}] of ${3:arr}.entries()) {
+		${0}
+	}
+snippet forof key_val
+	for (let [${1:key}, ${2:val}] of ${3:map}) {
+		${0}
+	}
+snippet iterator
+	[Symbol.iterator]() {
+		${0}
+
+		return {
+			next() {
+				return { done: false, value: value }
+			}
+		}
+	}
+
+# Modules
+snippet export
+	export {
+		${0:fn}
+	};
+snippet export const
+alias exportc
+	export const ${1:name} = ${2:value};
+snippet export function
+alias exportf
+	export function ${1:name}(${2:args}) {
+		${0}
+	};
+snippet export default
+alias exportd
+	export default function(${2:args}) {
+		${0}
+	};
+snippet import
+	import * from "${1:module}";
+snippet import as
+	import * as ${1:Module} from "${2:module}";
+snippet import only
+	import {${1:methods}} from "${2:module}";
+
+# Map, Set, WeakMap, WeakSet
+
+# Proxies
+snippet proxy
+	new Proxy(${1:target}, ${2:handler});
+snippet proxy handler
+	let ${1:handler} = {
+		get: function(receiver, ...args) {
+			${0}
+		},
+
+		set: function(receiver, ...args) {
+			${0}
+		}
+
+		apply: function(receiver, ...args) {
+			${0}
+		}
+	};
+
+# Symbols
+snippet symbol
+	Symbol("${1:symbol}");
+
+# Promises
+snippet promise
+	new Promise((resolve, reject) => {
+		${0}
+	});
