@@ -1262,7 +1262,7 @@ snippet task with args
 	end
 snippet task with prerequisite args
 	desc '${1:description}'
-	task ${2:name}, [:${3:arg}] => [:${4:prereq}] do |t, args|
+	task ${2:name}, [:${3:arg}] => [:${4:environment}] do |t, args|
 		args.with_defaults($3: ${5})
 		${6}
 	end
@@ -1751,6 +1751,7 @@ snippet with_options
 	end
 snippet alias_method_chain
 	def ${1:method}_with_${2:feature}(${3:args})
+		result = $1_without_$2($3)
 		${0:code}
 	end
 	alias_method_chain :$1, :$2
@@ -2317,7 +2318,7 @@ snippet within
 # FactoryGirl
 #############################################
 snippet fg
-	FactoryGirl.${1:build_stub}(:${2:model})
+	FactoryGirl.${1:build_stubbed}(:${2:model})
 snippet factory define
 alias fgd
 	FactoryGirl.define do
