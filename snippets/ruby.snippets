@@ -276,10 +276,10 @@ snippet atta
 	attr_accessible :${1:attr_names}
 snippet accepts_nested_attributes_for
 	accepts_nested_attributes_for :${1:association}
+snippet enum
+	enum ${1:name}: %i[${2:option_1}, ${3:option_2}]
 snippet const_get
 	Object.const_get(${1:name}.capitalize)
-snippet enum
-	enum ${1:name}: [:${2:option_1}, :${3:other_options}]
 # include
 snippet include
 alias inc
@@ -1357,37 +1357,32 @@ snippet validate
 snippet validates
 	validates :${1:attribute}, ${2:validators}
 snippet validates acceptance
-alias valac
 	validates :${1:terms}, acceptance: true
 snippet validates confirmation
-alias valc
 	validates :${1:attribute}, confirmation: true
 snippet validates exclusion
-alias vale
-	validates :${1:attribute}, exclusion: { in: ${2:%w( mov avi )} }
+	validates :${1:attribute}, exclusion: { in: %w(${2: mov avi }) }
 snippet validates format
-alias valf
-	validates :${1:attribute}, format: { with: /${2:regex}/ }
+	validates :${1:attribute}, format: { with: /\A${2:regex}\z/ }
 snippet validates inclusion
-alias vali
 	validates :${1:attribute}, inclusion: { in: %w(${2: mov avi }) }
-snippet validates length
-alias vall
+snippet validates length in
 	validates :${1:attribute}, length: { in: ${2:3}..${3:20} }
+snippet validates length max
+	validates :${1:attribute}, length: { maximum: ${2:255} }
 snippet validates numericality
-alias valn
 	validates :${1:attribute}, numericality: ${1:true}
+snippet validates numericality greater_than_or_equal_to
+	validates :${1:attribute}, numericality: ${1:true}, greater_than_or_equal_to: ${2:55}
 snippet validates presence
-alias valp
 	validates :${1:attribute}, presence: true
 snippet validates uniqueness
-alias valu
 	validates :${1:attribute}, uniqueness: true
+snippet validates uniqueness scope
+	validates :${1:attribute}, uniqueness: true, scope: :${2:attr}
 snippet validates_associated
-alias valas
 	validates_associated :${1:attribute}
 snippet validates_with
-alias valw
 	validates_with ${1:Some}Validator
 # queries
 snippet where
@@ -2104,73 +2099,100 @@ snippet expto_receive_with_anything
 	expect(${1:obj}).to receive(:${2:method}).with(anything())
 snippet expto_receive_and_raise
 	expect(${1:obj}).to receive(:${2:method}).and_raise('${3:an error}')
-# it is expected shorthands
+
+#############################################
+# shoulda-matchers
+#############################################
 snippet itisexpto
 	it { is_expected.to ${1} }
-snippet itisexpto_respond_to
-	it { is_expected.to respond_to(:${1}) }
-snippet itisexpto_match
-	it { is_expected.to match(${1}) }
+# ActiveModel Matchers
 snippet itisexpto_allow_mass_assignment_of
-	it { is_expected.to allow_mass_assignment_of(${1}) }
-snippet itisexpto_accept_nested_attributes_for
-	it { is_expected.to accept_nested_attributes_for(${1}) }
+	it { is_expected.to allow_mass_assignment_of(:${1:attr}) }
 snippet itisexpto_allow_value
-	it { is_expected.to allow_value(${1}) }
-snippet itisexpto_define_enum_for
-	it { is_expected.to define_enum_for(${1}) }
-snippet itisexpto_ensure_length_of
-	it { is_expected.to ensure_length_of(${1}) }
+	it { is_expected.to allow_value(${1:values}).for(:${2:attr}) }
+snippet itisexpto_not_allow_value
+	it { is_expected.to_not allow_value(${1:values}).for(:${2:attr}) }
 snippet itisexpto_have_secure_password
-	it { is_expected.to have_secure_password(${1}) }
-snippet itisexpto_validate_inclusion_of
-	it { is_expected.to validate_inclusion_of(${1}) }
-snippet itisexpto_validate_exclusion_of
-	it { is_expected.to validate_exclusion_of(${1}) }
+	it { is_expected.to have_secure_password }
+snippet itisexpto_validate_acceptance_of
+	it { is_expected.to_not validate_acceptance_of(:${1:attr}) }
 snippet itisexpto_validate_confirmation_of
-	it { is_expected.to validate_confirmation_of(${1}) }
+	it { is_expected.to validate_confirmation_of(:${1:attr}) }
+snippet itisexpto_validate_exclusion_of
+	it { is_expected.to validate_exclusion_of(:${1:attr}).in_array(%w[${2}]) }
+snippet itisexpto_validate_inclusion_of
+	it { is_expected.to validate_inclusion_of(:${1:attr}).in_array(%w[${2}]) }
+snippet itisexpto_ensure_length_is_at_least
+	it { is_expected.to ensure_length_of(:${1:attr}).is_at_least(${2:3}) }
+snippet itisexpto_ensure_length_is_at_most
+	it { is_expected.to ensure_length_of(:${1:attr}).is_at_most(${2:255}) }
+snippet itisexpto_validate_length_is_at_least
+	it { is_expected.to validate_length_of(:${1:attr}).is_at_least(${2:3}) }
+snippet itisexpto_validate_length_is_at_most
+	it { is_expected.to validate_length_of(:${1:attr}).is_at_most(${2:255}) }
 snippet itisexpto_validate_numericality_of
-	it { is_expected.to validate_numericality_of(${1}) }
+	it { is_expected.to validate_numericality_of(:${1:attr}) }
+snippet itisexpto_validate_numericality_of_greater_than
+	it { is_expected.to validate_numericality_of(:${1:attr}).is_greater_than_or_equal_to(${2:55}) }
 snippet itisexpto_validate_presence_of
 	it { is_expected.to validate_presence_of(${1}) }
-snippet itisexpto_validate_uniqueness_of
-	it { is_expected.to validate_uniqueness_of(${1}) }
+# ActiveRecord Matchers
+snippet itisexpto_accept_nested_attributes_for
+	it { is_expected.to accept_nested_attributes_for(:${1:name}) }
 snippet itisexpto_belong_to
-	it { is_expected.to belong_to(${1}) }
-snippet itisexpto_have_many
-	it { is_expected.to have_many(${1}) }
-snippet itisexpto_have_one
-	it { is_expected.to have_one(${1}) }
+	it { is_expected.to belong_to(:${1:name}) }
+snippet itisexpto_define_enum_for
+	it { is_expected.to define_enum_for(:${1:name}).with(%i[${2}]) }
 snippet itisexpto_have_and_belong_to_many
-	it { is_expected.to have_and_belong_to_many(${1}) }
+	it { is_expected.to have_and_belong_to_many(:${1:name}) }
 snippet itisexpto_have_db_column
-	it { is_expected.to have_db_column(${1}) }
+	it { is_expected.to have_db_column(:${1:name}).of_type(:${2:string}) }
 snippet itisexpto_have_db_index
-	it { is_expected.to have_db_index(${1}) }
+	it { is_expected.to have_db_index(:${1:name}) }
+snippet itisexpto_have_many
+	it { is_expected.to have_many(:${1:name}) }
+snippet itisexpto_have_one
+	it { is_expected.to have_one(:${1:name}) }
 snippet itisexpto_have_readonly_attribute
-	it { is_expected.to have_readonly_attribute(${1}) }
+	it { is_expected.to have_readonly_attribute(:${1:name}) }
 snippet itisexpto_serialize
-	it { is_expected.to serialize(${1}) }
+	it { is_expected.to serialize(:${1:name}).as(${2:Array}) }
+snippet itisexpto_validate_uniqueness_of
+	it { is_expected.to validate_uniqueness_of(:${1:attr}) }
+# ActionController Matchers
 snippet itisexpto_filter_param
-	it { is_expected.to filter_param(${1}) }
+	it { is_expected.to filter_param(:${1:param}) }
+snippet itisexpto_permit
+	it { is_expected.to permit(:${1:param}).for(:${2:create}) }
 snippet itisexpto_redirect_to
-	it { is_expected.to redirect_to(${1}) }
+	it { is_expected.to redirect_to(${1:url}) }
 snippet itisexpto_render_template
-	it { is_expected.to render_template(${1}) }
+	it { is_expected.to render_template(${1:name}) }
 snippet itisexpto_render_with_layout
-	it { is_expected.to render_with_layout(${1}) }
+	it { is_expected.to render_with_layout(${1:name}) }
 snippet itisexpto_rescue_from
-	it { is_expected.to rescue_from(${1}) }
+	it { is_expected.to rescue_from(${1:ActiveRecord::RecordNotFound}).with(${2:method}) }
 snippet itisexpto_respond_with
-	it { is_expected.to respond_with(${1}) }
-snippet itisexpto_respond_with_content_type
-	it { is_expected.to respond_with_content_type(${1::json}) }
+	it { is_expected.to respond_with(${1:status_code}) }
 snippet itisexpto_route
-	it { is_expected.to route(${1}) }
-snippet itisexpto_set_session
-	it { is_expected.to set_session(${1}) }
+	it { is_expected.to route(:${1:get}, '${2:path}').to(action: ${3:index}, ${params}) }
 snippet itisexpto_set_flash
-	it { is_expected.to set_the_flash(${1}) }
+	it { is_expected.to set_flash[:${1:key}] }
+snippet itisexpto_set_session
+	it { is_expected.to set_session[:${1:key}] }
+snippet itisexpto_use_after_action
+	it { is_expected.to use_after_action(:${1:callback}) }
+snippet itisexpto_use_around_action
+	it { is_expected.to use_around_action(:${1:callback}) }
+snippet itisexpto_use_before_action
+	it { is_expected.to use_before_action(:${1:callback}) }
+# Other Matchers
+snippet itisexpto_respond_to
+	it { is_expected.to respond_to(:${1:method}) }
+snippet itisexpto_match
+	it { is_expected.to match(/${1:regex}/) }
+snippet itisexpto_respond_with_content_type
+	it { is_expected.to respond_with_content_type(:${1:json}) }
 snippet itisexpto_delegate_method
 	it { is_expected.to delegate_method(${1}) }
 
@@ -2195,11 +2217,11 @@ snippet doc class/module
 	# ${3:bar()}
 snippet doc constant
 	# ${1:Public/Internal/Deprecated}: [${2:Type}] ${3:its purpose}
-snippet doca argument
+snippet doc argument
 	${1:arg} - ${2:description}
-snippet doca argument with default
+snippet doc argument with default
 	${1:arg} - ${2:description}(default: ${3})
-snippet docr returns
+snippet doc returns
 	Returns ${1}
 
 # regex
@@ -2219,10 +2241,12 @@ snippet negative lookbehind
 	(?<!${1})
 
 # to_json
-snippet json only
-	${1:instance}.to_json(include: ${2}, only: ${3})${4}
-snippet json except
-	${1:instance}.to_json(include: ${2}, except: ${3})${4}
+snippet to_json only
+options word
+	to_json(include: ${1}, only: ${2})
+snippet to_json except
+options word
+	to_json(include: ${1}, except: ${2})
 
 # Here Document
 snippet heredoc
@@ -2261,7 +2285,7 @@ alias sce
 	scenario '${1:use case}' do
 		${2}
 	end
-snippet scenario js:true
+snippet scenario js
 	scenario '${1:use case}', js: true do
 		${2}
 	end
@@ -2377,7 +2401,7 @@ snippet time freeze do
 	end
 snippet time freeze
 	Timecop.freeze(${1:Time.now})
-snippet time return
+snippet time unfreeze
 	Timecop.return
 
 #############################################
