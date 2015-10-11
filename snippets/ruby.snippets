@@ -322,41 +322,29 @@ alias defs
 snippet def init
 alias defi init
 	def initialize(${1:args})
-		${2}
+		${0:code}
 	end
-# def method_missing
-# adopted form SimpleDelegator
-# https://github.com/ruby/ruby/blob/3f2d575f8c2f9b503afe733010041a55fd8baf37/lib/delegate.rb#L77
+# def method_missing and respond_to_missing?
 snippet method_missing
 	def method_missing(method_name, *args, &block)
-		if ${1:@instance}.respond_to?(method_name)
-			$1.send(method_name, *args, &block)
-		else
-			super(method_name, *args, &block)
-		end
+		if ${0}
+		else super
 	end
 
-	def respond_to_missing?(method_name, include_private)
-		respond_to = $1.respond_to?(method_name, include_private)
-
-		if respond_to && include_private && !$1.respond_to?(method_name, false)
-			warn "#{caller(3)[0]}: does not forward private method \##{m}"
-			return false
-		end
-
-		respond_to
+	def respond_to_missing?(method_name, include_private = false)
+		super
 	end
 # def respond_to_missing
 snippet respond_to_missing?
-	def respond_to_missing?(method_name, include_private)
-		respond_to = $1.respond_to?(method_name, include_private)
-
-		if respond_to && include_private && !$1.respond_to?(method_name, false)
-			warn "#{caller(3)[0]}: does not forward private method \##{m}"
-			return false
-		end
-
-		respond_to
+	def respond_to_missing?(method_name, include_private = false)
+		if ${0}
+		else super
+	end
+# def const_missing
+snippet const_missing
+	def const_missing(const_name)
+		if ${0}
+		else super
 	end
 # delegator
 snippet def_delegator
@@ -364,23 +352,30 @@ snippet def_delegator
 snippet def_delegators
 	def_delegators :${1:@del_obj}, :${2:del_methods}
 snippet define_method
-	define_method '${1:method_name}' do
-		${2:implementation}
+	define_method ${1:method_name} do
+		${0:implementation}
 	end
 snippet define_method args
-	define_method '${1:method_name}' do |*args, &block|
-		${2:implementation}
-		send '$1', *args, &block
+	define_method ${1:method_name} do |*args, &block|
+		${0:implementation}
 	end
 snippet class_eval
 	${1:klass}.class_eval do
-		${2:implementation}
+		${0:implementation}
 	end
 snippet instance_eval
 	${1:instance}.instance_eval do
-		${2:implementation}
+		${0:implementation}
 	end
-snippet alias method
+snippet instance_variable_set
+	instance_variable_set('@${1:variable}', ${2:value})
+snippet refine
+	refine ${1:String} do
+		def ${2:method}
+			${0:behaviour}
+		end
+	end
+snippet alias_method
 	alias_method :${1:new_name}, :${2:old_name}
 # __
 snippet __e
@@ -2099,6 +2094,8 @@ snippet expto_receive_with_anything
 	expect(${1:obj}).to receive(:${2:method}).with(anything())
 snippet expto_receive_and_raise
 	expect(${1:obj}).to receive(:${2:method}).and_raise('${3:an error}')
+snippet expto_receive_and_call_original
+	expect(${1:obj}).to receive(:${2:method}).and_call_original
 
 #############################################
 # shoulda-matchers
@@ -2229,15 +2226,15 @@ snippet rgx
 	%r{
 		${1}
 	}x
-snippet named group
+snippet rgx named_group
 	(?<${1:name}>${2:regex})
-snippet positive lookahead
+snippet lookahead positive
 	(?=${1})
-snippet negative lookahead
+snippet lookahead negative
 	(?!${1})
-snippet positive lookbehind
+snippet lookbehind positive
 	(?<=${1})
-snippet negative lookbehind
+snippet lookbehind negative
 	(?<!${1})
 
 # to_json
@@ -2289,20 +2286,24 @@ snippet scenario js
 	scenario '${1:use case}', js: true do
 		${2}
 	end
+snippet expto_have_text
+	expect(page).to have_text(${1})
 snippet expto_have_content
 	expect(page).to have_content(${1})
-snippet expto_current_path_eq
-	expect(current_path).to eq(${1})
 snippet expto_have_selector
 	expect(page).to have_selector(${1})
 snippet expto_have_xpath
 	expect(page).to have_xpath(${1})
 snippet expto_have_css
 	expect(page).to have_css(${1})
+snippet expto_current_path_eq
+	expect(current_path).to eq(${1})
 snippet expto_checkbox_checked
 	expect(find('${1:.checkbox}').checked?).to be_true
 snippet visit
 	visit ${1:path}
+snippet execute_script
+	execute_script '${1:javascript}'
 snippet click_link
 	click_link ${1:id/text}
 snippet click_button
@@ -2321,17 +2322,17 @@ snippet select dropdown
 	select '${1:option}', from: '${2:field}'
 snippet unselect dropdown
 	unselect '${1:option}', from: '${2:field}'
-snippet attach file
+snippet attach_file
 	attach_file '${1:field}', '${2:path_to_file}'
 snippet find default
 	find('${1:selector}').${2:action}
 snippet find click on
 	find('${1:selector}').click_on('${2:link}')
-snippet find field
+snippet find_field
 	find_field('${1:selector}').${2:action}
-snippet find link
+snippet find_link
 	find_link('${1:text}').${2:action}
-snippet find button
+snippet find_button
 	find_button('${1:text}').${2:action}
 snippet within
 	within '${1:selector}' do
