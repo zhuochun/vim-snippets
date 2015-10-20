@@ -2342,28 +2342,41 @@ snippet within
 #############################################
 # FactoryGirl
 #############################################
-snippet fg
-	FactoryGirl.${1:build_stubbed}(:${2:model})
-snippet factory define
-alias fgd
+snippet fg build_stubbed
+	${1:FactoryGirl.}build_stubbed(:${0:model})
+snippet fg create
+	${1:FactoryGirl.}create(:${0:model})
+snippet fg create_list
+alias create_list
+	${1:FactoryGirl.}create_list(:${2:of_model}, ${3:3})
+snippet fg build_list
+alias build_list
+	${1:FactoryGirl.}build_list(:${2:of_model}, ${3:3})
+snippet fg attributes_for
+	${1:FactoryGirl.}attributes_for(:${0:name})
+snippet fg define
 	FactoryGirl.define do
 		factory :${1:name} do
 			${2:attr} ${3:value}
 		end
 	end
-snippet factory default
-alias fgdf
+snippet fg default
 	factory :${1:name} do
 		${2:attr} ${3:value}
 	end
-snippet factory class
-alias fgc
+snippet fg class
 	factory :${1:name}, class: ${2:Model} do
 		${3:attr} ${4:value}
 	end
-snippet factory trait
+snippet fg sequence
+alias sequence
+	sequence(:${1:field}) { |i| ${2:value} }
+snippet fg association
+alias association
+	association :${1:attr}, factory: :${2:model}
+snippet fg trait
 	factory :${1}, traits: [:${2:trait}]
-snippet factory has_many
+snippet fg has_many
 	factory :${1:model}_with_${2:many}s do
 		ignore do
 			$2s_count 5
@@ -2373,25 +2386,9 @@ snippet factory has_many
 			create_list(:$2, evaluator.$2s_count, $1: $1)
 		end
 	end
-snippet attributes for
-	attributes_for(:${1:name})
-snippet sequence
-alias seq
-	sequence(:${1:field}) { |i| ${2:value} }
-snippet association
-alias ass
-	association :${1:attr}, factory: :${2:model}
-snippet build
+snippet fg strategy
 alias strategy
 	strategy: :build
-snippet trait
-	trait :${1:name} do
-		${2}
-	end
-snippet create_list
-	create_list(:${1:of_model}, ${2:count}, ${3:to_model}: $3)
-snippet build_list
-	build_list(:${1:of_model}, ${2:count}, ${3:to_model}: $3)
 
 #############################################
 # timecop gem
