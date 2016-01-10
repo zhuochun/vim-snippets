@@ -57,6 +57,10 @@ snippet rescue
 snippet ensure
 	ensure
 		${1:always executed}
+snippet trap
+	trap(:${1:INT}) do
+		${0}
+	end
 snippet require
 alias req
 	require '${1}'${0}
@@ -136,14 +140,16 @@ snippet until
 		${2}
 	end
 snippet loop
-	loop { ${1} }
-snippet loop do
 	loop do
 		${1}
 	end
 # memo
 snippet memo basic
 	@${1:variable} ||= ${2:method}
+snippet memo basic begin
+	@${1:variable} ||= begin
+		${2:method}
+	end
 snippet memo unless defined?
 	@${1:variable} = ${2:method} unless defined?(@$1)
 snippet memo if defined?
@@ -220,6 +226,8 @@ alias clr
 	end
 snippet class RuntimeError
 	class ${1:NewExtented}Error < RuntimeError; end
+snippet class StandardError
+	class ${1:NewExtented}Error < StandardError; end
 snippet struct
 	Struct.new(:${1:attr_name})
 # module
@@ -274,12 +282,19 @@ snippet attp
 	attr_protected :${1:attr_names}
 snippet atta
 	attr_accessible :${1:attr_names}
+# http://api.rubyonrails.org/classes/ActiveRecord/NestedAttributes/ClassMethods.html
 snippet accepts_nested_attributes_for
-	accepts_nested_attributes_for :${1:association}
+	accepts_nested_attributes_for :${1:association}, allow_destroy: true
 snippet enum
 	enum ${1:name}: %i[${2:option_1}, ${3:option_2}]
+snippet const_defined?
+	Object.const_defined?(${1:constant})
 snippet const_get
 	Object.const_get(${1:name}.capitalize)
+snippet qualified_const_defined?
+	${1:Object}.qualified_const_defined?(${2:'constant'})
+snippet qualified_const_get
+	${1:Object}.qualified_const_get(${1:'name'})
 # include
 snippet include
 alias inc
@@ -294,6 +309,10 @@ alias enumerable
 
 	def each(&block)
 		${1}
+	end
+snippet enumerator
+	Enumerator.new do |yielder|
+		${0}
 	end
 # include Comparable
 snippet include comparable
@@ -323,6 +342,10 @@ snippet def init
 alias defi init
 	def initialize(${1:args})
 		${0:code}
+	end
+snippet inspect
+	def inspect
+		"#<${1:class_name}:${0:content}>"
 	end
 # def method_missing and respond_to_missing?
 snippet method_missing
@@ -363,6 +386,12 @@ snippet class_eval
 	${1:klass}.class_eval do
 		${0:implementation}
 	end
+snippet class_eval raw
+	class_eval <<-RUBY, __FILE__, __LINE__ + 1
+		def ${1:method}(${2:args})
+			${0:implementation}
+		end
+	RUBY
 snippet instance_eval
 	${1:instance}.instance_eval do
 		${0:implementation}
@@ -385,7 +414,7 @@ snippet __f
 snippet __l
 	__LINE__
 # do something only if the code is being implicitly run, not required
-snippet app
+snippet main
 	if __FILE__ == $PROGRAM_NAME
 		${1}
 	end
@@ -720,6 +749,16 @@ snippet opt
 			'${4:Option description.}') do |${5:opt}|
 		${6}
 	end
+# GC
+snippet GC stat
+	GC.stat[:#{total_allocated_objects}]
+snippet GC allocated_objects
+	before = GC.stat[:total_allocated_objects]
+
+	${0:TARGET}
+
+	after =  GC.stat[:total_allocated_objects]
+	puts "allocated: #{after - before} objects"
 # CSV
 snippet csv foreach
 	CSV.foreach(${1:file}, headers: true) do |row|
@@ -750,6 +789,8 @@ snippet singleton_class
 snippet open
 	open(${1:'path/or/url/or/pipe'}, '${2:w}') { |${3:io}| ${4} }
 # common ruby exceptions
+snippet err StandardError
+	StandardError
 snippet err ArgumentError
 	ArgumentError
 snippet err IndexError
@@ -770,6 +811,12 @@ snippet err RuntimeError
 	RuntimeError
 snippet err ZeroDivisionError
 	ZeroDivisionError
+snippet at_exit
+	at_exit do
+		if $! # the program exits due to an exception
+			${0:puts 'Exiting'}
+		end
+	end
 
 #############################################
 # MiniTest
@@ -950,16 +997,6 @@ snippet status 422 unprocessable_entity
 	:unprocessable_entity
 snippet status 500 internal_server_error
 	:internal_server_error
-
-#############################################
-# ActiveSupport
-#############################################
-snippet deprecate warn
-	ActiveSupport::Deprecation.warn("${1:message}")
-snippet deprecate method_warning
-	ActiveSupport::Deprecation.deprecated_method_warning(${1:method_name}, ${2:message = nil})
-snippet deprecate methods
-	ActiveSupport::Deprecation.deprecate_methods(${1:target_module}, ${2:*method_names})
 
 #############################################
 # Assertions
@@ -1242,31 +1279,47 @@ snippet group
 #############################################
 snippet namespace rake
 	namespace :${1:`vim_snippets#Filename()`} do
-		${2}
+		${0}
 	end
 snippet task
 	desc '${1:description}'
 	task ${2:name}: [:${3:environment}] do
-		${4}
+		${0}
+	end
+snippet task with env args
+	desc '${1:description}'
+	task ${2:name}: [:${3:environment}] do
+		$4 = ENV['${4:name}']
+		${0}
 	end
 snippet task with args
+	# To invoke with arguments, run:
+	#
+	#    rake namespace:${2}[${3}]
+	#
 	desc '${1:description}'
 	task ${2:name}, [:${3:arg}] do |t, args|
 		args.with_defaults($3: ${4})
-		${5}
+		${0}
 	end
 snippet task with prerequisite args
+	# To invoke with arguments, run:
+	#
+	#    rake namespace:${2}[${3}]
+	#
 	desc '${1:description}'
 	task ${2:name}, [:${3:arg}] => [:${4:environment}] do |t, args|
 		args.with_defaults($3: ${5})
-		${6}
+		${0}
 	end
 snippet task file
 	file '${1:output}' => ['${2:dependent}'] do |t|
-		${3}
+		${0}
 	end
+snippet rake invoke
+	Rake::Task['${1:task_name}'].invoke
 snippet rake execute
-	Rake::Task['${1:task_name}'].${2:execute}
+	Rake::Task['${1:task_name}'].execute
 
 #############################################
 # Sinatra snippets
@@ -1281,20 +1334,30 @@ snippet sinatra
 #############################################
 snippet belongs_to
 	belongs_to :${1:association}
+snippet belongs_to touch
+	belongs_to :${1:association}, touch: true
+snippet belongs_to inverse_of
+	belongs_to :${1:association}, inverse_of: true
 snippet belongs_to polymorphic
-	belongs_to :${1:association}, polymorphic: true${2}
+	belongs_to :${1:association}, polymorphic: true
 snippet has_and_belongs_to_many
 	has_and_belongs_to_many :${1:associations}
 snippet has_and_belongs_to_many join_table
-	has_and_belongs_to_many :${1:associations}, join_table: '${2:table_name}', foreign_key: '${3}_id'${4}
+	has_and_belongs_to_many :${1:associations}, join_table: '${2:table_name}', foreign_key: '${3}_id'
 snippet has_many
-	has_many :${1:object}
+	has_many :${1:associations}
+snippet has_many inverse_of
+	has_many :${1:associations}, inverse_of: :${2:model}
 snippet has_many class_name
-	has_many :${1:other}s, class_name: '${2:$1}', foreign_key: '${3:$1}_id', dependent: :destroy${4}
+	has_many :${1:associations}, class_name: '${2:class_name}', foreign_key: '${3:$2}_id', dependent: :destroy
+snippet has_many condition
+	has_many :${1:associations}, conditions: -> { where(${2:condition}) }, class_name: '${3:class_name}'
 snippet has_many through
-	has_many :${1:object}, through: :${2:object}
+	has_many :${1:associations}, through: :${2:association}
 snippet has_one
 	has_one :${1:object}
+snippet has_one inverse_of
+	has_one :${1:object}, inverse_of: :${2:model}
 snippet has_one dependent
 	has_one :${1:object}, dependent: :${2:destroy}
 # serialize text field
@@ -1374,57 +1437,55 @@ snippet validates presence
 snippet validates uniqueness
 	validates :${1:attribute}, uniqueness: true
 snippet validates uniqueness scope
-	validates :${1:attribute}, uniqueness: true, scope: :${2:attr}
+	validates :${1:attribute}, uniqueness: { scope: :${2:attr} }
+# http://edgeguides.rubyonrails.org/active_record_validations.html#validates-associated
 snippet validates_associated
 	validates_associated :${1:attribute}
 snippet validates_with
 	validates_with ${1:Some}Validator
+snippet validates_with_options
+	with_options if: ${1:condition?} do |${2:model}|
+		$2.validates :${3:attr}, presence: true
+	end
 # queries
 snippet where
-options word
 	where(${1:field}: ${2:value})
 snippet where condition
-options word
 	where('${1:condition = ?}', ${2:bind_var})
 snippet order
-options word
 	order(${1:field}: :${2:desc})
 snippet order desc
-options word
 	order('${1:field} ${2:DESC}')
 snippet join merge
-options word
 	joins(:${1:models}).merge(${2:Model.scope})
 snippet includes
-options word
 	includes(:${1:models})
 snippet find_each
-options word
 	find_each(batch_size: ${1:5000}).do |${2:obj}}
 		${3}
 	end
 snippet find_or_initialize_by
-options word
 	find_or_initialize_by(${1:field}: ${2:value})
 snippet find_or_create_by
-options word
 	find_or_create_by(${1:attribute}: ${2:value})
 snippet find_by_sql
 	find_by_sql <<-SQL
 		${1:SQL}
 	SQL
+snippet find_by_sql binds
+	find_by_sql ['${1:sql}', ${2:binds}]
 snippet persisted?
-	@${1:model}.persisted?${0}
+	persisted?
 snippet new_record?
-	@${1:model}.new_record?${0}
+	new_record?
 # transaction
 snippet transaction
-	ActiveRecord::Base.transaction do
-		${1:TARGET}
-	end
-snippet transaction model
-	${1:@model}.class.transaction do
+	transaction do
 		${2:operation}
+	end
+snippet transaction base
+	${1:ActiveRecord::Base}.transaction do
+		${0:TARGET}
 	end
 # ActiveRecord exceptions
 snippet raise RecordInvalid
@@ -1695,7 +1756,6 @@ snippet except
 snippet cache fetch
 	Rails.cache.fetch(${1:cache_key}) { ${2:block} }
 snippet cache fetch do
-alias caf
 	Rails.cache.fetch(${1:cache_key}) do
 		${2:TARGET}
 	end
@@ -1727,6 +1787,15 @@ snippet sweeper
 			expire_page
 		end
 	end
+snippet stale
+	if stale?(${1:model})
+		respond_to do |format|
+			format.html # index.html.erb
+			format.json { render json: $1 }
+		end
+	end
+snippet fresh_when
+	fresh_when last_modified: ${1:@model}.updated_at.utc, etag: $1
 
 #############################################
 # ActiveSupport
@@ -1747,12 +1816,41 @@ snippet alias_method_chain
 	alias_method_chain :$1, :$2
 snippet alias_attribute
 	alias_attribute :${1:new_name}, :${2:old_name}
+# http://edgeguides.rubyonrails.org/active_support_core_extensions.html#class-attribute
+snippet class_attribute
+	class_attribute :${1:attr}
 snippet delegate
 	delegate :${1:methods}, to: :${2:object}
 snippet delegate with prefix
 	delegate :${1:methods}, to: :${2:object}, prefix: ${3:true}
 snippet delegate and allow_nil
 	delegate :${1:methods}, to: :${2:object}, allow_nil: ${3:true}
+# Deprecation
+snippet deprecate warn
+	ActiveSupport::Deprecation.warn("${1:message}")
+snippet deprecate method_warning
+	ActiveSupport::Deprecation.deprecated_method_warning(${1:method_name}, ${2:message = nil})
+snippet deprecate methods
+	ActiveSupport::Deprecation.deprecate_methods(${1:target_module}, ${2:*method_names})
+# Instrumentation
+snippet instrument
+	ActiveSupport::Notifications.instrument '${1:custom.event}', ${2:data} do
+		${0}
+	end
+snippet subscribe
+	ActiveSupport::Notifications.subscribe '${1:event.name}' do |name, started, finished, unique_id, data|
+		${0}
+	end
+snippet subscribe event
+	ActiveSupport::Notifications.subscribe 'process_action.action_controller' do |*args|
+		event = ActiveSupport::Notifications::Event.new(*args)
+
+		event.name      # => "process_action.action_controller"
+		event.duration  # => 10 (in milliseconds)
+		event.payload   # => {:extra=>information}
+
+		${0}
+	end
 
 #############################################
 # Rails Route
@@ -1863,6 +1961,25 @@ snippet ttimestamps
 snippet tchange
 	t.change :${1:name}, :${2:string}, :${3:limit} => ${4:80}
 
+#############################################
+# Rails ActiveJob
+#############################################
+# Enqueue a job to be performed at a specific time
+snippet perform_later_at
+	set(wait_until: ${1:Date.tomorrow.noon}).perform_later(${2:args})
+# Enqueue a job to be performed 1 week from now.
+snippet perform_later_in
+	set(wait: ${1:1.week}).perform_later(${2:args})
+snippet activejob
+alias job
+	class ${1:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`} < ActiveJob::Base
+		queue_as :default
+
+		def perform(${1:id})
+			${0:TODO}
+		end
+	end
+
 ##########################
 # Rspec snippets
 ##########################
@@ -1925,7 +2042,7 @@ snippet let
 snippet let!
 	let!(:${1:object}) { ${2} }
 snippet subj
-	subject { ${1} }
+	subject { ${1:described_class.new} }
 snippet subj name
 	subject(:${1:instance}) { ${2} }
 # shared examples
@@ -2006,6 +2123,8 @@ snippet expto_raise_exception
 # match
 snippet expto_match
 	expect(${1:target}).to match(${2})
+snippet expto_match_with_captures
+	expect(${1:target}).to match(${2}).with_captures(${3:capture_groups})
 # response to
 snippet expto_response_to
 	expect(${1:target}).to respond_to(:${2:method})
@@ -2039,6 +2158,13 @@ snippet expto_response_with
 	expect(${1:response.status}).to eq(${2:200})
 snippet expto_have_http_status
 	expect(${1:response}).to have_http_status(${2:200})
+# rspec mocks https://relishapp.com/rspec/rspec-mocks/v/3-4/docs/verifying-doubles
+snippet double instance_double
+alias instance_double
+	instance_double(${1:ClassName})
+snippet double class_double
+alias class_double
+	class_double(${1:ClassName})
 # mock and stub
 snippet all_to_receive_and_return
 	allow(${1:mock}).to receive(:${2:method}).and_return(${3:result})
@@ -2049,7 +2175,7 @@ snippet all_to_receive_and_return block
 snippet all_to_receive_message_chain
 	allow(${1:mock}).to receive_message_chain(:${2:method1}, :${3:method2})
 snippet all_any_instance_to_receive
-	allow_any_instance_of(${1:Class}).to receive(:${2:method}) { ${3:result} }
+	allow_any_instance_of(${1:Class}).to receive(:${2:method}).and_return(${4:result})
 # instance.stub (Deprecated)
 snippet stub
 options word
@@ -2064,38 +2190,51 @@ snippet stub instance
 options word
 	any_instance.stub(:${1:method}).and_return(${2:return_value})
 # expect spies/doubles
+snippet expto_rec_once
+	expect(${1:obj}).to receive(:${2:method}).once
+snippet expto_rec_twice
+	expect(${1:obj}).to receive(:${2:method}).twice
+snippet expto_rec_exactly_times
+	expect(${1:obj}).to receive(:${2:method}).exactly(${3:3}).times
+snippet expto_rec_at_least_times
+	expect(${1:obj}).to receive(:${2:method}).at_least(${3:3}).times
+snippet expto_rec_at_most_times
+	expect(${1:obj}).to receive(:${2:method}).at_most(${3:3}).times
+snippet expto_rec_any_number_of_times
+	expect(${1:obj}).to receive(:${2:method}).any_number_of_times
+snippet expto_rec_with
+	expect(${1:obj}).to receive(:${2:method}).with(${3:any_args})
+snippet expto_rec_with_and_return
+	expect(${1:obj}).to receive(:${2:method}).with(${3:args}).and_return(${4:result})
+snippet expto_rec_with_hash_including
+	expect(${1:obj}).to receive(:${2:method}).with(hash_including(${3:key: val}))
+snippet expto_rec_with_hash_excluding
+	expect(${1:obj}).to receive(:${2:method}).with(hash_excluding(${3:key: val}))
+snippet expto_rec_with_array_including
+	expect(${1:obj}).to receive(:${2:method}).with(array_including(${3:v1, v2}))
+snippet expto_rec_with_instance_of
+	expect(${1:obj}).to receive(:${2:method}).with(instance_of(${3:Object}))
+snippet expto_rec_with_duck_type
+	expect(${1:obj}).to receive(:${2:method}).with(duck_type(${3::interface}))
+snippet expto_rec_with_anything
+	expect(${1:obj}).to receive(:${2:method}).with(anything)
+snippet expto_rec_and_raise
+	expect(${1:obj}).to receive(:${2:method}).and_raise('${3:an error}')
+snippet expto_rec_and_call_original
+	expect(${1:obj}).to receive(:${2:method}).and_call_original
+# respec any_instance_of
+snippet exp_any_instance_of_receive
+	expect_any_instance_of(${1:Object}).to receive(:${2:method})
+# rspec expect have
 snippet expto_have_received
 	expect(${1:obj}).to have_received(:${2:method})
 snippet expto_have_received_with
 	expect(${1:obj}).to have_received(:${2:method}).with(${3:args})
-snippet exp_any_instance_of_receive
-	expect_any_instance_of(${1:Object}).to receive(:${2:method})
-snippet expto_receive_once
-	expect(${1:obj}).to receive(:${2:method}).once
-snippet expto_receive_twice
-	expect(${1:obj}).to receive(:${2:method}).twice
-snippet expto_receive_exactly_times
-	expect(${1:obj}).to receive(:${2:method}).exactly(${3:3}).times
-snippet expto_receive_at_least_times
-	expect(${1:obj}).to receive(:${2:method}).at_least(${3:3}).times
-snippet expto_receive_at_most_times
-	expect(${1:obj}).to receive(:${2:method}).at_most(${3:3}).times
-snippet expto_receive_any_number_of_times
-	expect(${1:obj}).to receive(:${2:method}).any_number_of_times
-snippet expto_receive_with
-	expect(${1:obj}).to receive(:${2:method}).with(${3:args})
-snippet expto_receive_with_and_return
-	expect(${1:obj}).to receive(:${2:method}).with(${3:args}).and_return(${4:result})
-snippet expto_receive_with_an_instance_of
-	expect(${1:obj}).to receive(:${2:method}).with(an_instance_of(${3:Object}))
-snippet expto_receive_with_hash
-	expect(${1:obj}).to receive(:${2:method}).with(hash_including(${3:key: val}))
-snippet expto_receive_with_anything
-	expect(${1:obj}).to receive(:${2:method}).with(anything())
-snippet expto_receive_and_raise
-	expect(${1:obj}).to receive(:${2:method}).and_raise('${3:an error}')
-snippet expto_receive_and_call_original
-	expect(${1:obj}).to receive(:${2:method}).and_call_original
+# rspec active_job
+snippet expto_have_enqueued_job
+	expect { ${1:action} }.to have_enqueued_job(${2:JobClass}).with(${3:args})
+snippet expto_have_enqueued_job_at
+	expect { ${1:action} }.to have_enqueued_job(${2:JobClass}).with(${3:args}).at(${4:Date.tomorrow.noon})
 
 #############################################
 # shoulda-matchers
@@ -2249,19 +2388,23 @@ options word
 snippet heredoc
 alias <<
 	<<-${1:EOS}
-		${2}
+		${0}
 	$1
 snippet heredoc strip
 	<<-${1:END}.strip_heredoc
-		${2}
+		${0}
+	$1
+snippet heredoc indent
+	<<-${1:END}.indent(${2:2})
+		${0}
 	$1
 snippet heredoc sql
 	<<-SQL
-		${1}
+		${0}
 	SQL
 snippet heredoc eof
 	<<-EOF
-		${1}
+		${0}
 	EOF
 
 #############################################
@@ -2435,4 +2578,24 @@ snippet policy application
 		end
 
 		${3}
+	end
+
+#############################################
+# sidekiq gem
+#############################################
+snippet perform_in
+	perform_in(${1:3.hours}, ${2:args})
+snippet perform_at
+	perform_at(${1:3.hours.from_now}, ${2:args})
+snippet perform_async
+	perform_async(${1:args})
+snippet worker
+	class ${1:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`}
+		include Sidekiq::Worker
+
+		sidekiq_options retry: false
+
+		def perform(${1:id})
+			${0:TODO}
+		end
 	end

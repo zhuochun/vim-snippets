@@ -2,14 +2,24 @@ snippet do
 	do
 		${0}
 	end
+snippet try rescue
+	try do
+		${1}
+	rescue
+		${2} -> ${0}
+	end
+snippet rec
+	receive do
+		${1} ->
+			${0}
+	end
 snippet if
 	if ${1} do
 		${0}
 	end
 snippet if do:
 	if ${1:condition}, do: ${0}
-snippet if else
-alias ife
+snippet ife
 	if ${1:condition} do
 		${2}
 	else
@@ -41,22 +51,30 @@ snippet fori
 	for ${1:item} <- ${2:items}, into: ${3} do
 		${0}
 	end
+
+snippet req
+	require ${0:module_name}
+snippet imp
+	import ${0:module_name}
+snippet ali
+	alias ${0:module_name}
+
 snippet def
 	def ${1:name} do
 		${0}
 	end
 snippet defdo
 	def ${1:name}, do: ${2}
-snippet defim
-	defimpl ${1:protocol_name}, for: ${2:data_type} do
+snippet defmo
+	defmodule ${1:module_name} do
 		${0}
 	end
 snippet defma
 	defmacro ${1:name} do
 		${0}
 	end
-snippet defmo
-	defmodule ${1:module_name} do
+snippet defim
+	defimpl ${1:protocol_name}, for: ${2:data_type} do
 		${0}
 	end
 snippet defp
@@ -67,12 +85,14 @@ snippet defpr
 	defprotocol ${1:name}, [${0:function}]
 snippet defre
 	defrecord ${1:record_name}, ${0:fields}
+
 snippet fn
 	fn ${1:args} -> ${0} end
 snippet fun
 	function do
 		${0}
 	end
+
 snippet doc
 	@doc """
 	${0}
@@ -81,17 +101,7 @@ snippet mdoc
 	@moduledoc """
 	${0}
 	"""
-snippet rec
-	receive do
-		${1} ->
-			${0}
-	end
-snippet req
-	require ${0:module_name}
-snippet imp
-	import ${0:module_name}
-snippet ali
-	alias ${0:module_name}
+
 snippet test
 	test "${1:test_name}" do
 		${0}
@@ -99,12 +109,6 @@ snippet test
 snippet testa
 	test "${1:test_name}", %{${2:arg: arg}} do
 		${0}
-	end
-snippet try rescue
-	try do
-		${1}
-	rescue
-		${2} -> ${0}
 	end
 snippet pry
 	require IEx; IEx.pry

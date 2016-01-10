@@ -29,7 +29,7 @@ snippet render
 snippet render partial
 	<%= render partial: '${1:item}' %>
 snippet render partial locals
-	<%= render partial: '${1:item}', locals: { ${2:name}: '${3:value}'$4 } %>
+	<%= render partial: '${1:item}', locals: { ${2:name}: ${3:value} } %>
 snippet render partial status
 	<%= render partial: '${1:item}', status: ${2:500} %>
 snippet render partial collection
@@ -124,9 +124,14 @@ snippet form_for with error
 	<%= form_for ${2:@model} do |f| %>
 		${3}
 	<% end %>
-snippet form fields
-	<%= fields_for :${1:model}, @$1 do |${2:f}| %>
-		${3}
+# http://railscasts.com/episodes/196-nested-model-form-revised?view=asciicast
+snippet form fields_for
+	<%= ${1:f}.fields_for :${2:child_association} do |${2:builder}| %>
+		<fieldset>
+		$0
+			<%= builder.check_box :_destroy %>
+			<%= builder.label :_destroy, 'Remove' %>
+		</fieldset>
 	<% end %>
 snippet form input
 alias input
@@ -170,14 +175,15 @@ alias collection_radio_buttons
 snippet form collection checkbox
 alias collection_check_boxes
 	<%= ${1:f}.collection_check_boxes(:${2:method}, ${3:collection}, :${4:value_method}, :${5:text_method}) %>
+snippet ofcfs
+	<%= options_from_collection_for_select ${1:collection}, ${2:value_method}, ${3:text_method}, ${4:selected_value} %>
+# assets
 snippet img tag
 	<%= image_tag '${1}'${2} %>
 snippet img path
 	image_path('${1:name}')
 snippet img url
 	image_url('${1:name}')
-snippet ofcfs
-	<%= options_from_collection_for_select ${1:collection}, ${2:value_method}, ${3:text_method}, ${4:selected_value} %>
 snippet js
 alias javascript
 	<%= javascript_include_tag '${1}' %>
@@ -222,6 +228,10 @@ snippet cache_if
 	<% cache_if(${1:condition}, ${2:cache_key}) do %>
 		${3:TARGET}
 	<% end %>
+snippet cache_unless
+	<% cache_unless(${1:condition}, ${2:cache_key}) do %>
+		${3:TARGET}
+	<% end %>
 # function helpers
 snippet pluralize
 	pluralize(${1:size}, '${2:word}')
@@ -247,6 +257,9 @@ snippet number with_delimiter
 	number_with_delimiter ${1}
 snippet number with_precision
 	number_with_precision ${1}
+# debug
+snippet debug
+	<%= debug @${1:model} %>
 # cancan gem
 snippet can default
 alias can
