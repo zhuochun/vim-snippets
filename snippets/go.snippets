@@ -1,10 +1,22 @@
+# package
+snippet package
+alias pack
+	package ${1:`substitute(vim_snippets#Filename(), '\(_test\)', '', 'g')`}
+
 # import
-snippet i
-	import "${0:package}"
-# import ()
 snippet import
+	import "${0:fmt}"
+# import ()
+snippet imp
 	import (
-		"${0:package}"
+		"${1:fmt}"
+		${0}
+	)
+# import ("testing")
+snippet imp testing
+	import (
+		"${1:testing}"
+		${0}
 	)
 
 # main()
@@ -21,22 +33,42 @@ snippet main
 
 # function simple
 snippet func
+alias fn
+	func ${1:funcName}(${2:arg type})${3} {
+		${0}
+	}
+# function with error
+snippet func err
+alias fe
 	func ${1:funcName}(${2:arg type}) ${3:error} {
 		${0}
 	}
 # function with return result
-snippet func err
-	func ${1:funcName}(${2:arg type}) (${3:return_type}, ${4:error}) {
+snippet func return
+alias fr
+	func ${1:funcName}(${2:arg type}) (${3:return type}, ${4:err error}) {
 		${0}
 	}
 # function on receiver
 snippet func self
-	func (${2:self} ${1:type}) ${3:funcName}(${4:arg type}) ${5:error} {
+alias fm
+	func (${1:self} ${2:type}) ${3:funcName}(${4:arg type}) ${5:error} {
 		${0}
+	}
+# function new
+snippet func new
+alias fnew
+	func New${1:Instance}(${2:arg type}) *${1} {
+		${0}
+
+		return &$1
 	}
 # function definition in interface
 snippet func interface
+alias fni
 	${1:Method}(${2:arg type}) (${3:return_type})
+snippet args
+	${1:args} ...interface{}
 
 # if condition
 snippet if
@@ -44,37 +76,42 @@ snippet if
 		${2}
 	}
 # if else
-snippet ie
+snippet ifel
 	if ${1:condition} {
 		${2}
 	} else {
 		${3}
 	}
 # else snippet
-snippet el
+snippet elseif
 	else if ${1:condition} {
 		${0}
+	}
+# if nil
+snippet ifn
+	if ${1:err} != nil {
+		${0:return}
 	}
 # if error snippet
 snippet ifer
 	if err != nil {
-		return ${0:err}
+		return${0: err}
 	}
-snippet ife
+snippet ifer return
 	if err := ${1}; err != nil {
-		return ${0:err}
+		return${0: err}
 	}
 
 # select
 snippet select
+alias sel
 	select {
-	case ${1:v1} := <-${2:chan1}:
-		${3}
-	default:
-		${0}
+	case ${1:v := <- chan1}:
+		${2}
 	}
 # switch
 snippet switch
+alias sw
 	switch ${1:var} {
 	case ${2:value1}:
 		${3}
@@ -85,10 +122,17 @@ snippet switch
 snippet case
 	case ${1:value}:
 		${0}
+snippet default
+	default:
+		${0}
 
 # for loop
 snippet for
 	for ${1:condition} {
+		${0}
+	}
+snippet while
+	for {
 		${0}
 	}
 snippet fori
@@ -97,15 +141,20 @@ snippet fori
 	}
 # for range loop
 snippet forr
-	for ${1:k}, ${2:v} := range ${3} {
+	for ${1:k}, ${2:v} := range ${3:collections} {
+		${0}
+	}
+snippet forr value
+	for ${1:v} := range ${2:collections} {
 		${0}
 	}
 
 # interface
-snippet int empty
+snippet interface
+alias any
 	interface{}
 # full interface snippet
-snippet int
+snippet interface name
 	interface ${1:name} {
 		${0:methods}
 	}
@@ -117,12 +166,16 @@ snippet struct
 	}
 
 # type struct
+snippet type
+	type ${1:typeName} ${2:type}
 snippet type struct
+alias typs
 	type ${1:typeName} struct {
 		${0:data}
 	}
 # type interface
 snippet type interface
+alias typi
 	type ${1:typeName} interface {
 		${0:methods}
 	}
@@ -150,20 +203,50 @@ snippet const
 	)
 
 # variables
+snippet -
+	${1:chan} <- ${2:data}
+snippet &
+	&${1:Struct}{${2:args}}
+snippet -c
+	<-chan ${1:int}
+snippet c-
+	chan<- ${1:int}
 snippet v
-	${1} := ${2}
-snippet var
-	var ${1} ${2} = ${3}
-snippet var struct
-	var ${1} struct {
+	${1:name} := ${2:value}
+snippet ve
+	${1:name}, ${2:err} := ${3:action}
+	if $2 != nil {
+		${0:return}
+	}
+snippet ok
+	${1:val}, ok := ${2:<-ch}
+	if ok {
+		${0}
+	}
+snippet va
+	var ${1:name} ${2:int} = ${3:value}
+snippet vcr
+	var ${1:chan_name} chan<- ${2:int}
+snippet vcw
+	var ${1:chan_name} <-chan ${2:int}
+snippet vs
+	var ${1:name} struct {
 		${0}
 	}
 
 # defer
 snippet defer
+alias def
 	defer ${1:func}()
+# def func
+snippet defer func
+alias deff
+	defer func() {
+		${0}
+	}()
 # defer recover
 snippet defer recover
+alias defr
 	defer func() {
 		if err := recover(); err != nil {
 			${0}
@@ -178,22 +261,6 @@ snippet ga
 	go func(${1} ${2:type}) {
 		${0:/* code */}
 	}(${3:arg})
-
-# log Printf
-snippet log.Printf
-	log.Printf("%${1:s}", ${2:var})
-# log Println
-snippet log.Println
-	log.Println("${1}")
-
-# fmt Printf
-snippet fmt.Printf
-	fmt.Printf("%${1:s}\n", ${2:var})
-snippet fmt.Println
-	fmt.Println(${1})
-# fmt Sprintf
-snippet fmt.Sprintf
-	fmt.Sprintf("%${1:s}", ${2:var})
 
 # string
 snippet st
@@ -218,33 +285,103 @@ snippet ch
 	chan ${1:int}
 
 # continue
-snippet cn
+snippet con
 	continue
 # fallthrough
-snippet ft
+snippet fal
 	fallthrough
 # result
-snippet rs
+snippet res
 	result
 # return
-snippet rt
+snippet ret
 	return ${1}, ${2:nil}
 # range
-snippet rn
+snippet ran
 	range ${1}
-
+# len
+snippet len
+	len(${1:var})
 # make
-snippet mk
+snippet make
+alias ma
 	make(${1:[]string}, ${2:0})
+snippet make chan
+alias mac
+	make(chan ${1:int}, ${2:1})
+# close
+snippet close
+alias cl
+	close(${1:ch})
 # append
-snippet ap
+snippet app
 	append(${1:slice}, ${2:value})
 # map
-snippet mp
+snippet map
 	map[${1:string}]${2:int}
 # new
-snippet nw
+snippet new
 	new(${1:type})
 # panic
-snippet pn
+snippet panic
+alias pan
 	panic("${1:msg}")
+
+# runtime package
+
+# sync package
+snippet sync
+	var ${1:mutex} sync.${2:Mutex}
+snippet mutex.Lock
+	mutex.Lock()
+	defer mutex.Unlock()
+
+	${0}
+
+# log package
+snippet log.Printf
+alias lf
+	log.Printf("%${1:s}", ${2:var})
+snippet log.Println
+alias ll
+	log.Println("${1}")
+
+# fmt package
+snippet fmt.Println
+alias pl
+	fmt.Println(${1})
+snippet fmt.Printf
+alias pf
+	fmt.Printf("${1}", ${2:var})
+snippet fmt.Sprintf
+alias sp
+	fmt.Sprintf("${1}", ${2:var})
+
+# testing package
+snippet func test
+	func Test${1:FuncName}(t *testing.T) {
+		${0}
+	}
+snippet t.Error
+	t.Error("${1:test failed}", ${2:actual}, ${3:expected})
+
+# flag package
+snippet flag
+	var ${1:name} *${2:type} = flag.${3:Type}("${4:short}", "${5:default}", "${6:description}")
+snippet flag.Parse
+	flag.Parse()
+
+# snippets
+snippet timeout
+	timeout := make(chan bool, 1)
+	go func() {
+		time.Sleep(${1:1}e9) // timeout after $1s
+		timeout <- true
+	}
+
+	select {
+	case <-${2:ch}:
+		// nandle normal process
+	case <-timeout:
+		// handle timeout
+	}
