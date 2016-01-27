@@ -63,27 +63,27 @@ snippet trap
 	end
 snippet require
 alias req
-	require '${1}'${0}
+	require '${1}'
 snippet require_relative
 alias reqr
-	require_relative '${1}'${0}
+	require_relative '${1}'
 snippet require_absolute
 alias reqa
-	require File.expand_path('../${1}', __FILE__)${0}
+	require File.expand_path('../${1}', __FILE__)
 snippet load_path
-	$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), *%w[${1:lib}]))${0}
+	$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), *%w[${1:lib}]))
 snippet :
 	${1:key}: ${2:'value'}
 snippet #
 	# =>
 snippet lambda
-	lambda { |${1:args}| ${2} }${0}
+	lambda { |${1:args}| ${2} }
 snippet ->
 alias lam
-	->(${1:args}) { ${2} }${0}
+	->(${1:args}) { ${2} }
 # block
 snippet b
-	{ |${1:var}| ${2} }${0}
+	{ |${1:var}| ${2} }
 snippet d
 	do
 		${1}
@@ -536,10 +536,10 @@ options word
 	end
 snippet each_pair
 options word
-	each_pair { |${1:name}, ${2:val}| ${3} }
+	each_pair { |${1:key}, ${2:val}| ${3} }
 snippet each_pair do
 options word
-	each_pair do |${1:name}, ${2:val}|
+	each_pair do |${1:key}, ${2:val}|
 		${3}
 	end
 snippet each_slice
@@ -561,11 +561,11 @@ options word
 snippet each_with_index
 alias eawi
 options word
-	each_with_index { |${1:e}, ${2:i}| ${3} }
+	each_with_index { |${1:obj}, ${2:i}| ${3} }
 snippet each_with_index do
 alias eawid
 options word
-	each_with_index do |${1:e}, ${2:i}|
+	each_with_index do |${1:obj}, ${2:i}|
 		${3}
 	end
 snippet each_with_object
@@ -927,11 +927,11 @@ snippet encode_credentials token
 snippet get api
 	get '${1:path}'
 snippet get api accept
-	get '${1:path}', {}, { 'Accept' => Mime::${2:JSON} }${0}
+	get '${1:path}', {}, { 'Accept' => Mime::${2:JSON} }
 snippet get api authorization
-	get '${1:path}', {}, { 'Authorization' => ${2:string}, 'Accept': Mime::${3:JSON} }${0}
+	get '${1:path}', {}, { 'Authorization' => ${2:string}, 'Accept': Mime::${3:JSON} }
 snippet get api accept-language
-	get '${1:path}', {}, { 'Accept-Language': '${2:en}', 'Accept': Mime::${3:JSON} }${0}
+	get '${1:path}', {}, { 'Accept-Language': '${2:en}', 'Accept': Mime::${3:JSON} }
 snippet post api
 	post '${1:path}',
 		{ ${2:model}: { ${3:contents} } }.to_json,
@@ -1232,7 +1232,7 @@ options head
 	require 'benchmark/ips'
 
 	Benchmark.ips do |x|
-		x.config(time: ${1:3}.seconds, warmup: ${2:1}.seconds)
+		x.config(time: ${1:3.seconds}, warmup: ${2:1.seconds})
 
 		x.report('${3:name}:') do
 			${4:code}
@@ -1268,7 +1268,6 @@ snippet gem
 	ruby '${1:2.2.2}'
 
 	${2:gem 'rspec', '~> 3.2.0'}
-	${0}
 snippet group
 	group :${2:development} do
 		${1:TARGET}
@@ -1489,11 +1488,11 @@ snippet transaction base
 	end
 # ActiveRecord exceptions
 snippet raise RecordInvalid
-	raise ActiveRecord::RecordInvalid${0}
+	raise ActiveRecord::RecordInvalid
 snippet raise RecordNotFound
-	raise ActiveRecord::RecordNotFound${0}
+	raise ActiveRecord::RecordNotFound
 snippet raise Rollback
-	raise ActiveRecord::Rollback${0}
+	raise ActiveRecord::Rollback
 
 #############################################
 # Rails controller
@@ -1524,7 +1523,7 @@ snippet defcreate
 	# POST /$1
 	# POST /$1.json
 	def create
-		@${1:model_class_name} = ${2:ModelClassName}.new(params[:$1])${0}
+		@${1:model_class_name} = ${2:ModelClassName}.new(params[:$1])
 
 		respond_to do |format|
 			if @$1.save
@@ -1540,7 +1539,7 @@ snippet defshow
 	# GET /$1/1
 	# GET /$1/1.json
 	def show
-		@${1:model_class_name} = ${2:ModelClassName}.find(params[:id])${0}
+		@${1:model_class_name} = ${2:ModelClassName}.find(params[:id])
 
 		respond_to do |format|
 			format.html # show.html.erb
@@ -1550,13 +1549,13 @@ snippet defshow
 snippet defedit
 	# GET /$1/1/edit
 	def edit
-		@${1:model_class_name} = ${2:ModelClassName}.find(params[:id])${0}
+		@${1:model_class_name} = ${2:ModelClassName}.find(params[:id])
 	end
 snippet defupdate
 	# PUT /$1/1
 	# PUT /$1/1.json
 	def update
-		@${1:model_class_name} = ${2:ModelClassName}.find(params[:id])${0}
+		@${1:model_class_name} = ${2:ModelClassName}.find(params[:id])
 
 		respond_to do |format|
 			if @$1.update_attributes(params[:$1])
@@ -1572,7 +1571,7 @@ snippet defdestroy
 	# DELETE /$1/1
 	# DELETE /$1/1.json
 	def destroy
-		@${1:model_class_name} = ${2:ModelClassName}.find(params[:id])${0}
+		@${1:model_class_name} = ${2:ModelClassName}.find(params[:id])
 		@$1.destroy
 
 		respond_to do |format|
@@ -2599,3 +2598,54 @@ snippet worker
 			${0:TODO}
 		end
 	end
+
+#############################################
+# Profile basic
+#############################################
+snippet obj_count
+	(
+		GC.start(full_mark: true, immediate_sweep: true, immediate_mark: false)
+		GC.disable
+
+		b = ObjectSpace.count_objects
+
+		${0:TARGET}
+
+		a = ObjectSpace.count_objects
+		p a[:TOTAL] - b[:TOTAL]
+	)
+
+#############################################
+# ruby-prof gem
+#############################################
+snippet prof
+	require 'ruby-prof'
+
+	GC.disable
+
+	RubyProf.start
+	${0:TARGET}
+	result = RubyProf.stop
+
+	printer = RubyProf::FlatPrinter.new(result)
+	printer.print(STDOUT)
+snippet prof block
+	require 'ruby-prof'
+
+	GC.disable
+
+	result = RubyProf.profile do
+		${0:TARGET}
+	end
+
+	printer = RubyProf::GraphPrinter.new(result)
+	printer.print(STDOUT)
+snippet prof FlatPrinter
+	printer = RubyProf::FlatPrinter.new(result)
+	printer.print(File.open("app_flat_profile.txt", "w+"), min_percent: 3)
+snippet prof GraphPrinter
+	printer = RubyProf::GraphPrinter.new(result)
+	printer.print(File.open("app_graph_profile.txt", "w+"), min_percent: 3)
+snippet prof CallStackPrinter
+	printer = RubyProf::CallStackPrinter.new(result)
+	printer.print(File.open("app_call_stack_profile.html", "w+"))
