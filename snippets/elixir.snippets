@@ -1,3 +1,41 @@
+snippet .
+options word
+	.(${0})
+snippet &
+	&(${0})
+snippet ..
+options indent
+	|> ${0}
+snippet <<
+	<< ${0} >>
+snippet ->
+	${1:condition} ->
+		${0}
+
+# sigils
+snippet ~r
+	~r/${0:regexp}/
+snippet ~R
+	~R/${0:no interpolation regexp}/
+snippet ~s
+	~s(${0:string})
+snippet ~S
+	~S(${0:no interpolation string})
+snippet ~w
+	~w(${0:words})
+snippet ~W
+	~W(${0:no interpolation words})
+snippet ~i
+	~w(${0:words})a
+snippet ~I
+	~W(${0:no interpolation words})a
+snippet ~c
+	~c(${0:chars})
+snippet ~C
+	~C(${0:no interpolation chars})
+
+snippet ,d
+	, do: ${0}
 snippet do
 	do
 		${0}
@@ -8,6 +46,8 @@ snippet try rescue
 	rescue
 		${2} -> ${0}
 	end
+snippet raise
+	raise ${1:RuntimeError}, message: "${0:content}"
 snippet rec
 	receive do
 		${1} ->
@@ -17,30 +57,39 @@ snippet if
 	if ${1} do
 		${0}
 	end
-snippet if do:
-	if ${1:condition}, do: ${0}
 snippet ife
 	if ${1:condition} do
 		${2}
 	else
 		${0}
 	end
-snippet if else:
+snippet ifd
+	if ${1:condition}, do: ${0}
+snippet ifde
 	if ${1:condition}, do: ${2}, else: ${0}
 snippet unless
 	unless ${1} do
 		${0}
 	end
-snippet unless do:
+snippet unlessd
 	unless ${1:condition}, do: ${0}
 snippet cond
 	cond do
-		${1} ->
+		${1:condition} ->
 			${0}
+		true ->
+			${2}
 	end
 snippet case
 	case ${1} do
-		${2} ->
+		${2:match} ->
+			${0}
+	end
+snippet case ok
+	case ${1} do
+		{ :ok, ${2:data} } ->
+			${3}
+		{ :error, ${4:message} } ->
 			${0}
 	end
 snippet for
@@ -53,42 +102,52 @@ snippet fori
 	end
 
 snippet req
-	require ${0:module_name}
+	require ${0:moduleName}
 snippet imp
-	import ${0:module_name}
+	import ${0:moduleName}
 snippet ali
-	alias ${0:module_name}
+	alias ${0:moduleName}
 
 snippet def
-	def ${1:name} do
+	def ${1:name()} do
 		${0}
 	end
-snippet defdo
-	def ${1:name}, do: ${2}
-snippet defmo
-	defmodule ${1:module_name} do
+snippet def when
+	def ${1:name()} when ${2:guard} do
+		${0}
+	end
+snippet defd
+	def ${1:name()}, do: ${0}
+snippet defp
+	defp ${1:name()} do
+		${0}
+	end
+snippet defp when
+	defp ${1:name()} when ${2:guard} do
+		${0}
+	end
+snippet defpd
+	defp ${1:name()}, do: ${0}
+snippet defm
+	defmodule ${1:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`} do
 		${0}
 	end
 snippet defma
 	defmacro ${1:name} do
 		${0}
 	end
-snippet defim
+snippet defi
 	defimpl ${1:protocol_name}, for: ${2:data_type} do
-		${0}
-	end
-snippet defp
-	defp ${1:name} do
 		${0}
 	end
 snippet defpr
 	defprotocol ${1:name}, [${0:function}]
-snippet defre
+snippet defr
 	defrecord ${1:record_name}, ${0:fields}
 
 snippet fn
 	fn ${1:args} -> ${0} end
-snippet fun
+snippet fnd
 	function do
 		${0}
 	end
@@ -97,8 +156,16 @@ snippet doc
 	@doc """
 	${0}
 	"""
+snippet docs
+	@doc ~S"""
+	${0}
+	"""
 snippet mdoc
 	@moduledoc """
+	${0}
+	"""
+snippet mdocs
+	@moduledoc ~S"""
 	${0}
 	"""
 
@@ -110,6 +177,42 @@ snippet testa
 	test "${1:test_name}", %{${2:arg: arg}} do
 		${0}
 	end
+
 snippet pry
-	require IEx; IEx.pry
-	${0}
+	require IEx; IEx.pry${0}
+snippet p
+	IO.puts ${0}
+snippet i
+	IO.inspect ${0}
+
+# Enum
+snippet enum ma
+	Enum.map ${1}, ${0:fun}
+snippet enum take
+	Enum.take ${0:3}
+snippet enum into
+	Enum.into ${1}, ${0:[]}
+snippet enum tolist
+	Enum.to_list ${0}
+
+# Stream
+snippet stream map
+	Stream.map ${1:enumerable}, ${0:fun}
+snippet stream filter
+	Stream.filter ${1:enumerable}, ${0:fun}
+snippet stream cycle
+	Stream.cycle(~w{ ${0:words} })
+snippet stream repeatedly
+	Stream.repeatedly(${0:fun})
+snippet stream iterate
+	Stream.interate(${1:start_value}, ${0:next_fun})
+snippet stream unfold
+	Stream.unfold(${1:start_value}, fn ${2:val} -> {${3:result}, ${4:next_val}} end)
+snippet stream resource
+	Stream.resource(${1:resource_fun}, ${2:next_fun}, ${3:close_fun})
+
+# String
+
+# IO
+snippet io stream
+	IO.stream(:line)
