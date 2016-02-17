@@ -1994,6 +1994,15 @@ snippet rspec feature
 	feature '${1:an action}' do
 		${2:pending 'Not implemented'}
 	end
+snippet rspec config
+	config.around(:each, :${1:caching}) do |example|
+		caching = ActionController::Base.perform_caching
+		ActionController::Base.perform_caching = example.metadata[:caching]
+
+		example.run
+
+		ActionController::Base.perform_caching = caching
+	end
 snippet describe
 alias desc
 	describe ${1:name} do
