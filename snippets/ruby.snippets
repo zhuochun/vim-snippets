@@ -288,9 +288,9 @@ snippet accepts_nested_attributes_for
 snippet enum
 	enum ${1:name}: %i[${2:option_1}, ${3:option_2}]
 snippet const_defined?
-	Object.const_defined?(${1:constant})
+	${1:Object}.const_defined?(${2:constant})
 snippet const_get
-	Object.const_get(${1:name}.capitalize)
+	${1:Object}.const_get(${2:name}.capitalize)
 snippet qualified_const_defined?
 	${1:Object}.qualified_const_defined?(${2:'constant'})
 snippet qualified_const_get
@@ -1477,14 +1477,17 @@ snippet persisted?
 	persisted?
 snippet new_record?
 	new_record?
+# connection
+snippet connection with_connection
+	ActiveRecord::Base.connection_pool.with_connection do |connection|
+		${0:do_sth_on_connection}
+	end
+snippet connection select_value
+	${1:ActiveRecord::Base}.connection.select_value(${1:raw_sql})
 # transaction
 snippet transaction
-	transaction do
-		${2:operation}
-	end
-snippet transaction base
 	${1:ActiveRecord::Base}.transaction do
-		${0:TARGET}
+		${0:raise ActiveRecord::Rollback}
 	end
 # ActiveRecord exceptions
 snippet raise RecordInvalid

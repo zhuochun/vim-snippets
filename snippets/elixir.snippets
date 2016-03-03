@@ -11,9 +11,18 @@ snippet <<
 snippet ->
 	${1:condition} ->
 		${0}
+snippet %
+	%${1:Struct}{${0:fields}}
+snippet %|
+	%{${1:map} | ${0:k: v}}
+snippet tuple
+	{${0:tuple}}
+snippet keyword
+	[${1:k1}: ${2:v2}, ${3:k1}: ${4:v2}]
 
 # sigils
 snippet ~r
+alias //
 	~r/${0:regexp}/
 snippet ~R
 	~R/${0:no interpolation regexp}/
@@ -48,11 +57,6 @@ snippet try rescue
 	end
 snippet raise
 	raise ${1:RuntimeError}, message: "${0:content}"
-snippet rec
-	receive do
-		${1} ->
-			${0}
-	end
 snippet if
 	if ${1} do
 		${0}
@@ -75,21 +79,23 @@ snippet unlessd
 	unless ${1:condition}, do: ${0}
 snippet cond
 	cond do
-		${1:condition} ->
+		${1:bool} ->
 			${0}
 		true ->
 			${2}
 	end
 snippet case
 	case ${1} do
-		${2:match} ->
+		${2:match [guard]} ->
 			${0}
+		_ ->
+			${3}
 	end
 snippet case ok
 	case ${1} do
-		{ :ok, ${2:data} } ->
+		{:ok, ${2:data}} ->
 			${3}
-		{ :error, ${4:message} } ->
+		{:error, ${4:message}} ->
 			${0}
 	end
 snippet for
@@ -105,76 +111,111 @@ snippet req
 	require ${0:moduleName}
 snippet imp
 	import ${0:moduleName}
+snippet imp only
+	import ${1:moduleName}, only: [${2:method}: ${0:1}]
+snippet imp except
+	import ${1:moduleName}, except: [${2:method}: ${0:1}]
 snippet ali
 	alias ${0:moduleName}
+snippet ali as
+	alias ${1:moduleName}, as: ${0:name}
 
+snippet when
+	when ${0:val > 0}
+snippet fn
+	fn ${1:args} -> ${0} end
 snippet def
-	def ${1:name()} do
-		${0}
-	end
-snippet def when
-	def ${1:name()} when ${2:guard} do
+	def ${1:name}(${2}) do
 		${0}
 	end
 snippet defd
-	def ${1:name()}, do: ${0}
+	def ${1:name}(${2}), do: ${0}
 snippet defp
-	defp ${1:name()} do
-		${0}
-	end
-snippet defp when
-	defp ${1:name()} when ${2:guard} do
+	defp ${1:name}(${2}) do
 		${0}
 	end
 snippet defpd
-	defp ${1:name()}, do: ${0}
-snippet defm
-	defmodule ${1:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`} do
+	defp ${1:name}(${2}), do: ${0}
+snippet defma
+	defmacro ${1:name}(${2}) do
+		${0:params are quoted args, return quoted code}
+	end
+snippet quote
+	quote do
+		${0:return internal rep}
+	end
+snippet quote bind_quoted
+	quote bind_quoted: [${1:arg}: ${2:val}] do
 		${0}
 	end
-snippet defma
-	defmacro ${1:name} do
+snippet unquote
+	unquote do
+		${0}
+	end
+snippet defm
+	defmodule ${1:#:Module.}${2:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`} do
+		${0}
+	end
+snippet defs
+	defmodule ${1:#:Module.}${2:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`} do
+		defstruct ${3:field}: ${0:default}
+	end
+snippet defpr
+	defprotocol ${1:name} do
 		${0}
 	end
 snippet defi
 	defimpl ${1:protocol_name}, for: ${2:data_type} do
 		${0}
 	end
-snippet defpr
-	defprotocol ${1:name}, [${0:function}]
-snippet defr
-	defrecord ${1:record_name}, ${0:fields}
 
-snippet fn
-	fn ${1:args} -> ${0} end
-snippet fnd
-	function do
-		${0}
-	end
-
-snippet doc
+snippet @doc
 	@doc """
 	${0}
 	"""
-snippet docs
+snippet @docs
 	@doc ~S"""
 	${0}
 	"""
-snippet mdoc
+snippet @mdoc
 	@moduledoc """
 	${0}
 	"""
-snippet mdocs
+snippet @mdocs
 	@moduledoc ~S"""
 	${0}
 	"""
+snippet iex
+	iex> ${0:code snippet}
 
+# Test
+snippet defm ExUnit
+	defmodule ${1:#:Module.}${2:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`} do
+		use ExUnit.Case
+
+		${0}
+	end
 snippet test
 	test "${1:test_name}" do
 		${0}
 	end
 snippet testa
-	test "${1:test_name}", %{${2:arg: arg}} do
+	test "${1:test_name}", %{${2:arg: val}} do
+		${0}
+	end
+snippet assert
+alias ass
+	assert ${0:test}
+snippet imp ExUnit.CaptureIO
+	import ExUnit.CaptureIO
+snippet cature_io
+	capture_io fn ->
+		${0}
+	end
+snippet imp ExUnit.CaptureLog
+	import ExUnit.CaptureLog
+snippet cature_log
+	capture_log fn ->
 		${0}
 	end
 
@@ -184,6 +225,84 @@ snippet p
 	IO.puts ${0}
 snippet i
 	IO.inspect ${0}
+snippet sys halt
+	System.halt(${0:0})
+snippet app get_env
+	Application.get_env(:${1:project}, :${2:key})
+snippet config
+	config :${1:project}, ${2:key}: ${3::value}
+
+# Processes
+snippet spawn
+alias spa
+	spawn(${1:__MODULE__}, :${2:func}, [${3:args}])
+snippet spawn anonymous_func
+	spawn(${1:anonymous_func})
+snippet send
+	send(${1:pid}, {${0:data}})
+snippet receive
+alias rec
+	receive do
+		${1} -> ${0}
+	end
+snippet receive timeout
+	receive do
+		{sender, ${1}} ->
+			${0}
+			send sender {:ok, value}
+		after timeout ->
+			${2}
+	end
+
+# Predefined names
+snippet _MO
+	__MODULE__
+snippet _FI
+	__FILE__
+snippet _DI
+	__DIR__
+snippet _EN
+	__ENV__
+snippet _CA
+	__CALLER__
+
+# Operators
+snippet is_atom
+	is_atom(${0})
+snippet is_binary
+	is_binary(${0})
+snippet is_bitstring
+	is_bitstring(${0})
+snippet is_boolean
+	is_boolean(${0})
+snippet is_exception
+	is_exception(${0})
+snippet is_float
+	is_float(${0})
+snippet is_function
+	is_function(${0})
+snippet is_integer
+	is_integer(${0})
+snippet is_nil
+	is_nil(${0})
+snippet is_list
+	is_list(${0})
+snippet is_number
+	is_number(${0})
+snippet is_pid
+	is_pid(${0})
+snippet is_port
+	is_port(${0})
+snippet is_reference
+	is_reference(${0})
+snippet is_tuple
+	is_tuple(${0})
+
+# Logger
+snippet log
+	Logger.${1:info} ${0:"message"}
+snippet log fn
+	Logger.${1:info} fn -> ${0:"message"} end
 
 # Enum
 snippet enum ma
@@ -216,3 +335,13 @@ snippet stream resource
 # IO
 snippet io stream
 	IO.stream(:line)
+
+# Erlang global
+snippet :global register_name
+	:global.register_name(${1::uniq_name}, ${2:pid})
+snippet :global whereis_name
+	:global.whereis_name(${1::uniq_name})
+
+# Erlang time
+snippet :time tc
+	:timer.tc(${1:Module}, ${2:method}, [${3:args}])
