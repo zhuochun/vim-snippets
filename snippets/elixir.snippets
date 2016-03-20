@@ -169,6 +169,7 @@ snippet defi
 		${0}
 	end
 
+# Tags
 snippet @doc
 	@doc """
 	${0}
@@ -185,10 +186,22 @@ snippet @mdocs
 	@moduledoc ~S"""
 	${0}
 	"""
-snippet iex
-	iex> ${0:code snippet}
+snippet @tag
+	@tag :${1:pending}
 
-# Test
+# Agent
+# http://elixir-lang.org/docs/stable/elixir/Agent.html
+snippet agent start_link
+	Agent.start_link(fn -> ${0:MapSet.new} end, name: ${1:__MODULE__})
+snippet agent get
+	Agent.get(${1:__MODULE__}, fn ${2:arg} -> ${0} end, ${3:timeout})
+snippet agent get_and_update
+	Agent.get_and_update(${1:__MODULE__}, fn ${2:arg} -> ${0} end, ${3:timeout})
+snippet agent cast
+	Agent.cast(${1:__MODULE__}, fn ${2:arg} -> ${0} end)
+
+# ExUnit
+# http://elixir-lang.org/docs/stable/ex_unit/ExUnit.Assertions.html
 snippet defm ExUnit
 	defmodule ${1:#:Module.}${2:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`} do
 		use ExUnit.Case
@@ -205,7 +218,16 @@ snippet testa
 	end
 snippet assert
 alias ass
-	assert ${0:test}
+	assert ${0:assertion}
+snippet assert_raise
+alias assra
+	assert_raise ${1:exception}, ${0:function}
+snippet assert_receive
+alias assre
+	assert_receive ${1:expected}, ${2:timeout \\ 100}
+snippet refute
+alias ref
+	refute ${0:assertion}
 snippet imp ExUnit.CaptureIO
 	import ExUnit.CaptureIO
 snippet cature_io
@@ -218,6 +240,13 @@ snippet cature_log
 	capture_log fn ->
 		${0}
 	end
+
+# ExUnit > DocTest
+# http://elixir-lang.org/docs/stable/ex_unit/ExUnit.DocTest.html
+snippet iex
+	iex> ${0:code snippet}
+snippet iex .
+	...> ${0:code snippet}
 
 snippet pry
 	require IEx; IEx.pry${0}
@@ -299,10 +328,13 @@ snippet is_tuple
 	is_tuple(${0})
 
 # Logger
+# http://elixir-lang.org/docs/stable/logger/Logger.html
 snippet log
 	Logger.${1:info} ${0:"message"}
 snippet log fn
 	Logger.${1:info} fn -> ${0:"message"} end
+snippet log metadata
+	Logger.metadata(${0:dict})
 
 # Enum
 snippet enum ma
