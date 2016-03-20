@@ -34,7 +34,7 @@ snippet main
 # function simple
 snippet func
 alias fn
-	func ${1:funcName}(${2:arg type})${3} {
+	func ${1:funcName}(${2:arg type}) ${3:return type} {
 		${0}
 	}
 # function with error
@@ -69,6 +69,18 @@ alias fni
 	${1:Method}(${2:arg type}) (${3:return_type})
 snippet args
 	${1:args} ...interface{}
+
+# function that returns a channel
+snippet func generator
+	func ${1:funcName}(${2:arg type}) <-chan ${3:type} {
+		${4:c} := make(chan $3)
+
+		go func() {
+			${0}
+		}()
+
+		return $4
+	}
 
 # if condition
 snippet if
@@ -106,8 +118,10 @@ snippet ifer return
 snippet select
 alias sel
 	select {
-	case ${1:v := <- chan1}:
-		${2}
+	case ${1:v} := <-${2:chan1}:
+		${3}
+	default:
+		${0}
 	}
 # switch
 snippet switch
@@ -122,6 +136,9 @@ alias sw
 snippet case
 	case ${1:value}:
 		${0}
+snippet case chan
+	case ${1:v} := <- ${2:chan1}:
+		${0}
 snippet default
 	default:
 		${0}
@@ -132,6 +149,7 @@ snippet for
 		${0}
 	}
 snippet while
+alias loop
 	for {
 		${0}
 	}
@@ -257,10 +275,11 @@ alias defr
 snippet go
 	go ${1:funcName}(${2})
 # goroutine anonymous function
-snippet ga
-	go func(${1} ${2:type}) {
+snippet go func
+alias ga
+	go func(${1:arg type}) {
 		${0:/* code */}
-	}(${3:arg})
+	}(${2:arg})
 
 # string
 snippet st
@@ -373,15 +392,13 @@ snippet flag.Parse
 
 # snippets
 snippet timeout
-	timeout := make(chan bool, 1)
-	go func() {
-		time.Sleep(${1:1}e9) // timeout after $1s
-		timeout <- true
-	}
+	timeout = time.After(${1:1} * time.Millisecond)
 
-	select {
-	case <-${2:ch}:
-		// nandle normal process
-	case <-timeout:
-		// handle timeout
+	for ${2} {
+		select {
+		case ${3:v} := <-${4:chan1}:
+			${0}
+		case <-timeout
+			return
+		}
 	}
