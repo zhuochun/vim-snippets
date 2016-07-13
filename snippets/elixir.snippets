@@ -3,7 +3,11 @@ options word
 	.(${0})
 snippet &
 	&(${0})
-snippet ..
+snippet :
+alias ;
+	=> ${0}
+snippet \
+alias \>
 options indent
 	|> ${0}
 snippet <<
@@ -12,36 +16,44 @@ snippet ->
 	${1:condition} ->
 		${0}
 snippet %
-	%${1:Struct}{${0:fields}}
+	%${1}{${0:fields}}
 snippet %|
 	%{${1:map} | ${0:k: v}}
 snippet tuple
+alias t
 	{${0:tuple}}
 snippet keyword
+alias k
 	[${1:k1}: ${2:v2}, ${3:k1}: ${4:v2}]
+snippet ok
+	{:ok, ${0}}
+snippet err
+	{:error, ${0}}
 
 # sigils
-snippet ~r
-alias //
+snippet r
+alias /
 	~r/${0:regexp}/
-snippet ~R
+snippet R
 	~R/${0:no interpolation regexp}/
-snippet ~s
-	~s(${0:string})
-snippet ~S
+snippet s
+	~s(${0:interpolate string})
+snippet S
 	~S(${0:no interpolation string})
-snippet ~w
-	~w(${0:words})
-snippet ~W
+snippet w
+	~w(${0:interpolate words})
+snippet W
 	~W(${0:no interpolation words})
-snippet ~i
-	~w(${0:words})a
-snippet ~I
-	~W(${0:no interpolation words})a
-snippet ~c
-	~c(${0:chars})
-snippet ~C
+snippet c
+	~c(${0:interpolate chars})
+snippet C
 	~C(${0:no interpolation chars})
+snippet D
+	~D[`strftime("%Y-%m-%d")`]
+snippet T
+	~T[`strftime("%H:%M:00")`]
+snippet N
+	~N[`strftime("%Y-%m-%d %H:%M:00")`]
 
 snippet ,d
 	, do: ${0}
@@ -81,27 +93,29 @@ snippet cond
 	cond do
 		${1:bool} ->
 			${0}
-		true ->
-			${2}
+		${2:true} ->
+
 	end
 snippet case
+alias cas
 	case ${1} do
 		${2:match [guard]} ->
 			${0}
-		_ ->
-			${3}
+		${3:_} ->
 	end
 snippet case ok
+alias cao
 	case ${1} do
 		{:ok, ${2:data}} ->
-			${3}
-		{:error, ${4:message}} ->
 			${0}
+		{:error, ${3:message}} ->
 	end
 snippet for
 	for ${1:item} <- ${2:items} do
 		${0}
 	end
+snippet ford
+	for ${1:item} <- ${2:items}, do: ${0}
 snippet fori
 	for ${1:item} <- ${2:items}, into: ${3} do
 		${0}
@@ -116,14 +130,20 @@ snippet imp only
 snippet imp except
 	import ${1:moduleName}, except: [${2:method}: ${0:1}]
 snippet ali
+alias al
 	alias ${0:moduleName}
-snippet ali as
+snippet alia
+alias ala
 	alias ${1:moduleName}, as: ${0:name}
 
 snippet when
 	when ${0:val > 0}
 snippet fn
 	fn ${1:args} -> ${0} end
+snippet fnn
+	fn ${1:args} ->
+		${0}
+	end
 snippet def
 	def ${1:name}(${2}) do
 		${0}
@@ -153,18 +173,17 @@ snippet unquote
 		${0}
 	end
 snippet defm
-	defmodule ${1:#:Module.}${2:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`} do
+alias mod
+	defmodule ${1:#:Module}.${2:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`} do
 		${0}
 	end
 snippet defs
-	defmodule ${1:#:Module.}${2:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`} do
-		defstruct ${3:field}: ${0:default}
-	end
-snippet defpr
+	defstruct ${3:field}: ${0:default}
+snippet defpro
 	defprotocol ${1:name} do
 		${0}
 	end
-snippet defi
+snippet defimp
 	defimpl ${1:protocol_name}, for: ${2:data_type} do
 		${0}
 	end
@@ -203,17 +222,21 @@ snippet agent cast
 # ExUnit
 # http://elixir-lang.org/docs/stable/ex_unit/ExUnit.Assertions.html
 snippet defm ExUnit
-	defmodule ${1:#:Module.}${2:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`} do
+	defmodule ${1:#:Module}.${2:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`} do
 		use ExUnit.Case
 
 		${0}
 	end
+snippet setup
+	setup ${1:config} do
+		${0::ok}
+	end
 snippet test
-	test "${1:test_name}" do
+	test "${1:test name}" do
 		${0}
 	end
-snippet testa
-	test "${1:test_name}", %{${2:arg: val}} do
+snippet test conn
+	test "${1:test name}", %{${2:conn}: ${3:conn}${4}} do
 		${0}
 	end
 snippet assert
@@ -221,7 +244,9 @@ alias ass
 	assert ${0:assertion}
 snippet assert_raise
 alias assra
-	assert_raise ${1:exception}, ${0:function}
+	assert_raise ${1:exception}, fn ->
+		${0}
+	end
 snippet assert_receive
 alias assre
 	assert_receive ${1:expected}, ${2:timeout \\ 100}
@@ -247,6 +272,18 @@ snippet iex
 	iex> ${0:code snippet}
 snippet iex .
 	...> ${0:code snippet}
+
+# Phoenix ExUnit
+snippet assert html_resp
+	assert html_response(conn, ${1:200})
+snippet assert json_resp
+	assert json_response(conn, ${1:200})
+snippet assert redirect_to
+	assert redirected_to(conn) == ${1:some}_path(conn, :${2:index})
+snippet assert errors_on
+    assert {:${1:field}, {"${2:message}", [${3:keyword}]}} in errors_on(%${4:Model}{}, ${5:attrs}${0})
+snippet render_to_string
+	render_to_string(${2:Some}View, "${3:new}.html", conn: conn${4})
 
 snippet pry
 	require IEx; IEx.pry${0}
@@ -367,6 +404,63 @@ snippet stream resource
 # IO
 snippet io stream
 	IO.stream(:line)
+
+# Ecto
+# https://hexdocs.pm/ecto/Ecto.html
+snippet schema
+	schema "${1:name}" do
+		field :${2:name}, :${3:string}
+		${0}
+
+		timestamps
+	end
+snippet field
+	field :${1:name}, :${2:string}${0}
+snippet field virtual
+	field :${1:name}, :${2:string}, virtual: true${0}
+
+# Ecto.Query.API
+snippet from
+	from ${1:m} in ${2:Model}, select: ${0}
+snippet from where
+	from ${1:m} in ${2:Model},
+	where: ${3:conditions},
+	select: ${0:{ columns }}
+
+# Ecto.Migration
+# https://hexdocs.pm/ecto/Ecto.Migration.html
+snippet create table
+	create table(:${1:table}) do
+		add :${2:column}, :${3:string}
+		${0}
+
+		timestamps
+	end
+snippet create index
+	create unique_index(:${1:table}, [:${2:column}])
+snippet alter table
+	alter table(:${1:table}) do
+		add :${2:column}, :${3:string}
+		${0}
+	end
+
+# Plug
+snippet plug
+	defmodule ${1:#:Module}.${2:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`} do
+		import Plug.Conn
+
+		def init(opts) do
+			opts
+		end
+
+		def call(conn, opts) do
+			${0:conn}
+		end
+	end
+snippet plug fun
+	def ${1:name}(conn, _opts) do
+		${0}
+	end
 
 # Erlang global
 snippet :global register_name
