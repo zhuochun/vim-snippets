@@ -1,0 +1,53 @@
+include html.snippets
+
+# EEx Templates
+snippet %
+options word
+	<%= ${0:TARGET} %>
+snippet end
+	<% end %>
+snippet else
+	<% else %>
+snippet if
+	<%= if ${1:condition} do %>
+		${0:TARGET}
+	<% end %>
+snippet ife
+	<%= if ${1:condition} do %>
+		${0:TARGET}
+	<% else %>
+
+	<% end %>
+snippet for
+	<%= for ${2:item} <- ${1:@items} %>
+		${0:TARGET}
+	<% end %>
+
+# Phoenix.HTML helpers
+# https://hexdocs.pm/phoenix_html/Phoenix.HTML.html
+snippet link
+	<%= link "${1:View}", to: ${2:some}_path(@conn, :${3:action}, ${0}) %>
+snippet render
+	<%= render "${1:html}", ${2:key}: ${3:val} %>
+snippet content_tag
+	<%= content_tag :${1:div}, id: "${2:id}", data: [${3:keyword}] do %>
+		${0:TARGET}
+	<% end %>
+
+# Form helpers
+snippet form
+	<%= form_for @${1:changeset}, ${2:some}_path(@conn, :${3:create}), fn f -> %>
+		${0:TARGET}
+	<% end %>
+snippet cla
+	class: "${0}"
+snippet label
+	<%= label f, :${1:field}, "${2:label}"${0} %>
+snippet select
+	<%= select f, :${1:field}, @${2:collections}, prompt: "${3:Choose $1}"${0} %>
+snippet text_input
+	<%= text_input f, :${1:field}, placeholder: "$1"${0} %>
+snippet pass_input
+	<%= password_input f, :${1:field}, placeholder: "$1"${0} %>
+snippet error_tag
+	<%= error_tag f, :${1:field} %>
