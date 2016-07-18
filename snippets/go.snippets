@@ -5,7 +5,7 @@ alias pack
 
 # import
 snippet import
-	import "${0:fmt}"
+	import "${1:fmt}"
 # import ()
 snippet imp
 	import (
@@ -24,7 +24,7 @@ snippet main
 	package main
 
 	import (
-		"${1:package}"
+		"${1:fmt}"
 	)
 
 	func main() {
@@ -33,46 +33,52 @@ snippet main
 
 # function simple
 snippet func
-alias fn
-	func ${1:funcName}(${2:arg type}) ${3:return type} {
+alias fun
+	func ${1:name}(${2}) ${3}{
+		${0}
+	}
+# function anonymous
+snippet func anonymous
+alias funa
+	func(${1}) ${2}{
 		${0}
 	}
 # function with error
 snippet func err
-alias fe
-	func ${1:funcName}(${2:arg type}) ${3:error} {
+alias fune
+	func ${1:name}(${2}) ${3:error} {
 		${0}
 	}
 # function with return result
 snippet func return
-alias fr
-	func ${1:funcName}(${2:arg type}) (${3:return type}, ${4:err error}) {
+alias funr
+	func ${1:name}(${2}) (${3:result string}, ${4:err error}) {
 		${0}
 	}
-# function on receiver
-snippet func self
-alias fm
-	func (${1:self} ${2:type}) ${3:funcName}(${4:arg type}) ${5:error} {
-		${0}
-	}
+
 # function new
 snippet func new
-alias fnew
+alias funn
 	func New${1:Instance}(${2:arg type}) *${1} {
 		${0}
 
 		return &$1
 	}
-# function definition in interface
-snippet func interface
-alias fni
-	${1:Method}(${2:arg type}) (${3:return_type})
-snippet args
-	${1:args} ...interface{}
-
+# function on receiver
+snippet func receiver
+alias funr funm
+	func (${1:receiver} *${2:Type}) ${3:name}(${4}) ${5}{
+		${0}
+	}
+snippet func receiver nil
+	func (${1:receiver} *${2:Type}) ${3:name}(${4}) ${5}{
+		if $1 == nil {
+			${0}
+		}
+	}
 # function that returns a channel
 snippet func generator
-	func ${1:funcName}(${2:arg type}) <-chan ${3:type} {
+	func ${1:name}(${2:arg type}) <-chan ${3:type} {
 		${4:c} := make(chan $3)
 
 		go func() {
@@ -92,56 +98,84 @@ snippet ifel
 	if ${1:condition} {
 		${2}
 	} else {
-		${3}
+
 	}
 # else snippet
-snippet elseif
+snippet elif
 	else if ${1:condition} {
 		${0}
 	}
-# if nil
-snippet ifn
-	if ${1:err} != nil {
-		${0:return}
-	}
 # if error snippet
+snippet ife
+	if ${1:err} != nil {
+		return $1
+	}
 snippet ifer
-	if err != nil {
-		return${0: err}
+	if ${1}${2:err} := ${3}; $2 != nil {
+		return $2
 	}
-snippet ifer return
-	if err := ${1}; err != nil {
-		return${0: err}
-	}
-
-# select
-snippet select
-alias sel
-	select {
-	case ${1:v} := <-${2:chan1}:
-		${3}
-	default:
+snippet ifok
+	if ${1:val}, ok := ${2:<-ch}; ok {
 		${0}
 	}
+
 # switch
 snippet switch
 alias sw
 	switch ${1:var} {
 	case ${2:value1}:
-		${3}
-	default:
 		${0}
+	default:
+	}
+snippet switch type
+	switch v := ${1:var}.(type) {
+	case ${2:string}:
+		${0}
+	default:
 	}
 # case
 snippet case
 	case ${1:value}:
 		${0}
-snippet case chan
-	case ${1:v} := <- ${2:chan1}:
+snippet case read chan
+	case ${1:v} := <- ${2:chan}:
+		${0}
+snippet case wait chan
+	case <-${1:chan}:
+		${0}
+snippet case timeout
+alias timeout
+	case <-time.After(${1:1000} * time.Millisecond):
 		${0}
 snippet default
 	default:
 		${0}
+
+# select
+snippet select
+alias sel
+	select {
+	case ${1:<-chan}:
+		${0}
+	}
+# select without blocking
+snippet select default
+alias seld
+	select {
+	case ${1:<-chan}:
+		${0}
+	default:
+
+	}
+# select with timeout
+snippet select timeout
+alias selt
+	select {
+	case ${2:<-chan}:
+		${0}
+	case <-time.After(${1:1000} * time.Millisecond)
+		return
+	}
 
 # for loop
 snippet for
@@ -154,27 +188,80 @@ alias loop
 		${0}
 	}
 snippet fori
+alias foi
 	for ${1:i} := 0; $1 < ${2:count}; $1${3:++} {
 		${0}
 	}
-# for range loop
-snippet forr
-	for ${1:k}, ${2:v} := range ${3:collections} {
+# for range
+snippet for range
+alias forr
+	for ${1:i}, ${2:v} := range ${3:collection} {
 		${0}
 	}
-snippet forr value
-	for ${1:v} := range ${2:collections} {
+# for range channel
+snippet for range channel
+alias forc
+	for ${1:v} := range <-${3:chan} {
 		${0}
+	}
+# for select loop
+snippet for select
+alias fors
+	for {
+		select {
+		case ${2:<-chan}:
+			${0}
+		case <-time.After(${1:1000} * time.Millisecond)
+			return
+		}
 	}
 
 # interface
 snippet interface
-alias any
+alias i
 	interface{}
 # full interface snippet
 snippet interface name
 	interface ${1:name} {
 		${0:methods}
+	}
+snippet interface args
+alias args
+	${1:args} ...interface{}
+
+# interface definition interface
+snippet interface func
+alias in funi fn
+	${1:func}(${2})
+# common interfaces
+# fmt.Stringer interface
+snippet in stringer
+	func (${1:self} ${2:Type}) String() string {
+		return fmt.Sprintf("${3:format}", ${0:values})
+	}
+# error interface
+snippet in error
+	func (${1:e} ${2:ErrorType}) Error() string {
+		return fmt.Sprintf("${3:format}", ${0:values})
+	}
+# io.Reader interface
+snippet in reader
+	func (${1:t} ${2:Type}) Read(b []byte) (int, error) {
+		${0}
+		return 0, io.EOF
+	}
+# sort.Interface interface
+snippet in sort
+	func (${1:b} *${2:Type}) Len() int {
+		return len($1)
+	}
+
+	func ($1 *$2) Less(i int, j int) bool {
+		${0}
+	}
+
+	func ($1 *$2) Swap(i int, j int) {
+		$1[i], $1[j] = $1[j], $1[i]
 	}
 
 # struct
@@ -183,71 +270,109 @@ snippet struct
 		${2:data}
 	}
 
-# type struct
+# type
 snippet type
+alias ty
 	type ${1:typeName} ${2:type}
+# type function
+snippet type func
+alias tf ft
+	type ${1:typeName} func(${2})
+# type struct
 snippet type struct
-alias typs
+alias ts st
 	type ${1:typeName} struct {
 		${0:data}
 	}
+snippet type err
+	type ${1:Foo}Error struct {
+		${0:data}
+	}
+
+	func (e *$1Error) Error() string {
+		return /* error message */
+	}
 # type interface
 snippet type interface
-alias typi
+alias ti it
 	type ${1:typeName} interface {
 		${0:methods}
 	}
 
 # json
-snippet json
-	${1:Name} ${2:type} \`json:"${3:key}"\`
-snippet json Marshal
+snippet j
+	${1:UpperCase} ${2:string} \`json:"${3:$1}"\`
+snippet jo
+	${1:UpperCase} ${2:string} \`json:"${3:$1},omitempty"\`
+snippet js
+	${1:Name} ${2:struct} {
+		${0}
+	} \`json:"${3:$1}"\`
+snippet js marshal
+alias jma
 	${1:data}, err := json.Marshal(${2:v})
-snippet json Unmarshal
+snippet js unmarshal
+alias jun
 	err := json.Unmarshal(${1:data}, &${2:v})
-snippet json encode
+snippet js encode
+alias jen
 	json.NewEncoder(${1:io.Writer}).Encode(${2:data})
-snippet json decode
+snippet js decode
+alias jde
 	json.NewDecoder(${1:io.Reader}).Decode(&${2:v})
 
-# const
-snippet c
-	const ${1:NAME} = ${2:0}
-# constants with iota
+# sql
+snippet sql
+	${1:UpperCase} ${2:string} \`sql-col:"${3:$1}"\`
+
+# constants (cannot be declared using :=)
 snippet const
+	const ${1:name} = ${2:0}
+# constants with iota
+snippet con
 	const (
-		${1:NAME1} = iota
-		${2:NAME2}
+		${1:name} = ${0:iota}
 	)
 
 # variables
+snippet .
+	...
 snippet -
 	${1:chan} <- ${2:data}
 snippet &
+alias s
 	&${1:Struct}{${2:args}}
 snippet -c
 	<-chan ${1:int}
 snippet c-
 	chan<- ${1:int}
 snippet v
+alias ;
 	${1:name} := ${2:value}
+snippet vm
+alias ;m
+	${1:name} := make(${2:value})
 snippet ve
+alias ;e
 	${1:name}, ${2:err} := ${3:action}
 	if $2 != nil {
-		${0:return}
+		return $2${0}
 	}
 snippet ok
-	${1:val}, ok := ${2:<-ch}
-	if ok {
-		${0}
-	}
+alias ;k
+	${1:val}, ${2:ok} := ${3:<-ch}
 snippet va
 	var ${1:name} ${2:int} = ${3:value}
-snippet vcr
+snippet var
+	var (
+		${1:name} ${2:int} = ${3:value}
+	)
+snippet var chan<-
 	var ${1:chan_name} chan<- ${2:int}
-snippet vcw
+snippet var <-chan
 	var ${1:chan_name} <-chan ${2:int}
-snippet vs
+snippet var struct
+alias vas
 	var ${1:name} struct {
 		${0}
 	}
@@ -255,7 +380,7 @@ snippet vs
 # defer
 snippet defer
 alias def
-	defer ${1:func}()
+	defer ${0:func()}
 # def func
 snippet defer func
 alias deff
@@ -273,28 +398,42 @@ alias defr
 
 # go
 snippet go
-	go ${1:funcName}(${2})
+	go ${1:func}(${2})
 # goroutine anonymous function
-snippet go func
-alias ga
+snippet gof
 	go func(${1:arg type}) {
-		${0:/* code */}
+		${0}
 	}(${2:arg})
 
 # string
-snippet st
+snippet str
 	string
+snippet sts
+	strings.${0}
 # bool
 snippet bl
 	bool
-# byte
+# byte, alias for uint8
 snippet bt
 	byte
-# float
+# rune, alias for int32, a Unicode code point
+snippet ru
+	rune
+# int
+snippet i3
+	int32
+snippet i6
+	int64
+# unit
+snippet ui
+	uint
+snippet u3
+	uint32
+snippet u6
+	uint64
+# float/float32
 snippet fl
-	float32
-# float32
-snippet f3
+alias f3
 	float32
 # float64
 snippet f6
@@ -302,18 +441,23 @@ snippet f6
 # channel
 snippet ch
 	chan ${1:int}
-
+# error
+snippet ern
+	errors.New("${1:description}")
+snippet erf
+	fmt.Errorf("${1:format}", ${2:values})
 # continue
-snippet con
+snippet cont
 	continue
 # fallthrough
-snippet fal
+snippet fall
 	fallthrough
 # result
 snippet res
 	result
 # return
 snippet ret
+alias rt
 	return ${1}, ${2:nil}
 # range
 snippet ran
@@ -322,22 +466,34 @@ snippet ran
 snippet len
 	len(${1:var})
 # make
-snippet make
-alias ma
-	make(${1:[]string}, ${2:0})
+snippet make slice
+alias mas ms
+	make([]${1:string})
+snippet make slice length
+alias masl
+	make([]${1:string}, ${0:length})
+snippet make map
+alias mam mm
+	make(map[${1:keyType}]${2:valType}, ${0:length})
+snippet make map length
+alias maml
+	make(map[${1:keyType}]${2:valType}, ${0:length})
 snippet make chan
-alias mac
-	make(chan ${1:int}, ${2:1})
+alias mac mc
+	make(chan ${1:int})
+snippet make chan length
+alias macl
+	make(chan ${1:int}, ${0:length})
 # close
 snippet close
 alias cl
 	close(${1:ch})
 # append
 snippet app
-	append(${1:slice}, ${2:value})
+	append(${1:slice}, ${0:value})
 # map
 snippet map
-	map[${1:string}]${2:int}
+	map[${1:keyType}]${0:valType}
 # new
 snippet new
 	new(${1:type})
@@ -346,59 +502,161 @@ snippet panic
 alias pan
 	panic("${1:msg}")
 
-# runtime package
-
-# sync package
-snippet sync
-	var ${1:mutex} sync.${2:Mutex}
-snippet mutex.Lock
-	mutex.Lock()
-	defer mutex.Unlock()
+# sync https://golang.org/pkg/sync/
+snippet lock
+	${1:mutex}.Lock()
+	defer $1.Unlock()
 
 	${0}
+snippet rlock
+	${1:mutex}.RLock()
+	defer $1.RUnlock()
 
-# log package
-snippet log.Printf
+	${0}
+snippet waitGroup
+alias wg
+	var ${1:wg} sync.WaitGroup
+snippet waitGroup add
+alias wga
+	${1:wg}.Add(${2:1})
+snippet waitGroup wait
+alias wgw
+	${1:wg}.Wait()
+snippet waitGroup done
+alias wgd
+	${1:wg}.Done()
+
+# log https://golang.org/pkg/log/
+snippet log
+alias l
+	log.Print${1:f}(${0})
+snippet log Printf
 alias lf
 	log.Printf("%${1:s}", ${2:var})
-snippet log.Println
+snippet log Println
 alias ll
 	log.Println("${1}")
 
-# fmt package
-snippet fmt.Println
-alias pl
+# fmt https://golang.org/pkg/fmt/
+snippet fmt Print
+alias fp p
+	fmt.Print${1:f}(${2})
+snippet fmt Println
+alias fpl pl
 	fmt.Println(${1})
-snippet fmt.Printf
-alias pf
-	fmt.Printf("${1}", ${2:var})
-snippet fmt.Sprintf
-alias sp
-	fmt.Sprintf("${1}", ${2:var})
+snippet fmt Printf
+alias fpf pf
+	fmt.Printf("${1}\n", ${2:values})
+snippet fmt Sprintf
+alias fsp pp
+	fmt.Sprintf("${1}", ${2:values})
+snippet fmt errorf
+alias fpe pe
+	fmt.Errorf("${1}", ${2:values})
 
-# testing package
-snippet func test
-	func Test${1:FuncName}(t *testing.T) {
-		${0}
-	}
-snippet t.Error
-	t.Error("${1:test failed}", ${2:actual}, ${3:expected})
+# strconv https://golang.org/pkg/strconv/
+snippet str atoi
+	${1:i}, err := strconv.Atoi("${0}")
+snippet str parse
+	${1:i}, err := strconv.Parse${2:Int}(${3:v}, ${4:10, 64})
+snippet str parseFloat
+	${1:s}, err := strconv.ParseFloat(${2:v}, ${3:64})
 
-# flag package
+# flag https://golang.org/pkg/flag/
 snippet flag
 	var ${1:name} *${2:type} = flag.${3:Type}("${4:short}", "${5:default}", "${6:description}")
-snippet flag.Parse
+snippet flag Parse
 	flag.Parse()
 
-# snippets
-snippet timeout
-	timeout = time.After(${1:1} * time.Millisecond)
+# time https://golang.org/pkg/time/
+snippet time sec
+	time.Second
+snippet time msec
+	time.Millisecond
+# https://golang.org/pkg/time/#After
+snippet time after
+	time.After(${1:1000} * time.${2:Millisecond})
+snippet time ticker
+	time.NewTicker(${1:1000} * time.${2:Millisecond})
 
-	for ${2} {
-		select {
-		case ${3:v} := <-${4:chan1}:
-			${0}
-		case <-timeout
-			return
+# regexp https://golang.org/pkg/regexp/
+snippet regexp compile
+alias /
+	regexp.${1:Must}Compile(`${2}`)
+
+# testing https://golang.org/pkg/testing/
+# go test
+snippet func test
+alias test funt
+	func Test${1:Name}(t *testing.T) {
+		${0}
+	}
+snippet func testMain
+	func TestMain(m *testing.M) {
+		${0}
+	}
+snippet t errorf
+alias terr
+	t.Errorf("${1:test()} = %v, expected: %v", ${2:actual}, ${3:expected})
+snippet t fatalf
+alias tfat
+	t.Fatalf("${1:test()} = %v, expected: %v", ${2:actual}, ${3:expected})
+snippet t table
+alias ttab
+	var ${1:tests} = []struct {
+		in ${2:string}
+		expected ${3:string}
+	}{
+		{${0:in, expected}}
+	}
+
+	for _, tc = range $1 {
+		if actual != tc.expected {
+
 		}
 	}
+
+# testing benchmark
+# go test -bench
+snippet func benchmark
+alias bench
+	func Benchmark${1:Name}(b *testing.B) {
+		${0}
+	}
+# reset benchmark timer
+snippet b resetTimer
+	b.ResetTimer()
+# go test -cpu
+snippet b parallel
+alias bpa
+	b.RunParallel(func(pb *testing.PB) {
+		for pb.Next() {
+			${0}
+		}
+	})
+
+# testing examples https://blog.golang.org/examples
+snippet func example
+alias exam eg funeg
+	func Example${1:Name}() {
+		${0}
+
+		// Output:
+		// expected output
+	}
+snippet func example method
+alias examm egm funegm
+	func Example${1:Type}_${2:Method}() {
+		${0}
+
+		// Output:
+		// expected output
+	}
+
+# testing assert https://godoc.org/github.com/stretchr/testify/assert
+snippet assert equal
+alias aseq
+	assert.Equal(t, ${1:expected}, ${2:actual}, ${3:msgAndArgs})
+snippet assert empty
+alias asem
+	assert.Empty(t, ${1:emptyObj})
