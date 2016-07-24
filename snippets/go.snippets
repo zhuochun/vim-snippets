@@ -389,7 +389,7 @@ alias deff
 	}()
 # defer recover
 snippet defer recover
-alias defr
+alias defr recover
 	defer func() {
 		if err := recover(); err != nil {
 			${0}
@@ -528,7 +528,7 @@ alias wgd
 
 # log https://golang.org/pkg/log/
 snippet log
-alias l
+alias lp
 	log.Print${1:f}(${0})
 snippet log Printf
 alias lf
@@ -582,7 +582,7 @@ snippet time ticker
 # regexp https://golang.org/pkg/regexp/
 snippet regexp compile
 alias /
-	regexp.${1:Must}Compile(`${2}`)
+	regexp.${1:Must}Compile(\`${2}\`)
 
 # testing https://golang.org/pkg/testing/
 # go test
@@ -595,25 +595,23 @@ snippet func testMain
 	func TestMain(m *testing.M) {
 		${0}
 	}
-snippet t errorf
+snippet test errorf
 alias terr
 	t.Errorf("${1:test()} = %v, expected: %v", ${2:actual}, ${3:expected})
-snippet t fatalf
+snippet test fatalf
 alias tfat
 	t.Fatalf("${1:test()} = %v, expected: %v", ${2:actual}, ${3:expected})
-snippet t table
+snippet test table
 alias ttab
-	var ${1:tests} = []struct {
-		in ${2:string}
+	${1:tests} := []struct {
+		${2:in string}
 		expected ${3:string}
 	}{
 		{${0:in, expected}}
 	}
 
-	for _, tc = range $1 {
-		if actual != tc.expected {
+	for _, tc := range $1 {
 
-		}
 	}
 
 # testing benchmark
@@ -654,9 +652,29 @@ alias examm egm funegm
 	}
 
 # testing assert https://godoc.org/github.com/stretchr/testify/assert
-snippet assert equal
-alias aseq
-	assert.Equal(t, ${1:expected}, ${2:actual}, ${3:msgAndArgs})
+snippet assert contains
+alias aco
+	assert.Contains(t, ${1:s}, ${2:contains}, ${3:msgAndArgs})
 snippet assert empty
-alias asem
-	assert.Empty(t, ${1:emptyObj})
+alias aem
+	assert.Empty(t, ${1:emptyObj}, ${2:msgAndArgs})
+snippet assert equal
+alias aeq
+	assert.Equal(t, ${1:expected}, ${2:actual}, ${3:msgAndArgs})
+snippet assert jsoneq
+alias ajs
+	assert.JSONEq(t, ${1:expected}, ${2:actual}, ${3:msgAndArgs})
+snippet assert len
+	assert.Len(t, ${1:object}, ${2:length}, ${3:msgAndArgs})
+snippet assert true
+alias atr
+	assert.True(t, ${1:value}, ${2:msgAndArgs})
+snippet assert regexp
+alias areg
+	assert.Regexp(t, ${1:rx}, ${2:str}, ${3:msgAndArgs})
+snippet assert notempty
+alias anem
+	assert.NotEmpty(t, ${1:object}, ${2:msgAndArgs})
+snippet assert notequal
+alias aneq
+	assert.NotEqual(t, ${1:expected}, ${2:actual}, ${3:msgAndArgs})
