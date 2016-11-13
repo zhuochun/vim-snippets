@@ -319,10 +319,12 @@ alias ti
 # json
 snippet j
 	${1:UpperCase} ${2:string} \`json:"${3:$1}"\`
+snippet j.
+	\`json:"${1:keyName}"\`
 snippet jo
 	${1:UpperCase} ${2:string} \`json:"${3:$1},omitempty"\`
-snippet jq
-	${1:UpperCase} ${2:string} \`${3:sql-col}:"${4:$1}"\`
+snippet jo.
+	\`json:"${1:keyName},omitempty"\`
 snippet js struct
 alias jst
 	${1:Name} ${2:struct} {
@@ -432,8 +434,6 @@ snippet gof
 # string
 snippet st
 	string
-snippet sts
-	strings.${0}
 # bool
 snippet bl
 	bool
@@ -597,6 +597,10 @@ snippet ern
 snippet erf
 	fmt.Errorf("${1:format}", ${2:values})
 
+# strings https://godoc.org/strings
+snippet ss
+	strings.${0}
+
 # strconv https://golang.org/pkg/strconv/
 snippet atoi
 	${1:i}, ${2:err} := strconv.Atoi("${0}")
@@ -736,36 +740,36 @@ alias examm egm funegm
 	}
 
 # testing assert https://godoc.org/github.com/stretchr/testify/assert
-snippet acontains
+snippet ascontains
 	assert.Contains(t, ${1:s}, ${2:contains}, ${3:msgAndArgs})
-snippet aempty
+snippet asempty
 	assert.Empty(t, ${1:emptyObj}, ${2:msgAndArgs})
-snippet anotempty
+snippet asnotempty
 	assert.NotEmpty(t, ${1:object}, ${2:msgAndArgs})
-snippet aeq
+snippet aseq
 	assert.Equal(t, ${1:expected}, ${2:actual}, ${3:msgAndArgs})
-snippet anoteq
+snippet asnoteq
 	assert.NotEqual(t, ${1:expected}, ${2:actual}, ${3:msgAndArgs})
-snippet ajseq
+snippet asjseq
 	assert.JSONEq(t, ${1:expected}, ${2:actual}, ${3:msgAndArgs})
-snippet alen
+snippet aslen
 	assert.Len(t, ${1:object}, ${2:length}, ${3:msgAndArgs})
-snippet anil
+snippet asnil
 	assert.Nil(t, ${1:object}, ${3:msgAndArgs})
-snippet anotnil
+snippet asnotnil
 	assert.NotNil(t, ${1:object}, ${3:msgAndArgs})
-snippet atrue
+snippet astrue
 	assert.True(t, ${1:value}, ${2:msgAndArgs})
-snippet afalse
+snippet asfalse
 	assert.False(t, ${1:value}, ${2:msgAndArgs})
-snippet aregexp
+snippet asregexp
 	assert.Regexp(t, ${1:rx}, ${2:str}, ${3:msgAndArgs})
-snippet aimpl
+snippet asimpl
 	assert.Implements(t, ${1:interface}, ${2:obj}, ${3:msgAndArgs})
 # testing mock https://godoc.org/github.com/stretchr/testify/mock
-snippet mon
+snippet mockon
 	${1:mock}.On("${2:methodName}", ${3:args}).Return(${0})
-snippet mrun
+snippet mockrun
 	${1:mock}.On("${2:methodName}", AnythingOfType("${3:*map[string]interface{}}").Return().Run(func(args Arguments) {
 		${0:arg := args.Get(0).(*map[string]interface{})}
 

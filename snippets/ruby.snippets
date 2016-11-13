@@ -1639,6 +1639,10 @@ snippet low
 	logger.warn { '${1:message}' }
 snippet rails log
 	Rails.logger.info { '${1:message}' }
+# Logger print all ActiveRecord queries
+# http://stackoverflow.com/questions/5244486/how-do-i-turn-on-sql-debug-logging-for-activerecord-in-rspec-tests
+snippet logger ActiveRecord
+	ActiveRecord::Base.logger = Logger.new(STDOUT)
 # Map
 snippet mapc
 	${1:map}.${2:connect} '${3:controller/:action/:id}'
