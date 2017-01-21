@@ -1,7 +1,9 @@
 # package
 snippet package
-alias pack
-	package ${1:`substitute(vim_snippets#Filename(), '\(_test\)', '', 'g')`}
+alias p pkg
+	package ${1:`split(expand("%:h"), '\\')[-1]`}
+
+	${0}
 
 # import
 snippet import
@@ -214,9 +216,9 @@ alias forr
 		${0}
 	}
 # for range channel
-snippet for range channel
+snippet for channel
 alias forc
-	for ${1:v} := range <-${3:chan} {
+	for ${1:v} := range ${3:chan} {
 		${0}
 	}
 # for select loop
@@ -363,16 +365,6 @@ snippet :
 	[${1:beg}:${2:end}:${3:cap}]
 snippet &
 	&${1:Struct}{${2:args}}
-snippet -
-	${1:chan} <- ${2:data}${0}
-snippet ;
-	${1:name} := ${2:value}${0}
-snippet ;c
-	${1:name} := make(${2}chan ${3:type})
-snippet ;d
-	${1:done} := make(${2}chan ${3:struct{}})
-snippet ;m
-	${1:name} := make(${2:value})
 snippet ;e
 	${1:name}, ${2:err} := ${3:action}
 	if $2 != nil {
@@ -381,18 +373,6 @@ snippet ;e
 snippet ;k
 alias ok
 	${1:val}, ${2:ok} := ${3:<-ch}${0}
-snippet v
-	var ${1:name}${0}
-snippet ve
-	var ${1:err} error${0}
-snippet vs
-	var ${1:name} []${2:slice}${0}
-snippet vm
-	var ${1:name} map[${2:key}]${3:val}${0}
-snippet va
-	var (
-		${1:name} ${2:int} = ${3:value}${0}
-	)
 snippet var chan<-
 	var ${1:chan_name} chan<- ${2:int}${0}
 snippet var <-chan
@@ -434,6 +414,8 @@ snippet gof
 # string
 snippet st
 	string
+snippet St
+	String
 # bool
 snippet bl
 	bool
@@ -451,6 +433,9 @@ snippet i3
 snippet i6
 alias i5 i7
 	int64
+snippet I6
+alias I5 I7
+	Int64
 # unit
 snippet ui
 	uint
@@ -467,6 +452,9 @@ alias f3
 snippet f6
 alias f5 f7
 	float64
+snippet F6
+alias F5 F7
+	Float64
 # channel
 snippet c
 	chan ${1:int}${0}
@@ -480,6 +468,15 @@ snippet m
 # struct
 snippet s
 	struct{}
+# sql nullable
+snippet ns
+	sql.NullString{Valid: ${1:true}, String: "${2}"}${0}
+snippet nb
+	sql.NullBool{Valid: ${1:true}, Bool: ${2:true}}${0}
+snippet ni
+	sql.NullInt64{Valid: ${1:true}, Int64: ${2}}${0}
+snippet nf
+	sql.NullFloat64{Valid: ${1:true}, Float64: ${2}}${0}
 
 # make
 snippet make slice
@@ -652,20 +649,22 @@ snippet test fatalf
 alias tfat
 	t.Fatalf("${1:test()} = %v, expected: %v", ${2:actual}, ${3:expected})
 snippet test table
-alias ttab
+alias testt
 	${1:tests} := []struct {
 		name string
-		${2:in string}
-		${3:expected string}
+		${2:in} ${3:string}
+		${4:expected} ${5:string}
 	}{
 		{
 			name: "${0}",
+			$2: $3,
+			$4: $5,
 		},
 	}
 
 	for _, tc := range $1 {
-
 	}
+
 # https://golang.org/cmd/go/
 snippet test subprocess
 	if os.Getenv("${1:BE_CRASHER}") == "1" {
@@ -704,8 +703,7 @@ snippet test handler
 
 # testing benchmark
 # go test -bench
-snippet func benchmark
-alias bench
+snippet bench
 	func Benchmark${1:Name}(b *testing.B) {
 		${0}
 	}
@@ -740,11 +738,11 @@ alias examm egm funegm
 	}
 
 # testing assert https://godoc.org/github.com/stretchr/testify/assert
-snippet ascontains
+snippet ascon
 	assert.Contains(t, ${1:s}, ${2:contains}, ${3:msgAndArgs})
-snippet asempty
+snippet asemp
 	assert.Empty(t, ${1:emptyObj}, ${2:msgAndArgs})
-snippet asnotempty
+snippet asnotem
 	assert.NotEmpty(t, ${1:object}, ${2:msgAndArgs})
 snippet aseq
 	assert.Equal(t, ${1:expected}, ${2:actual}, ${3:msgAndArgs})
@@ -770,7 +768,12 @@ snippet asimpl
 snippet mockon
 	${1:mock}.On("${2:methodName}", ${3:args}).Return(${0})
 snippet mockrun
-	${1:mock}.On("${2:methodName}", AnythingOfType("${3:*map[string]interface{}}").Return().Run(func(args Arguments) {
+	${1:mock}.On("${2:methodName}", mock.AnythingOfType("${3:*map[string]interface{}}").Return().Run(func(args Arguments) {
 		${0:arg := args.Get(0).(*map[string]interface{})}
-
 	})
+snippet mockany
+	mock.AnythingOfType("${1:type}")
+
+# debugging https://github.com/y0ssar1an/q
+snippet q
+	q.Q(${1})
