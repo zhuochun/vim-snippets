@@ -663,9 +663,15 @@ snippet test
 		${0}
 	}
 snippet testMain
+alias tmain
 	func TestMain(m *testing.M) {
 		${0}
 	}
+snippet test run
+alias trun
+	t.Run(tc.name, func(t *testing.T) {
+		${1:t.Parallel()}${0}
+	})
 snippet test errorf
 alias terr
 	t.Errorf("${1:test()} = %v, expected: %v", ${2:actual}, ${3:expected})
@@ -673,7 +679,7 @@ snippet test fatalf
 alias tfat
 	t.Fatalf("${1:test()} = %v, expected: %v", ${2:actual}, ${3:expected})
 snippet test table
-alias testt
+alias ttab
 	${1:tests} := []struct {
 		name string
 		${2:in} ${3:string}
