@@ -666,6 +666,8 @@ snippet testMain
 alias tmain
 	func TestMain(m *testing.M) {
 		${0}
+
+		os.Exit(m.Run())
 	}
 snippet test run
 alias trun
