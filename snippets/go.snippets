@@ -33,6 +33,12 @@ snippet main
 		${0}
 	}
 
+# signal
+snippet signal
+	sig := make(chan os.Signal, 1)
+	signal.Notify(sig, os.Interrupt)
+	<-sig
+
 # function simple
 snippet func
 alias f fun
@@ -116,6 +122,7 @@ snippet ifel
 	}
 # else snippet
 snippet elif
+alias eif
 	else if ${1:condition} {
 		${0}
 	}
@@ -290,7 +297,11 @@ snippet in sort
 # type
 snippet type
 alias ty
-	type ${1:typeName} ${2:type}
+	type ${1:typeName} ${2:type}${0}
+# type alias
+snippet type =
+alias t=
+	type ${1:typeAlias} = ${2:typeName}${0}
 # type function
 snippet type func
 alias tf
