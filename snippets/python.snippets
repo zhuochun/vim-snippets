@@ -1,25 +1,108 @@
 snippet #!
+alias shebang
 	#!/usr/bin/env python
-snippet imp
-	import ${1:module}
-snippet uni
-	def __unicode__(self):
-		${1:representation}
-snippet open
-alias o
-	open(r"${1:path}", "${2:r}")
+
+# Encodes
+snippet cutf8
+	# -*- coding: utf-8 -*-
+snippet clatin1
+	# -*- coding: latin-1 -*-
+snippet cascii
+	# -*- coding: ascii -*-
+
+# if __name__ == '__main__':
+snippet main
+	def main():
+		${0}
+
+	if __name__ == '__main__':
+		main()
+
+snippet testmain
+alias testm
+	import unittest
+
+	class ${1:ExampleCase}(unittest.TestCase):
+	    def setUp(self):
+			${0}
+
+		def tearDown(self):
+
+
+	if __name__ == '__main__':
+		unittest.main()
+	
+snippet ifmain
+	if __name__ == '__main__':
+		${0:main()}
+
+# generic imports
+snippet import
+alias imp
+	import ${1:module}${0}
+snippet import future
+alias fut
+	from __future__ import ${0:method}
+snippet import from
+alias from
+	from ${1:module} import ${0:method}
+snippet import * from
+alias impa
+	from ${1:module} import *
+# python debugger (pdb)
+snippet pdb
+	import pdb; pdb.set_trace()
+# ipython debugger (ipdb)
+snippet ipdb
+	import ipdb; ipdb.set_trace()
+# ipython debugger (pdbbb)
+snippet pdbbb
+	import pdbpp; pdbpp.set_trace()
+# python console debugger (pudb)
+snippet pudb
+	import pudb; pudb.set_trace()
+snippet pprint
+	import pprint; pprint.pprint(${1})
+
 # Short snippets
 snippet t
 	True
 snippet f
 	False
+snippet n
+	None
 snippet .
 alias @
 	self.
-snippet "
-	"""
-	${1:doc}
-	"""
+snippet _
+	__${1:init}__
+snippet %
+	% (${1})
+snippet &&
+	and ${0}
+snippet ||
+	or ${0}
+snippet !
+	not ${0}
+snippet r
+	range(${1:10})
+snippet l
+	len(${1:list})
+snippet d
+	del(${1:dict})
+snippet p
+	print(${1})
+snippet sorted reverse
+alias sorr
+	sorted(${1:list}, reverse=True)
+snippet sorted key
+	sorted(${1:list}, key=${2:Fun})
+snippet open
+alias o
+	${3:f} = open(r"${1:path}", "${2:rU}")
+	${0}
+	$3.close()
+
 # Module Docstring
 snippet docs
 	"""
@@ -29,23 +112,23 @@ snippet docs
 	Github: `g:snips_github`
 	Description: ${2}
 	"""
+# Function Docstring
+snippet doc
+	"""
+	${1:Description}
 
-snippet while
-alias wh
-	while ${1:condition}:
-		${2}
-# dowh - does the same as do...while in other languages
-snippet dowh
-	while True:
-		${1}
-		if ${2:condition}:
-			break
-snippet with
-	with ${1:expr} as ${2:var}:
-		${3}
+	@param ${2:param}: ${3: Description}
+	@type  $2: ${4: Type}
+
+	@return: ${5: Description}
+	@rtype : ${6: Type}
+
+	@raise e: ${7: Description}
+	"""
+
 # New Class
 snippet class
-alias cl
+alias cla
 	class ${1:ClassName}:
 		"""${2:docstring for $1}"""
 		def __init__(self, ${3:arg}):
@@ -67,6 +150,9 @@ snippet def
 snippet deff
 	def ${1:fname}(${2:`indent('.') ? 'self' : ''`}):
 		${3}
+snippet uni
+	def __unicode__(self):
+		${1:representation}
 # New Method
 snippet defs
 	def ${1:mname}(self, ${2:arg}):
@@ -83,57 +169,81 @@ snippet property
 			${5:del self._$1}
 		return locals()
 	$1 = property(**$1())
+
 # Ifs
 snippet if
 	if ${1:condition}:
-		${2}
+		${0}
+snippet ifi
+	if ${1} in ${2}:
 snippet else
 alias el
 	else:
-		${1}
-snippet else if
-alias ei
+		${0}
+snippet elif
+alias ei eif
 	elif ${1:condition}:
-		${2}
+		${0}
 # For
 snippet for
 	for ${1:item} in ${2:items}:
-		${3}
+		${0}
 snippet forr
-	for ${1:item} in ${2:items}
-# Encodes
-snippet cutf8
-	# -*- coding: utf-8 -*-
-snippet clatin1
-	# -*- coding: latin-1 -*-
-snippet cascii
-	# -*- coding: ascii -*-
+	${0} for ${1:item} in ${2:items}
+snippet fori
+	${0} for ${1:item} in ${2:items} if ${3:condition}
+# While
+snippet while
+alias wh
+	while ${1:condition}:
+		${0}
+snippet with
+	with ${1:expr} as ${2:var}:
+		${0}
+
 # Lambda
 snippet lambda
-alias ld
-	lambda ${1:vars} : ${2:action}
-snippet ->
-	lambda ${1:vars} : ${2:action}
-snippet try Try/Except
+alias ld ->
+	lambda ${1:vars} : ${2:action}${0}
+
+# Regular Expression
+snippet re compile
+alias /
+	${2:pattern} = re.compile(r'${1:pat}')
+snippet re search
+alias re
+	${3:match} = re.search(r'${1:pat}', ${2:str})
+snippet re findall
+alias ref
+	${3:match} = re.findall(r'${1:pat}', ${2:str})
+snippet re sub
+alias res
+	${4:str} = re.sub(r'${1:pat}', r'${2:replacement}', ${3:str})
+
+# Exception
+snippet try
 	try:
 		${1}
 	except ${2:Exception}, ${3:e}:
 		${4:raise $3}
-snippet try Try/Except/Else
+snippet try else
+alias trye
 	try:
 		${1}
 	except ${2:Exception}, ${3:e}:
 		${4:raise $3}
 	else:
 		${5}
-snippet try Try/Except/Finally
+snippet try finally
+alias tryf
 	try:
 		${1}
 	except ${2:Exception}, ${3:e}:
 		${4:raise $3}
 	finally:
 		${5}
-snippet try Try/Except/Else/Finally
+snippet try else/finally
+alias tryef
 	try:
 		${1}
 	except ${2:Exception}, ${3:e}:
@@ -142,47 +252,26 @@ snippet try Try/Except/Else/Finally
 		${5}
 	finally:
 		${6}
-# if __name__ == '__main__':
-snippet ifmain
-alias main
-	if __name__ == '__main__':
-		${1:main()}
-# __magic__
-snippet _
-	__${1:init}__${2}
-# python debugger (pdb)
-snippet pdb
-	import pdb; pdb.set_trace()
-# ipython debugger (ipdb)
-snippet ipdb
-	import ipdb; ipdb.set_trace()
-# ipython debugger (pdbbb)
-snippet pdbbb
-	import pdbpp; pdbpp.set_trace()
-# python console debugger (pudb)
-snippet pudb
-	import pudb; pudb.set_trace()
-snippet pprint
-	import pprint; pprint.pprint(${1})${2}
-snippet fut
-	from __future__ import ${1:method}
-snippet from
-	from ${1:module} import ${2:method}
-snippet from import
-	from ${1:module} import *
-snippet import
-	import ${1:module}
-# test function/method
+
+# unittest http://python-guide-pt-br.readthedocs.io/en/latest/writing/tests/
+# unittest https://docs.python.org/2/library/unittest.html
+# unittest.mock https://docs.python.org/3/library/unittest.mock.html
+snippet import test
+	import unittest
 snippet test
 	def test_${1:description}(${2:`indent('.') ? 'self' : ''`}):
-		${3}
+		${0}
 # test case
 snippet testcase
 	class ${1:ExampleCase}(unittest.TestCase):
+	    def setUp(self):
+
+		def tearDown(self):
 
 		def test_${2:description}(self):
-			${3}
-#getopt
+			${0}
+
+# getopt
 snippet getopt
 	try:
 		# Short option syntax: "hv:"
@@ -199,45 +288,53 @@ snippet getopt
 			${4}
 		elif option in ("-v", "--verbose"):
 			verbose = argument
+
 # logging
 # glog = get log
 snippet glog
 	import logging
 	logger = logging.getLogger(${1:__name__})
-snippet logger error
+snippet log error
+alias loge
 	logger.error(${1:msg})
-snippet logger debug
+snippet log debug
+alias logd
 	logger.debug(${1:msg})
-snippet logger warning
+snippet log warning
+alias logw
 	logger.warning(${1:msg})
-snippet logger critical
+snippet log critical
+alias logc
 	logger.critical(${1:msg})
-snippet logger info
+snippet log info
+alias logi
 	logger.info(${1:msg})
-snippet epydoc
-alias doc
-	"""
-	${1:Description}
 
-	@param ${2:param}: ${3: Description}
-	@type  $2: ${4: Type}
-
-	@return: ${5: Description}
-	@rtype : ${6: Type}
-
-	@raise e: ${7: Description}
-	"""
-
+# sys
+snippet import sys
+alias impsys
+	import sys
 # urllib https://docs.python.org/3/library/urllib.html
+snippet import url
+alias impurl
+	from urllib import request
+snippet request open
+	${2:f} = request.urlopen(${1:url})
 
 # scipy http://www.scipy.org/
 # numpy https://docs.scipy.org/doc/numpy/reference/
-snippet np
+snippet import numpy
+alias impnp
 	import numpy as np
+snippet narr
+	np.array(${1:list})
 # matplotlib http://matplotlib.org/contents.html
-snippet plt
+snippet import matplotlib
+alias impmat
 	import matplotlib.${1:pyplot} as ${2:plt}
 # pandas http://pandas.pydata.org/
-snippet pd
+snippet import pandas
+alias imppd
 	import pandas as pd
-
+snippet pd dataframe
+	pd.DataFrame(${1:dict})
