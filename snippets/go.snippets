@@ -5,6 +5,10 @@ alias p pkg
 
 	${0}
 
+# go:generate
+snippet gen mockery
+	//go:generate mockery -name=${1:Dao} -case=underscore -dir=${2:./} -output=${3:../mocks/mockdao} -outpkg=${4:mockdao}${0}
+
 # import
 snippet import
 	import "${1:fmt}"
@@ -46,6 +50,12 @@ alias f fun
 	func ${1:name}(${2}) ${3}{
 		${0}
 	}
+# function go
+snippet func go
+alias fn fung
+	func (${2}) {
+		${1:TARGET}
+	}(${0})
 # function anonymous
 snippet func anonymous
 alias funa
@@ -132,11 +142,16 @@ snippet ife
 		return ${0}$1
 	}
 snippet ifer
-	if ${1}${2:err} := ${3}; $2 != nil {
-		return ${0}$2
+	if ${2}${3:err} := ${1:TARGET}; $3 != nil {
+		return ${0}$3
+	}
+snippet iferr
+	${2:name}, ${3:err} := ${1:TARGET}
+	if $3 != nil {
+		return ${0}$3
 	}
 snippet ifok
-	if ${1:val}, ok := ${2:<-ch}; ok {
+	if ${2:val}, ok := ${1:TARGET}; ok {
 		${0}
 	}
 
@@ -255,7 +270,7 @@ alias args
 
 # interface definition interface
 snippet interface func
-alias in funi fn
+alias in funi
 	${1:func}(${2})
 # common interfaces
 # fmt.Stringer interface
@@ -388,13 +403,7 @@ snippet :
 	[${1:beg}:${2:end}:${3:cap}]
 snippet &
 	&${1:Struct}{${2:args}}
-snippet ;e
-	${1:name}, ${2:err} := ${3:action}
-	if $2 != nil {
-		return $2${0}
-	}
-snippet ;k
-alias ok
+snippet ok
 	${1:val}, ${2:ok} := ${3:<-ch}${0}
 snippet var chan<-
 	var ${1:chan_name} chan<- ${2:int}${0}
