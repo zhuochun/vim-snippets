@@ -419,17 +419,20 @@ snippet main
 		${1}
 	end
 # usage_if()
-snippet usai
-	if ARGV.${1}
+snippet argv if
+alias usai
+	if ARGV.${1:length}
 		abort 'Usage: #{$PROGRAM_NAME} ${2:ARGS_GO_HERE}'${3}
 	end
 # usage_unless()
-snippet usau
-	unless ARGV.${1}
+snippet argv unless
+alias usau
+	unless ARGV.${1:length}
 		abort 'Usage: #{$PROGRAM_NAME} ${2:ARGS_GO_HERE}'${3}
 	end
 # unix_filter {}
-snippet unif
+snippet argf
+alias unif
 	ARGF.each_line(${1}) do |${2:line}|
 		${3}
 	end
@@ -1217,15 +1220,15 @@ options head
 			end
 		end
 	end
-snippet benchmark_report do
+snippet benchmark_report
+options head
+	x.report('${1:name}:') { ${2:code} }
+snippet benchmark_report_do
 alias xre
 options head
 	x.report('${1:name}:') do
 		${2:code}
 	end
-snippet benchmark_report
-options head
-	x.report('${1:name}:') { ${2:code} }
 
 #############################################
 # benchmark-ips
@@ -2669,3 +2672,20 @@ snippet prof GraphPrinter
 snippet prof CallStackPrinter
 	printer = RubyProf::CallStackPrinter.new(result)
 	printer.print(File.open("app_call_stack_profile.html", "w+"))
+
+#############################################
+# scripting
+#############################################
+snippet mysql
+    require 'mysql2'
+
+    ${1:db_config} = {
+        host: 'host',
+        username: 'root',
+        password: '',
+        database: 'database'
+    }
+
+    client = Mysql2::Client.new($1)
+
+    rows = client.query("""SELECT * FROM table""")
