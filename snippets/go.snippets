@@ -88,7 +88,7 @@ alias funn fnew
 	}
 # function on receiver
 snippet func receiver
-alias funm
+alias fm funm
 	// $3 ...
 	func (${1:receiver} *${2:Type}) ${3:name}(${4}) ${5}{
 		${0}
@@ -679,6 +679,7 @@ alias /
 # testing https://golang.org/pkg/testing/
 # go test
 snippet test
+alias ft
 	func Test${1:Name}(t *testing.T) {
 		${0}
 	}
@@ -691,8 +692,8 @@ alias tmain
 	}
 snippet test run
 alias trun
-	t.Run(tc.name, func(t *testing.T) {
-		${1:t.Parallel()}${0}
+	t.Run(${1:tc.name}, func(t *testing.T) {
+		${0}
 	})
 snippet test errorf
 alias terr
@@ -756,6 +757,7 @@ snippet test handler
 # testing benchmark
 # go test -bench
 snippet bench
+alias fb
 	func Benchmark${1:Name}(b *testing.B) {
 		${0}
 	}
@@ -781,7 +783,7 @@ alias exam
 		// expected output
 	}
 snippet example method
-alias examm egm funegm
+alias examm egm funexa
 	func Example${1:Type}_${2:Method}() {
 		${0}
 
